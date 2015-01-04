@@ -1,4 +1,4 @@
-(defproject hackference "20.1.4-SNAPSHOT"
+(defproject clojure-through-code "20.1.4-SNAPSHOT"
   :description "Learning Clojure by evaluating code on the fly"
   :url "http://jr0cket.co.uk"
   :license {:name "Eclipse Public License"
