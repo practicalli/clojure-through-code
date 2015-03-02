@@ -16,6 +16,40 @@
 ;; All behaviour in Clojure is defined in a List, with the first elemtent being a function
 ;; and the remaining elements being arguments to that function.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; What is my environment
+
+;; Clojure has built in symbols, which start and end with *
+;; Symbols can be evaluated outside of a list structure,
+;; functions (the behaviour of your application) and their
+;; arguments are contained within a list structure ()
+
+;; The full clojure version
+;; can be used to check you are running a particular version, major or minor of Clojure core
+*clojure-version*
+
+;; The version info for Clojure core, as a map containing :major :minor
+;; :incremental and :qualifier keys. Feature releases may increment
+;; :minor and/or :major, bugfix releases will increment :incremental.
+;; Possible values of :qualifier include "GA", "SNAPSHOT", "RC-x" "BETA-x"
+
+
+;; The directory where the Clojure compiler will create the .class files for the current project
+;; This directory must be in the classpath for 'compile' to work.
+*compile-path*
+
+;; The path of the file being evaluated, as a String.  In the REPL the value is not defined.
+*file*
+
+;; A clojure.lang.Namespace object representing the current namespace
+*ns*
+
+
+;; most recent repl values
+*1
+*2
+*3
+
 ;; join strings together with the function str
 (str "Hello" " " "Hackerfernce UK")
 
