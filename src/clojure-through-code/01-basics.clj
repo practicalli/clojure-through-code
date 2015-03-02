@@ -50,6 +50,28 @@
 *2
 *3
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Using Java Interoperability
+
+;; java.lang is part of the Java runtime environment, so when ever you run a REPL you can call any methods without having to import them or include any dependencies
+
+;; From java.lang.System getProperty() as documented at:
+;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
+
+(System/getProperty "java.version")
+
+(System/getProperty "java.vm.name")
+
+;; Java properties can be obtained by calling System.getProperty
+;; from java.lang.  As System.getProperty is called as a function
+;; in clojure it needs to be wrapped in a list structure.
+
+;; Make the result prettier using the Clojure str function
+(str "Current Java version: " (System/getProperty "java.version"))
+
+;; We can also get the version of the project
+(System/getProperty "clojure-through-code.version")
+
 ;; join strings together with the function str
 (str "Hello" " " "Hackerfernce UK")
 
