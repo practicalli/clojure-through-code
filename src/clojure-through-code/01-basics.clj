@@ -106,13 +106,21 @@
      (apply hash-map)
      (def project))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Working with strings
+
+;; You could use the Java-like function `println` to output strings.
+
+(println "Hello, whats different with me?  What value do I return")
+
+;; However, something different happens when you evaluate this expression.  This is refered to as a side-effect because when you call this function it returns nil.  The actual text is output to the REPL or console.
+
+;; In Clojure, you are more likely to use the `str` function when working with strings.
+(str "Hello, I am returned as a value of this expression")
+
 ;; join strings together with the function str
-(str "Hello" " " "Hackerfernce UK")
+(str "Hello" ", " "HackTheTower UK")
 
-;; Get the first 3 elements of a vector (a vector can be thought of as an immutable array)
-(take 3 [1 2 3 4 5 6])
-
-(println "Hello Hackference Birmingham")
 
 ;; using println in LightTable shows the results in console window, as its a side affect
 ;; using srt you see the results of the evaluation inline with the code,
