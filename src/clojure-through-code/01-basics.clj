@@ -72,6 +72,40 @@
 ;; We can also get the version of the project
 (System/getProperty "clojure-through-code.version")
 
+
+;; Chaining a few Clojure functions together, to read from
+;; the Leiningen project file 
+
+;; Getting the version number of the project 
+(->
+ "./project.clj"
+ slurp
+ read-string
+ (nth 2))
+
+;; Get the contents of the project.clj file using `slurp`
+;; Read the text of that file using read-string
+;; Select just the third string using nth 2 (using an index starting at 0)
+
+;; Getting all the project information
+(->
+ "./project.clj"
+ slurp)
+(->
+ "./project.clj"
+ slurp
+ read-string)
+
+
+;; add all project information to a map
+(->> "project.clj"
+     slurp
+     read-string
+     (drop 2)
+     (cons :version)
+     (apply hash-map)
+     (def project))
+
 ;; join strings together with the function str
 (str "Hello" " " "Hackerfernce UK")
 
