@@ -74,9 +74,9 @@
 
 
 ;; Chaining a few Clojure functions together, to read from
-;; the Leiningen project file 
+;; the Leiningen project file
 
-;; Getting the version number of the project 
+;; Getting the version number of the project
 (->
  "./project.clj"
  slurp
@@ -130,6 +130,7 @@
 ;; using the fast feedback of the REPL usually works beter than println statements in debuging
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Simple math to show you the basic structure of Clojure
 
 ; Math is straightforward
