@@ -77,24 +77,60 @@
 ;; the Leiningen project file
 
 ;; Getting the version number of the project
+
+;; Information can be read from the Clojure project.clj file using the slurp function
+(slurp "project.clj")
+
+;; => "(defproject clojure-through-code \"20.1.5-SNAPSHOT\"\n  :description \"Learning Clojure by evaluating code on the fly\"\n  :url \"http://jr0cket.co.uk\"\n  :license {:name \"Eclipse Public License\"\n            :url \"http://www.eclipse.org/legal/epl-v10.html\"}\n  :dependencies [[org.clojure/clojure \"1.6.0\"]])\n\n"
+
+;; The value returned by slurp is a bit messy, so we can tidy it up with read-string
+
+(read-string (slurp "project.clj"))
+
+;; => (defproject clojure-through-code "20.1.5-SNAPSHOT" :description "Learning Clojure by evaluating code on the fly" :url "http://jr0cket.co.uk" :license {:name "Eclipse Public License", :url "http://www.eclipse.org/legal/epl-v10.html"} :dependencies [[org.clojure/clojure "1.6.0"]])
+
+;; rather than have all the information from the file, we just want to get the project version
+;; Using the nth function we can select which element we actually want
+
+(nth (read-string (slurp "project.clj")) 2)
+
+;; => "20.1.5-SNAPSHOT"
+
+;; The above code is classic Lisp, you read it from the inside out, so in this case you
+;; start with (slurp ...) and what it returns is used as the argument to read-string...
+
+;; Get the contents of the project.clj file using `slurp`
+;; Read the text of that file using read-string
+;; Select just the third string using nth 2 (using an index starting at 0)
+
+
+;; You can format the code differently, but in this case its not much easier to read
+(nth
+ (read-string
+  (slurp "project.clj"))
+ 2)
+
+
+;; the same behaviour as above can be written using the threading macro
+;; which can make code easier to read by reading sequentially down the list of functions.
+
 (->
  "./project.clj"
  slurp
  read-string
  (nth 2))
 
-;; Get the contents of the project.clj file using `slurp`
-;; Read the text of that file using read-string
-;; Select just the third string using nth 2 (using an index starting at 0)
+;; Using the threading macro, the result of every function is passed onto the next function
+;; in the list.  This can be seen very clearly usng ,,, to denote where the value is passed
+;; to the next function
 
-;; Getting all the project information
 (->
  "./project.clj"
- slurp)
-(->
- "./project.clj"
- slurp
- read-string)
+ slurp ,,,
+ read-string ,,,
+ (nth ,,, 2))
+
+;; Remember, commas in clojure are ignored
 
 
 ;; add all project information to a map
