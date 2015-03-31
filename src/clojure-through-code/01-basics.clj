@@ -132,6 +132,23 @@
 
 ;; Remember, commas in clojure are ignored
 
+;; To make this really simple lets create a contrived example of the threading macro.
+;; Here we use the str function to join strings together.  Each individual string call
+;; joins its own strings together, then passes them as a single string as the first argument to the next function
+
+(->
+ (str "This" " " "is" " ")
+ (str "the" " " "treading" " " "macro")
+ (str "in" " " "action."))
+
+;; Using the ->> threading macro, the result of a function is passed as the last parameter
+;; of the next function call.  So in another simple series of str function calls,
+;; our text comes out backwards.
+
+(->>
+ (str " This")
+ (str " is")
+ (str " backwards"))
 
 ;; add all project information to a map
 (->> "project.clj"
