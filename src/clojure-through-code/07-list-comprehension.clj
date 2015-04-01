@@ -4,6 +4,27 @@
 ;; List comprehension lets you work with multiple list.
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;
+
+;; Some functions can return a very large collection, if you dont use lazy evaluation
+;; around this kind of function you can blow up your repl, or have to break out of your repl.
+;; For example if you run the following
+
+;; (iterate inc 0)
+
+;;(set! *print-length* 10)
+;;10
+
+;; Now it's perfectly fine. Yay!
+;; (iterate inc 0)
+;; (0 1 2 3 4 5 6 7 8 9 ...)
+
+
+
+
+
 ;; Sequence / list comprehension
 
 (for [n (range 10)]
@@ -14,7 +35,8 @@
   [x y])
 
 ; create a list for x and y of the first 10 numbers as an array.
-(let [x (range 10) y (range 10)]
+(let [x (range 10)
+      y (range 10)]
   [x y])
 
 ;; add conditions using :when and :while
