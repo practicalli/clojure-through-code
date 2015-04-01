@@ -3,10 +3,18 @@
 
 (ns clojure-through-code.02-data-structures)
 
-;; Clojure has several datastructures as part of the language,
-;; these data structures are used rather than defining your own types
-;; Elements of Clojure data structures can be of any type,
-;; Clojure works out the types only when needed
+;; Clojure has several data structures as part of the language,
+;; list (a linked list),
+;; vector (indexed access like an array),
+;; map (key / Value pairs, usually using clojure :keyword type for the keys,
+;; set (unique elements, not ,orered by default).
+;; These data structures are typically used rather than defining your own types
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure Built-in data structures
+
 
 ;; list ()
 ;; a general set of elements with a sequential lookup time
@@ -25,13 +33,16 @@
 
 
 ;; further examples of mixing types
-(def five 5)
 
 (list )
 (list 1 2 3 4)
 (list 1 2 "three" [4] five '(6 7 8 9))
 
-'(1 2 3 4)
+(1 2 3 4)
+
+'(+ 1 2 3 4)
+
+(quote (1 2 3 4))
 
 ;; one unique thing about lists is that the first element is always evaluated as a function call,
 ;; with the remaining elements as arguments.
@@ -39,12 +50,13 @@
 ;; So, defining a list just using () will cause an error
 
 ;; This list definition will fail, unless you have defined a function called 1
-(1 2 3 4)  ;;fail
+( 1 2 3 4)
 
 ;; There is a special function called quote that tells Clojure to just treat the
 ;; list as data.
 
 (quote (1 2 3 4))
+
 
 ;; This syntax is actually more code to type than (list 1 2 3 4),
 ;; so there is a shortcut for the quote function using the ' character
@@ -55,10 +67,26 @@
 '(:cat :dog :rabit :fish)
 '(:cat 1 "fish" 22/7 (str "fish" "n" "chips"))
 
-;; The quote shortcust is uses where ever you have a list that you want to treat just as data.
+;; The quote shortcut is uses where ever you have a list that you want to treat just as data.
 ;; Another example is when you are including functions from other namespaces
 ;;(ns my-namespace.core
 ;;  use 'my-namespace.library)
+
+
+;; Duplicate elements in a list ?
+
+(list 1 2 3 4 1)
+(list "one" "two" "one")
+(list :fred :barney :fred)
+
+
+
+;; #{1 2 3 4 1}
+;; duplicate key error
+
+(set [1 2 3 4 1])
+;; only returns unique set from the collection
+(sorted-set 1 4 0 2 9 3 5 3 0 2 7 6 5 5 3 8)
 
 
 
@@ -82,6 +110,11 @@
 
 ;; remember we defined five earlier in the code
 [1 2 3 4 (list five)]
+
+
+;; Duplicate elements ?
+[1 2 3 4 1]
+
 
 
 ;; Map {}
@@ -113,6 +146,16 @@
 
 
 
+;; Duplicate keys in maps are not allowed, so the following maps...
+
+;; {"fish" "battered" "chips" "fried" "fish" "battered and fried"}
+;; {:fish "battered" :chips "fried" :fish "battered & fried"}
+
+;; ...throw dupicate key errors
+
+;; Duplicate values are okay though
+{"fish" "battered" "chips" "fried" "cod" "fried"}
+
 
 ; What is the difference between Collections & Sequences
 ;;;;;;;;;;;;;;;;;;;
@@ -132,101 +175,3 @@
 ; Only lists are seqs.
 (seq? '(1 2 3)) ; => true
 (seq? [1 2 3]) ; => false
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Be Lazy and get more done
-
-; Seqs are an interface for logical lists, which can be lazy.
-; "Lazy" means that a seq can define an infinite series, like so:
-(range 4)
-
-(range) ; => (0 1 2 3 4 ...) (an infinite series)
-
-;; So we dont blow up our memory, just get the values we want
-(take 4 (range)) ;  (0 1 2 3)
-
-;; Clojure (and Lisps in general) tend to evaluate at the last possible moment
-
-; Use cons to add an item to the beginning of a list or vector
-(cons 4 [1 2 3]) ; => (4 1 2 3)
-(cons 4 '(1 2 3)) ; => (4 1 2 3)
-
-; Use conj to add an item to the beginning of a list,
-; or the end of a vector
-(conj [1 2 3] 4) ; => [1 2 3 4]
-(conj '(1 2 3) 4) ; => (4 1 2 3)
-
-; Use concat to add lists or vectors together
-(concat [1 2] '(3 4)) ; => (1 2 3 4)
-
-; Use filter, map to interact with collections
-(map inc [1 2 3]) ; => (2 3 4)
-(filter even? [1 2 3]) ; => (2)
-
-; Use reduce to reduce them
-(reduce + [1 2 3 4])
-; = (+ (+ (+ 1 2) 3) 4)
-; => 10
-
-; Reduce can take an initial-value argument too
-(reduce conj [] '(3 2 1))
-; = (conj (conj (conj [] 3) 2) 1)
-; => [3 2 1]
-
-
-
-;; Playing with data structures
-
-;; Destructuring
-
-(let [[a b c & d :as e] [1 2 3 4 5 6 7]]
-  [a b c d e])
-
-
-(let [[[x1 y1][x2 y2]] [[1 2] [3 4]]]
-  [x1 y1 x2 y2])
-
-;; with strings
-(let [[a b & c :as str] "asdjhhfdas"]
-  [a b c str])
-
-;; with maps
-(let [{a :a, b :b, c :c, :as m :or {a 2 b 3}}  {:a 5 :c 6}]
-  [a b c m])
-
-
-
-
-;; It is often the case that you will want to bind same-named symbols to the map keys. The :keys directive allows you to avoid the redundancy:
-(let [{fred :fred ethel :ethel lucy :lucy} m] )
-
-;; can be written:
-
-(let [{:keys [fred ethel lucy]} m] )
-
-;; As of Clojure 1.6, you can also use prefixed map keys in the map destructuring form:
-
-(let [m {:x/a 1, :y/b 2}
-      {:keys [x/a y/b]} m]
-  (+ a b))
-
-
-; As shown above, in the case of using prefixed keys, the bound symbol name will be the same as the right-hand side of the prefixed key. You can also use auto-resolved keyword forms in the :keys directive:
-
-(let [m {::x 42}
-      {:keys [::x]} m]
-  x)
-
-
-
-;; 4Clojure - exercise 65
-
-(= :map (if (keyword? (first(first {:a 1, :b 2}))) :map))
-
-(if (keyword? (first(first {:a 1 :b 2}))) :map )
-
-(first (first {:a 1 :b 2}))
-
-
-(if (keyword? (first(first %))) :map )
