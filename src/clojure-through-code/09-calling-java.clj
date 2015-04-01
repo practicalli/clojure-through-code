@@ -7,6 +7,8 @@
 
 (.getName String)
 
+;; From java.lang.System getProperty() as documented at:
+;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
 (System/getProperty "java.vm.version")
 
 Math/PI
