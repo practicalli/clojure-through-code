@@ -16,10 +16,14 @@
 
 
 ; Use fn to create new functions. A function always returns
-; its last statement.
-(fn [] "Hello Hackference")
+; the value of evaluating its last statement.
 
-((fn [] "Hello Hackference"))
+; Lets define a very simple function, that returns a string
+(fn [] "Hello Clojurian, hope you are enjoying the REPL")
+
+; When evaluated, this function definition returns a reference to this function definition.  This means the function can be called, in this case by putting the function as the first elemment of a list
+
+((fn [] "Hello Clojurian, do you like the dynamic nature of Clojure"))
 
 ;; remember, the first item in a list is evaluted as a function call
 
@@ -30,11 +34,14 @@ x
 
 ; We can also give a name to a function using def
 
-(def hello-world (fn [] "Hello hacker world"))
-(hello-world)
+(def i-have-a-name (fn [] "I am not a number, I am a named function - actually we call the name a symbol and it can be used as a reference to the function."))
+
+(i-have-a-name)
 
 ; You can shorten this process by using defn
-(defn hello-world [] "Hello hackers, are you loving Clojure yet?")
+(defn i-have-a-name [] "Oh, I am a new function definition, but have the same name (symbol).")
+
+(i-have-a-name)
 
 ; The [] is the list of arguments for the function.
 
@@ -42,21 +49,194 @@ x
   (str "Hello " name))
 (hello "Steve") ; => "Hello Steve"
 
-; You can also use the annonymous function shorthand, #, to create functions
+; You can also use the annonymous function shorthand, # (), to create functions, (not that useful in this simple example).  The %1 placeholder takes the first argument to the function.  You can use %1, %2 and %3
 
 (def hello2 #(str "Hello " %1 ", are you awake yet?"))
 (hello2 "Mike")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; A brief divergence on anonymous functions and the #() syntatic sugar
+
+;; The anonymous function shorthand is only useful for one function call - personally I am not that keen on it 
+(#(+ %1 %2 %3) 2 4 6)
+
+;; A simple reverse anonymous function, using the threading macro
+(#(-> [%2 %1]) "Bob" "Sue")  ;; => ["Sue" "Bob"]
+
+;; #(...)  is shorthand for (fn [arg1 arg2 ...] (...))
+;; where the number of argN depends on how many %N you have in the body . So when you write
+;; #(%) is translated to(fn [arg1] (arg1))
+
+;; Notice that this is different from the first anonymous function: (fn [arg1] arg1)
+
+;; This version returns arg1 as a value, the version that comes from expanding the shorthand tries to call it as a function. You get an error because a string is not a valid function.
+
+;; Since the shorthand supplies a set of parentheses around the body, it can only be used to execute a single function call or special form.
+
+
+;; From ClojureBridge
+
+;; user> (fn [coll] (filter even? coll))
+;; #<user$eval4837$fn__4838 user$eval4837$fn__4838@660652c5>
+
+;; user> ; anonymous function is defined, but how can we use this?
+;; user> ; here's one way to use anonymous function
+;; user> ((fn [coll] (filter even? coll)) [1 2 3 4 5 6])
+;; (2 4 6)
+
+;; user> ; if we use #() literal, an anonymous function can be written like this.
+;; user> (#(filter even? %) [1 2 3 4 5 6])
+;; (2 4 6)
+
+;; user> ; to use anonymous function more than once, bind it to a name.
+;; user> (def evens (fn [coll] (filter even? coll)))
+;; #'user/evens
+;; user> (evens [1 2 3 4 5 6])
+;; (2 4 6)
+;; You may have thought that the function above is the equivalent to:
+
+;; user> (defn evens-by-defn
+;;         [coll]
+;;         (filter even? coll))
+;; #'user/evens-by-defn
+;; user> (evens-by-defn [1 2 3 4 5 6])
+;; (2 4 6)
+;; However, Clojure programmers use anonymous function very often. Why do we need anonymous function?
+
+;; The biggest reason is to use functions for higher-order-function (See Higher-order Function ).
+
+;; Another reason can been seen in the next example.
+
+;; Let’s say we want to get the even numbers after two vectors are combined:
+
+;; concat: http://clojuredocs.org/clojure_core/clojure.core/concat
+;; If we use def to save the value…
+
+;; user> (defn evens-with-def
+;;         [vec1 vec2]
+;;         (def combined (concat vec1 vec2))
+;;         (filter even? combined))
+;; #'user/evens-with-def
+;; user> (evens-with-def [1 2 3] [4 5 6])
+;; (2 4 6)
+;; user> combined
+;; [1 2 3 4 5 6]
+;; combined is exposed outside of our function, and this is bug-prone.
+
+;; If we use an anonymous function…
+
+;; user> (defn evens-with-fn
+;;         [vec1 vec2]
+;;         ((fn [x] (filter even? x))
+;;          (concat vec1 vec2)))
+;; #'user/evens-with-fn
+;; user> (evens-with-fn [1 2 3] [4 5 6])
+;; (2 4 6)
+;; There’s no variable for a combined vector.
+
+;; We could also use let, which provides lexical binding and limits it to within the scope.
+
+;; user> (defn evens-with-let
+;;         [vec1 vec2]
+;;         (let [combined-in-let (concat vec1 vec2)]
+;;           (filter even? combined-in-let)))
+;; #'user/evens-with-let
+;; user> (evens-with-let [1 2 3] [4 5 6])
+;; (2 4 6)
+;; user> combined-in-let
+;; CompilerException java.lang.RuntimeException: Unable to resolve symbol: combined-in-let in this c
+;; ontext, compiling:(/private/var/folders/4b/c9gsjvv12tq9n4mph065qs480000gn/T/form-init632366111132
+;; 2215411.clj:1:743)
+;; user> ; combined-in-let is available only in let body
+;; Advice to coaches
+
+;; The third example here doesn’t use anonymous functions. This would be a good example of how Clojure provides many ways to do the same thing.
+
+
+;;; some other examples
+
+;; user=> (#(* % %) 3) ; square
+;; 9
+;; user=> (#(+ % (* 2 %2)) 1 3) ; 1*x + 2*y
+;; 7
+;; user=> (+ 1 (* 2 3))
+;; 7
+
+;; See also
+;; http://java.dzone.com/articles/clojure-anonymous-functions
+;; https://coderwall.com/p/panlza/function-syntax-in-clojure
+
+;; Jay Fields - some good advice on avoiding annonymous functions
+;; http://blog.jayfields.com/2012/10/clojure-avoiding-anonymous-functions.html
+
+
+;; From http://en.wikibooks.org/wiki/Clojure_Programming/Examples/API_Examples/Function_Tools
+
+;; fn example
+
+;; (map (fn [a] (str "hi " a)) ["mum" "dad" "sister"])
+;; ; => ("hi mum" "hi dad" "hi sister")
+
+;; #() example
+;; See the reader page, (Macro characters -> Dispatch -> Anonymous function literal) for an explanation of the '%' and other characters used to refer to function arguments.
+
+;; user=> (def sq #(* % %))
+;; #'user/sq
+;; user=> (sq 3)
+;; 9
+;; user=> (map #(class %) [1 "asd"])      
+;; (java.lang.Integer java.lang.String)
+
+
+;; "lambda" example
+;; Use fn, or even better there is a custom syntax to create an anonymous function:
+
+;; (map #(str "hi " %) ["mum" "dad" "sister"])
+
+;; % example
+;; Represents an optional argument to an unnamed function:
+
+;; #(+ 2 %)
+;; #(+ 2 %1 %2)
+;; Arguments in the body are determined by the presence of argument literals taking the form %, %n or %&. % is a synonym for %1, %n designates the nth arg (1-based), and %& designates a rest arg.
+
+;; complement example
+;; Usage: (complement f)
+
+;; Takes a fn f and returns a fn that takes the same arguments as f, has the same effects, if any, and returns the opposite truth value.
+
+;; user=> (defn single-digit[x] (< x 10))
+;; #'user/single-digit
+;; user=> (single-digit 9)
+;; true
+;; user=> (single-digit 10)
+;; false
+;; user=> (def multi-digit (complement single-digit))
+;; #'user/multi-digit
+;; user=> (multi-digit 9)
+;; false
+;; user=> (multi-digit 10)
+;; true
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Polymorphism
+
+;; Clojure does not provide syntax for encapsulation as Java, C++ and C# developers know it.  No syntax is provided for defining a Class hierachy.  However, polymorphism syntax is available whendefining functions with multiple arity (different behaviour based on the number of arguments). 
+
 ; You can have multi-variadic functions too
 ;; one function that behaves differently dependant on the number or arugments passed
 
-(defn hello-with-args
+(defn hello-polly-function
   ([] "Hello Hackference")
-  ([name] (str "Hello " name ", hope your talk is awesome")))
-(hello-with-args "Cristiano")
-(hello-with-args)
+  ([name] (str "Hello " name ", hope your talk is awesome at Hackference")))
 
-; Functions can pack extra arguments up in a seq for you
+(hello-polly-function)
+(hello-polly-function "Cristiano")
+
+
+;; Functions can pack extra arguments up in a sequence for you, its the & notation that is important, although its a fairly common convention to use args (better if its given a more meaningful name though)
+
 (defn count-args [& args]
   (str "You passed " (count args) " args: " args))
 (count-args 1 2 3)
@@ -75,7 +255,9 @@ x
   (let [local-data (first argument)]
     (str local-data)))
 
-(do-stuff my-data)
+(do-stuff [1 2 3])
+
+;; (do-stuff my-data)
 
 ;; Remember, the first item in a list is evaluated as a call to a function.
 
@@ -103,16 +285,16 @@ x
 (:lastname john)
 (get john :lastname)
 
-(def people {
-     :001 {:name "John Stevenson"   :twitter "jr0cket"}
-     :002 {:name "Mike Mechanic"    :twitter "mechano"}
-     :006 {:name "Patrick McGoohan" :twitter "theprisoner"}})
+(def people
+  {:001 {:name "John Stevenson"   :twitter "jr0cket"}
+   :002 {:name "Mike Mechanic"    :twitter "mechano"}
+   :006 {:name "Patrick McGoohan" :twitter "theprisoner"}})
 
 (people :001)
 
 (get-in people [:006 :twitter])
 
-
+(:twitter (people :006))
 
 (def people-locations {
      :Birmingham [{:name "John Stevenson"   :twitter "jr0cket"}
@@ -141,33 +323,38 @@ x
 
 ;; the % symbol is used to refer to the functions return value
 
+(map
+   (partial clean-payroll-data payroll-data) data-format)
 
 (apply interleave
   (map
    (partial clean-payroll-data payroll-data) data-format))
 
-;; (clean-payroll-data payroll-data data-format) ;=> (nill nil nil)
+(clean-payroll-data payroll-data data-format)
+;;=> (nill nil nil)
 
 
 
-
-(def hack-data {:max-sandwiches 300
-                :max-attendees 200
-                :weather "good"})
+(def hack-data {:venue-capacity 200
+                :sandwiches-per-person 1.5
+                :previous-dropout-percent 10
+                :weather-prediction "good"})
 
 
 (defn random-sandwiches
-  "Unintelligent guess at how many sandwiches will be eaten at Hackference"
-  [hackference]
-  (rand-int hackference))
+  "Unintelligent guess at how many sandwiches will be eaten at Hackathon"
+  [attendees-registered]
+  (rand-int attendees-registered))
 
-(defn how-many-sandwiches []
-  (hack-data :max-sandwiches))
+(defn how-many-sandwiches-to-order
+  [hack-data]
+  (* (hack-data :venue-capacity)
+     (hack-data :sandwiches-per-person)))
 
 
 (random-sandwiches 50)
-(how-many-sandwiches )
 
+(how-many-sandwiches-to-order hack-data)
 
 
 
@@ -189,6 +376,12 @@ x
 (best-hack-language)
 (worst-hack-language)
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Scope of functions
+
+;; 
 
 
 
@@ -213,18 +406,19 @@ x
 
 
 (any-sandwiches-left "mike")
+(any-sandwiches-left 1 2 3)
 
 
 ;; How does this multi-arity work?
 ;; The parameters are bound to there aguments when compiled.
 
 (def mult
-  (fn this
+  (fn multi-pass
       ([] 1)
       ([x] x)
       ([x y] (* x y))
       ([x y & more]
-          (apply this (this x y) more))))
+          (apply multi-pass (multi-pass x y) more))))
 
 
 
@@ -265,6 +459,9 @@ x
 (assoc-in me [:name :initials] "JLA")
 (update-in me [:address :street] #(str "33 " %))
 
+;; In Emacs Live, the shorthand for a lambda function is represented as #() rather than # followed by parenthesis
+
+;; Emacs Live also substitutes the lambda (fn ) symbol for a lambda function
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -283,10 +480,95 @@ x
 ;; - defined values have a green background
 ;; - evaluated values have a grey background
 
-(defn lets-be-lazy [x]
+(defn lets-be-lazy
+  "Create a range of Integer values up to the value of the argument"
+  [x]
   (range x))
+
+;; (doc range)
+;;
+;; clojure.core/range
+;; ([] [end] [start end] [start end step])
+;; Added in 1.0
+;;  Returns a lazy seq of nums from start (inclusive) to end (exclusive), by step, where start defaults to 0, step to 1, and endto infinity. When step is equal to 0, returns an infinite sequence of start. When start is equal to end, returns empty list.
+
 
 (lets-be-lazy 5)
 
+;; => (1 2 3 4 5)
 
-(foo "Fred")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; More examples of functions
+
+
+;;; functions
+
+;; A symbol is something that can be used the same as its value - refferential transparency
+;; There is no requirement to use symbols, although it does make the code more readable
+;; and makes it easy to reuse the value (by typing the symbol rather than the function again)
+
+;; let binds symbols to values, only existing withing the local scope
+;; requires an even number of mappings (eg. symbol value pairs)
+
+(fn [x y]
+  (let [square (fn [x] (* x x))]
+     (Math/sqrt (+ (square x) (square y)))))
+
+(fn [x y]
+  (letfn [(square [x] (* x x))]
+     (Math/sqrt (+ (square x) (square y)))))
+
+
+
+;; You cannot next annonymous functions inside each other (good!).
+
+
+#(Math/sqrt (+ (* %1 %1) (* %2 %2)))
+
+
+;; You can do a lot without defining functions
+
+;; defs are golbally accesssible slots to bind symbols to values
+;; - the are like memory locations
+(def pi 3.1415926)
+
+
+(def pythagorus
+  (fn [x y]
+    (Math/sqrt (+ (* x x) (* y y)))))
+
+;; a simpler way to bind behaviour to a symbol
+;; a list program is usually a collection of defs
+(defn pythagorass
+  [x y]
+  (Math/sqrt (+ (* x x) (* y y))))
+
+
+;; Dynamic Vars
+;;(def ^:dynamic *out*)
+
+;; meta-data can be thought of as a bit like java annotations - but dont compile in the same way
+
+;; beware of using dynamic vars as the can get splatted when you cross threading boundaries
+;; dont use this...
+;;(binding [*out* (io/writer (io/file "/tmp/foo.txt"))]
+;;  (println "Hello"))
+
+;; Clojures
+;;a pure function can only be written in terms of its arguments
+
+(let [x 3]
+  (fn [y]
+    (Math/sqrt (+ (* x x) (* y y)))))
+
+
+;; Clojure can access values safely, unlike languages such as JavaScript
+;; -- with JavaScript the values are mutable, so they could change
+;; Clojure values are immutable so the same result is returned what ever happens
+
+;; Partial functions - more idiomatic to spell out the function
+;; not used that much
+;; (partial pythagorus 3)
+
