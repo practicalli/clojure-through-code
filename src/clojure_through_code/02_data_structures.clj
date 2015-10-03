@@ -7,7 +7,7 @@
 ;; list (a linked list),
 ;; vector (indexed access like an array),
 ;; map (key / Value pairs, usually using clojure :keyword type for the keys,
-;; set (unique elements, not ,orered by default).
+;; set (unique elements, not ,ordered by default).
 ;; These data structures are typically used rather than defining your own types
 
 
@@ -22,7 +22,7 @@
 ;; you can use the list function to create a new list
 (list 1 2 3 4)
 (list -1 -0.234 0 1.3 8/5 3.1415926)
-(list "cat" "dog" "rabit" "fish")
+(list "cat" "dog" "rabit" "fish" 12 22/7)
 
 ;; you can use any "types" in your list or any other Clojure collection
 (list :cat :dog :rabit :fish)
@@ -35,12 +35,15 @@
 ;; further examples of mixing types
 
 (list )
-(list 1 2 3 4)
+(list 1 2 3 4) 
+
+(def five 5)  ;; bind the name five to the value 5, clojure's equivalent to assignment
+
 (list 1 2 "three" [4] five '(6 7 8 9))
 
-(1 2 3 4)
+;; (1 2 3 4) ;; This list causes an error when evaluated
 
-'(+ 1 2 3 4)
+'(1 2 3 4)
 
 (quote (1 2 3 4))
 
@@ -50,7 +53,7 @@
 ;; So, defining a list just using () will cause an error
 
 ;; This list definition will fail, unless you have defined a function called 1
-( 1 2 3 4)
+;; ( 1 2 3 4)
 
 ;; There is a special function called quote that tells Clojure to just treat the
 ;; list as data.
@@ -80,6 +83,7 @@
 (list :fred :barney :fred)
 
 
+;; Sets #{}
 
 ;; #{1 2 3 4 1}
 ;; duplicate key error
@@ -124,8 +128,11 @@
 ;; Typicall a :keyword is used for a the key in a map, with the value being
 ;; a string, number or another keyword
 {:key "value"}
+(:key 42)
+{:key symbol}
 {:key :value}
-
+{"key" "value"}
+ 
 ;; As with other collections, you can use anything as a key or a value,
 ;; they are all values underneath.
 {:key 42}
@@ -139,14 +146,78 @@
 ;; Here is an example of a map made up of a :keyword as the key and
 ;; a map as the value.  The map representing the value is itself
 ;; defined with :keywords and strings
-{:starwars-characters
- {:name "Luke Skywarker" :skill "Targeting Swamp Rats"}
- {:name "Darth Vader"    :skill "Crank phone calls"}
- {:name "JarJar Binks"   :skill "Upsetting a generation of fans"}}
+
+{:starwars {
+    :characters {
+      :jedi   ["Luke Skywalker"
+               "Obiwan Kenobi"]
+      :sith   ["Darth Vader"
+               "Darth Sideous"]
+      :droids ["C3P0"
+               "R2D2"]}
+    :ships {
+      :rebel-alliance  ["Millenium Falcon"
+                        "X-wing figher"]
+      :imperial-empire ["Intergalactic Cruser"
+                        "Destroyer"
+                        "Im just making these up now"]}}}
 
 
 
-;; Duplicate keys in maps are not allowed, so the following maps...
+;; Individual starwars characters can be defined using a map of maps
+ {:luke   {:fullname "Luke Skywarker" :skill "Targeting Swamp Rats"}
+  :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
+  :jarjar {:fullname "JarJar Binks"   :skill "Upsetting a generation of fans"}}
+
+
+;; To make the starwars character information easier to use, lets give the collection of characters a name using the def function
+
+(def starwars-characters
+   {:luke   {:fullname "Luke Skywarker" :skill "Targeting Swamp Rats"}
+    :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
+    :jarjar {:fullname "JarJar Binks"   :skill "Upsetting a generation of fans"}})
+
+;; Now we can refer to the characters using keywords
+
+;; Using the get function we return all the informatoin about Luke
+(get starwars-characters :luke)
+
+;; By wrapping the get function around our first, we can get a specific
+;; piece of information about Luke
+(get (get starwars-characters :luke) :fullname)
+
+;; There is also the get-in function that makes the syntax a little easier to read
+(get-in starwars-characters [:luke :fullname])
+(get-in starwars-characters [:vader :fullname])
+
+;; Or you can get really Clojurey by just talking to the map directly
+(starwars-characters :luke)
+(:fullname (:luke starwars-characters))
+(:skill (:luke starwars-characters))
+
+(starwars-characters :vader)
+(:skill (:vader starwars-characters))
+(:fullname (:vader starwars-characters))
+
+
+;; And finally we can also use the threading macro to minimise our code further
+
+(-> starwars-characters
+    :luke)
+
+(-> starwars-characters
+    :luke
+    :fullname)
+
+(-> starwars-characters
+    :luke
+    :skill)
+
+;; More on Destructuring
+;; https://gist.github.com/john2x/e1dca953548bfdfb9844
+
+
+;; Duplicate keys in a map are not allowed, so the following maps...
 
 ;; {"fish" "battered" "chips" "fried" "fish" "battered and fried"}
 ;; {:fish "battered" :chips "fried" :fish "battered & fried"}
