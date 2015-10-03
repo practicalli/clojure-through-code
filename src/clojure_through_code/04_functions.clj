@@ -46,7 +46,8 @@ x
 ; The [] is the list of arguments for the function.
 
 (defn hello [name]
-  (str "Hello " name))
+  (str "Hello there " name))
+
 (hello "Steve") ; => "Hello Steve"
 
 ; You can also use the annonymous function shorthand, # (), to create functions, (not that useful in this simple example).  The %1 placeholder takes the first argument to the function.  You can use %1, %2 and %3
@@ -57,7 +58,7 @@ x
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; A brief divergence on anonymous functions and the #() syntatic sugar
 
-;; The anonymous function shorthand is only useful for one function call - personally I am not that keen on it 
+;; The anonymous function shorthand is only useful for one function call - personally I am not that keen on it
 (#(+ %1 %2 %3) 2 4 6)
 
 ;; A simple reverse anonymous function, using the threading macro
@@ -184,7 +185,7 @@ x
 ;; #'user/sq
 ;; user=> (sq 3)
 ;; 9
-;; user=> (map #(class %) [1 "asd"])      
+;; user=> (map #(class %) [1 "asd"])
 ;; (java.lang.Integer java.lang.String)
 
 
@@ -222,7 +223,7 @@ x
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Polymorphism
 
-;; Clojure does not provide syntax for encapsulation as Java, C++ and C# developers know it.  No syntax is provided for defining a Class hierachy.  However, polymorphism syntax is available whendefining functions with multiple arity (different behaviour based on the number of arguments). 
+;; Clojure does not provide syntax for encapsulation as Java, C++ and C# developers know it.  No syntax is provided for defining a Class hierachy.  However, polymorphism syntax is available whendefining functions with multiple arity (different behaviour based on the number of arguments).
 
 ; You can have multi-variadic functions too
 ;; one function that behaves differently dependant on the number or arugments passed
@@ -572,3 +573,100 @@ x
 ;; not used that much
 ;; (partial pythagorus 3)
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Understanding how functions work (move this to a later section)
+
+;; To see how a funciton has been defined, use the source function followed by that functions name
+
+;; Lets take a look at the srt function
+
+;; (source str)
+
+;; This gives the source code for str as a result
+
+;; (defn str
+;;   "With no args, returns the empty string. With one arg x, returns
+;;   x.toString().  (str nil) returns the empty string. With more than
+;;   one arg, returns the concatenation of the str values of the args."
+;;   {:tag String
+;;    :added "1.0"
+;;    :static true}
+;;   (^String [] "")
+;;   (^String [^Object x]
+;;    (if (nil? x) "" (. x (toString))))
+;;   (^String [x & ys]
+;;      ((fn [^StringBuilder sb more]
+;;           (if more
+;;             (recur (. sb  (append (str (first more)))) (next more))
+;;             (str sb)))
+;;       (new StringBuilder (str x)) ys)))
+;; nil
+
+;; The value nil is returned from the source function as the output of the function code is a side effect
+
+
+
+
+;; Basic refactoring with multiple cursors
+
+(defn refactor-me
+  "A simple little function used to practice simple refactoring with emacs multiple cursors"
+  [better-arg-name]
+  (let [arg better-arg-name]
+    (if (< (count arg) (count better-arg-name))
+      (str better-arg-name)
+      (str arg))))
+
+(refactor-me "fish")
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Fixed or Variable Arity
+
+;; http://stuartsierra.com/2015/06/01/clojure-donts-optional-arguments-with-varargs
+
+;; Say you want to define a function with a mix of required and optional arguments. I’ve often seen this:
+
+(defn foo [a & [b]]
+  (println "Required argument a is" a)
+  (println "Optional argument b is" b))
+
+;; This is a clever trick. It works because & [b] destructures the sequence of arguments passed to the function after a. Sequential destructuring doesn’t require that the number of symbols match the number of elements in the sequence being bound. If there are more symbols than values, they are bound to nil.
+
+(foo 3 4)
+;; Required argument a is 3
+;; Optional argument b is 4
+;;=> nil
+
+(foo 9)
+;; Required argument a is 9
+;; Optional argument b is nil
+;;=> nil
+
+;; I don’t like this pattern for two reasons.
+
+;; One. Because it’s variable arity, the function foo accepts any number of arguments. You won’t get an error if you call it with extra arguments, they will just be silently ignored.
+
+(foo 5 6 7 8)
+;; Required argument a is 5
+;; Optional argument b is 6
+;;=> nil
+
+;; Two. It muddles the intent. The presence of & in the parameter vector suggests that this function is meant to be variable-arity. Reading this code, I might start to wonder why. Or I might miss the & and think this function is meant to be called with a sequence as its second argument.
+
+;; A couple more lines make it clearer:
+
+(defn foo
+  ([a]
+   (foo a nil))
+  ([a b]
+   (println "Required argument a is" a)
+   (println "Optional argument b is" b)))
+
+;; The intent here is unambiguous: The function takes either one or two arguments, with b defaulting to nil. Trying to call it with more than two arguments will throw an exception, telling you that you did something wrong.
+
+;; And one more thing: it’s faster. Variable-arity function calls have to allocate a sequence to hold the arguments, then go through apply. Timothy Baldridge did a quick performance comparison showing that calls to a function with multiple, fixed arities can be much faster than variable-arity (varargs) function calls.

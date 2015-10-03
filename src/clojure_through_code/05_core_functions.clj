@@ -1,5 +1,10 @@
 (ns clojure-through-code.05-core-functions)
 
+;; There are a lot of functions in the Clojure core library
+
+(count (ns-publics 'clojure.core))
+
+;; when I checked on 7th April 2015 there were 599 functions defined in Clojure Core for version 1.6
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Data structures behave a little like functions
@@ -24,6 +29,8 @@
 
 ;; these are the building blocks for your own code and other Clojure libraries
 
+;; There are a great number of functions defined in Clojure core
+(count (ns-publics 'clojure.core))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with data structures

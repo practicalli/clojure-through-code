@@ -54,3 +54,6 @@ Math/PI
 (:firstName (bean (new Person "Alexandre" "Martins")))
 ;; -> Alexandre
 
+
+;; Miscellaneous
+

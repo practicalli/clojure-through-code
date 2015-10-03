@@ -192,11 +192,33 @@
 (* 1 2) ; => 2
 (/ 2 1)
 (/ 22 7.0)
+(/ 5 20)
+
+(/ (* 22/7 3) 3)
+
+;; Ratios delay the need to drop into decimal numbers.  Once you create a decimal number then everything it touches had a greater potential to becoming a decimal
 
 ;; Clojure uses Prefix notation, so math operations on many arguments is easy.
 (+ 1 2 3 4 5)
 
 (+ 1 2 (* 3 4) (- 5 6 -7))
+
+(+)
+(*)
+(* 2)
+(+ 4)
+
+;; Variadic functions
+(+ 1 2 3)
+(< 1 2 3)
+(< 1 3 8 4)
+(remains 22 7)
+
+(inc 3)
+(dec 4)
+
+(min 1 2 3 5 8 13)
+(max 1 2 3 5 8 13)
 
 (apply + [1 2 3])
 
@@ -207,6 +229,9 @@
 
 (repeat 4 9)
 
+
+
+
 ; Equality is =
 (= 1 1) ; => true
 (= 2 1) ; => false
@@ -215,6 +240,21 @@
 
 ; You need not for logic, too
 (not true) ; => false
+
+
+(identical? "foo" "bar")
+(identical? "foo" "foo")
+(= "foo" "bar")
+(= "foo" "foo")
+
+(identical? :foo :bar)
+(identical? :foo :foo)
+
+;; Keywords exist as identifiers and for very fast comparisons
+
+(def my-map {:foo "a"})
+
+(= "a" (:foo my-map))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -234,6 +274,12 @@
 (true? (not false))
 (- 2)
 ; (class (/))  ;; wrong number of arguments error
+
+(if true "hello" "goodbye")
+(if false "one" "two")
+(if nil "uh" "oh")
+(if false "Hello word" "Goodbye crule world")
+
 
 
 ;; Predicates - take a value and return a boolean result (true | false)
@@ -291,6 +337,61 @@
 (class (/ 22 7.0))
 
 
+;; Is something a thing
+
+(instance? String "hello")
+
+(instance? Double 3.14)
+
+(instance? Number 3.14)
+
+(instance? java.util.Date #inst "2015-01-01")
+
+
+
+;; Lets try and break clojure with Math
+
+(/ 22 0)
+
+;; ArithmeticException Divide by zero  clojure.lang.Numbers.divide (Numbers.java:156)
+
+;; java.lang.* packages are included in all Clojure projects, so you can call the
+;; Java Math functions easily
+
+(Math/sqrt 4)
+
+(Math/sqrt 13)
+
+;; Lets have some maths fun and see how Clojure deals with this
+
+(Math/sqrt -1)
+
+;; So Clojure, well Java really as its the Java Math class methods, deals with interesting
+;; mathematical concepts like the square-root of minus one.
+
+;; So what does NaN mean.  Well by consulting Stack Overflow, a NaN is produced if a floating point operation would produce an undefinable result.  Other examples include dividing 0.0 by 0.0 is arithmetically undefined.
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure projects
+
+;; Install Leiningen build tool from leingingen.org
+;; Create a new project with lein new project-name
+;; Run the repl using lein repl
+
+;; Look at the project configuration file project.clj
+;; The project is defined as Clojure code using defproject macro, keywords, maps & vectors
+
+;; In the source code src/project-name/core.clj is some sample code in a specific namespace
+;; Namespaces are similar to packages in Java
+
+;; A namespace is a way to organise your clojure code (data structure and function definitions)
+;; The namespace represents the underlying directory and filename which contain specific data structure and function definitions
+
+
+(namespace 'clojure-through-code.01-basics/my-map)
+(name 'clojure-through-code.01-basics/my-map)
 
 
 

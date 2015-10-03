@@ -24,11 +24,16 @@
 ;; the second definition of players point the var name to something new
 ;; we havent changed what players was, it just points to something diferent
 
-
+;; Add players
 (swap! players conj 2)
 (deref players)
+@players
 
+(reset! players 0)
 
+(reset! players [])
+
+;; Add players by name
 (defn joining-game [name]
   (swap! players conj name))
 

@@ -111,6 +111,23 @@ dev-event-details
                  { :ticker "MSFT" :lastTrade 29.12  :open 29.08 }
                  { :ticker "ORCL" :lastTrade 21.90  :open 21.83 }])
 
+;; We can get the value of the whole data structure by refering to it by name
+portfolio
+
+;; As the data structure is a vector (ie. array like) then we can ask for a specific element by its position in the array using the nth function
+
+;; Lets get the map that is the first element (again as a vector has array-like properties, the first element is referenced by zero)
+(nth portfolio 0)
+
+;; The vector has 4 elements, so we can access the last element by referencing the vector using 3
+(nth portfolio 3)
+
+;; As portfolio is a collection (list, vector, map, set), also known as a sequence, then we can use a number of functions that provide common ways of getting data from a data structure
+
+(first portfolio)
+(rest portfolio)
+(last portfolio)
+
 
 ;;;;;;;;;;;;;;;;
 ;; Evaluating things you have defined
@@ -203,7 +220,7 @@ developer-events
 ;; The second form is syntax sugar for the first one.
 
 
-;; You can define a macro for def- 
+;; You can define a macro for def-
 (defmacro def- [item value]
   `(def ^{:private true} ~item ~value)
 )
@@ -235,6 +252,41 @@ developer-events
 ; or the end of a vector
 (conj [1 2 3] 4) ; => [1 2 3 4]
 (conj '(1 2 3) 4) ; => (4 1 2 3)
+
+
+;; Showing how changing data structures does not change the original data structure
+;; Lets define a name for a data structure
+(def name1 [1 2 3 4])
+
+;; when we evaluate that name we get the original data we set
+name1
+
+;; Now we use a function called conj to adds (conjoin) another number to our data structure
+(conj name1 5)
+
+;; This returns a new value without changing the original data structre
+name1
+
+;; We cant change the original data structure, it is immutable.  Once it is set it cant be changed.
+;; However, if we give a name to the resultl of changing the original data structure, we can refer to that new data structure
+(def name2(conj name1 5))
+
+;; Now name2 is the new data structure, but name1 remains unchanged
+name2
+name1
+
+;; So we cannot change the data structure, however we can achieve something that looks like we have changed it
+;; We can re-assign the original name to the result of changing the original data structure
+(def name2(conj name1 5))
+
+;; Now name1 and name2 are the same result
+name2
+name1
+
+;; Analogy (Chris Ford)
+;; You have the number 2.  If you add 1 to 2, what value is the number 2?
+;; The number 2 is still 2 no mater that you add 1 to it, however, you get the value 3 in return
+
 
 ; Use concat to add lists or vectors together
 (concat [1 2] '(3 4)) ; => (1 2 3 4)
@@ -301,11 +353,17 @@ developer-events
 
 ;; 4Clojure - exercise 65
 
+;; Clojure has many sequence types, which act in subtly different ways. The core functions typically convert them into a uniform "sequence" type and work with them that way, but it can be important to understand the behavioral and performance differences so that you know which kind is appropriate for your application.
+
+;; Write a function which takes a collection and returns one of :map, :set, :list, or :vector - describing the type of collection it was given.
+;; You won't be allowed to inspect their class or use the built-in predicates like list? - the point is to poke at them and understand their behavior.
+
 (= :map (if (keyword? (first(first {:a 1, :b 2}))) :map))
 
 (if (keyword? (first(first {:a 1 :b 2}))) :map )
 
 (first (first {:a 1 :b 2}))
 
+(first {:a 1 :b 2})
 
 (if (keyword? (first(first %))) :map )
