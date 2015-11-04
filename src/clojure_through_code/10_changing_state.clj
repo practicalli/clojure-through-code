@@ -25,11 +25,12 @@
 ;; we havent changed what players was, it just points to something diferent
 
 ;; Add players
-(swap! players conj 2)
+(swap! players conj "Player One")
 (deref players)
 @players
 
-(reset! players 0)
+(swap! players conj "Player Two")
+(reset! players ["Player One"])
 
 (reset! players [])
 
@@ -39,8 +40,8 @@
 
 (joining-game "Rachel")
 (joining-game "Harriet")
-(joining-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
-(joining-game "Sally" "Sam") ;; too many parameters
+;; (joining-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
+;; (joining-game "Sally" "Sam") ;; too many parameters
 
 @players
 
@@ -75,12 +76,16 @@
 
 (join-game "Betty" betty-account)
 
+
+
+(def player-ref (ref [] :validator #(<= (count %) 2)))
+
 @player-ref
 @toms-account
 @harry-account
 @betty-account
 
-(def player-ref (ref [] :validator #(<= (count %) 2)))
+
 
 (defn join-game-safely [name player-account]
   (dosync
@@ -90,7 +95,7 @@
 
 (join-game-safely "Tom" toms-account)
 (join-game-safely "Harry" harry-account)
-(join-game-safely "Betty" betty-account)
+;; (join-game-safely "Betty" betty-account)
 
 
 ;; adding accounts example
