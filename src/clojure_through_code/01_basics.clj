@@ -2,6 +2,7 @@
 ;; namespaces allow you to structure your Clojure code into logical groupings
 ;; namesaces help you use functions defined in one namespace in a different namespace
 ;; using the (use) function in clojure.
+
 (ns clojure-through-code.01-basics)
 
 
@@ -53,7 +54,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Using Java Interoperability
 
-;; java.lang is part of the Java runtime environment, so when ever you run a REPL you can call any methods without having to import them or include any dependencies
+;; java.lang is part of the Clojure runtime environment, so when ever you run a REPL you can call any methods without having to import them or include any dependencies
 
 ;; From java.lang.System getProperty() as documented at:
 ;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
@@ -148,7 +149,7 @@
 (->>
  (str " This")
  (str " is")
- (str " backwards"))
+ (str "backwards"))
 
 ;; add all project information to a map
 (->> "project.clj"
@@ -212,7 +213,7 @@
 (+ 1 2 3)
 (< 1 2 3)
 (< 1 3 8 4)
-(remains 22 7)
+;; (remaining 22 7)
 
 (inc 3)
 (dec 4)
