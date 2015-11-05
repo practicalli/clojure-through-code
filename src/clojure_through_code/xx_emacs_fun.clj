@@ -15,15 +15,9 @@
 
 (def five 5)
 
-(Integer "80")
+(Integer. "80")
 
 (let [x  (+ 2 2)])
-
-;; (function
-;;  (blah bluha blus)
-;;  (wibble fish aargh
-;;          (wifffl sisi
-;;                  (insoss difn))))
 
 
 ;; Snippets for clojure-mode
