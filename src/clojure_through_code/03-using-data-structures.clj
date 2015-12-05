@@ -83,14 +83,14 @@ developer-events-strings
 ;; pieces of data associated with each event name.
 ;; So we have a map where each value is itself a map.
 (def dev-event-details
-  {:devoxxuk     {:URL "http://jaxlondon.co.uk"
-                  :event-type "Conference"
+  {:devoxxuk     {:URL                 "http://jaxlondon.co.uk"
+                  :event-type          "Conference"
                   :number-of-attendees 700
-                  :call-for-papers true}
-   :hackthetower {:URL "http://hackthetower.co.uk"
-                  :event-type "hackday"
+                  :call-for-papers     true}
+   :hackthetower {:URL                 "http://hackthetower.co.uk"
+                  :event-type          "hackday"
                   :number-of-attendees 60
-                  :call-for-papers false}})
+                  :call-for-papers     false}})
 
 ;; lets call the data structre and see what it evaluates too, it should not be a surprise
 dev-event-details

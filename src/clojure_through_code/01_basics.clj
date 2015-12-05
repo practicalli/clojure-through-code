@@ -352,7 +352,7 @@
 
 ;; Lets try and break clojure with Math
 
-(/ 22 0)
+;; (/ 22 0)
 
 ;; ArithmeticException Divide by zero  clojure.lang.Numbers.divide (Numbers.java:156)
 
