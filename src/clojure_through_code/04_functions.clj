@@ -670,3 +670,73 @@ x
 ;; The intent here is unambiguous: The function takes either one or two arguments, with b defaulting to nil. Trying to call it with more than two arguments will throw an exception, telling you that you did something wrong.
 
 ;; And one more thing: it’s faster. Variable-arity function calls have to allocate a sequence to hold the arguments, then go through apply. Timothy Baldridge did a quick performance comparison showing that calls to a function with multiple, fixed arities can be much faster than variable-arity (varargs) function calls.
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Avoiding named parameters in functions
+
+;; You could define a function to process a contact by specifying the particular arguments
+
+(defn process-contact [name address email]
+  (str name ", " address ", " email))
+
+(process-contact "John" "Clojureville" "john@clj.com")
+
+;; If we want to add more data to a contact then we end up changing the design of the function, breaking the api of our code.
+
+;; This call to our function will break as it has the wrong number of arguments
+
+;; (process-contact "John" "Clojureville" "john@clj.com" "07911000123")
+
+;; We could define a multi-method function, writing the behaviour for every possible group of parameters,
+;; however, unless we now all the possible parameters, we still need to update the functions.
+
+;; Using a multi-method also adds more complexity to the design of the function.
+
+;; Instead of specifically stating the parameters, you can use a clojure data structure.
+;; Candidates structures would be vectors or maps.
+;; The advantage of maps is that you can add symantic data in the keys to help clarify the meaning of the data
+
+(defn process-contact-map [contact-map]
+  (let [name (get contact-map :name)
+        address (get contact-map :address)
+        email (get contact-map :email)]
+    (str name ", " address ", " email)))
+
+(process-contact-map {:name "John" :address "Clojureville" :email "john@clj.com"})
+
+;; We can add another element to the function call without having to change the argument sent to the function, it remains a map.
+;; Our function will just ignore any additional entries in the map as we do not bind to them with the let function.
+
+(process-contact-map {:name "John" :address "Clojureville" :email "john@clj.com" :phone "07911000123"})
+
+;; This new version of the function seems more verbose and in this example it is.
+;; However, its easy to call this with an incomplete set of values in the map or extra values in the map and they will be ignored,
+;; rather than causing an error by not passing the correct number of arguments when calling a function.
+
+;; The previous funciton can be simplified we use a vector as the functions parameter.
+;; The let function uses destructuring to bind local symbols in the order of elements in the vector.
+
+(defn process-contact-vector-destructured [contact-vector]
+  (let
+    [[name address email] contact-vector]
+    (str name ", " address ", " email)))
+
+(process-contact-vector-destructured ["John" "Clojureville" "john@clj.com"])
+
+(process-contact-vector-destructured ["John" "Clojureville" "john@clj.com" "07911000123"])
+
+;; We can also make the map version of our function simpler by using the keyword :keys
+;; This new version of the function is much simpler to parse once you are comfortable with destructuring
+;; For every key in the map, a locally scoped symbol with the same name is created that points to the respective
+;; value for each of the keywords in the map.
+
+(defn process-contact-map-destructured [{:keys [name address email]}]
+    (str name ", " address ", " email))
+
+(process-contact-map-destructured {:name "John" :address "Clojureville" :email "john@clj.com"})
+
+;; Now if we change the map contents, we only have to change what we do with those elements.
+;; If our code does nothing wiith those elements, then they are simply ignored.
+
+(process-contact-map-destructured {:name "John" :address "Clojureville" :email "john@clj.com" :phone "07911000123"})
