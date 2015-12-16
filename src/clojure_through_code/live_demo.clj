@@ -1,12 +1,56 @@
 ;; JAX London - Get Functional with Clojure
+;; Get Functional with Clojure
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; What is Clojure
+
+;; A general purpose programming language
+;; - a modern LISP
+;; - hosted on the Java Virtual Machine (JVM), Microsoft CLR, JavaScript Engines (V8, Node)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Why Clojure
+
+;; Functional
+;; - all functions return a value & can be used as arguments / parameters
+;; - declarative approach
+
+;; Dynamic
+;; - types: making it faster to develop & test ideas
+;; - runtime: continuously compiling & running code for fast feedback
+
+;; Immutable
+;; - by default, making behaviour more deterministic
+;; - easier to reason and build concurrent systems
+;; - easier to scale via paralelism
+
+;; Extensibility & Interop
+;; - Macros allows the community to extend the language
+;; - use other libraries on the hosted runtime (JVM, CLR, JS)
+
+;; Persistent Data Structures
+;; - list, map, vector, set are all immutable
+;; - return new copies instead of being changed
+;; - efficient memory sharing between data structure copies
+
+;; Managing State with Software Transactional Memory (STM)
+;; - atoms / refs wrap data structures to make mutable state
+;; - STM controls state changes (like having an in-memory acid database)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Namespaces
 
 ;; Define the scope of your functions and data structures, similar in concept to java packages
+;; Namespaces encourage a modular / component approach to Clojure
 
 (ns clojure-through-code.live-demo)
+
+;; This namespace matches the directory structure of the project
+
+;; project-name
+;; - src
+;;   - clojure_through_code
+;;     - live_demo.clj
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
