@@ -1,4 +1,3 @@
-;; JAX London - Get Functional with Clojure
 ;; Get Functional with Clojure
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -64,9 +63,10 @@
 
 my-data
 
-(class "whats my type")
+;; See the types used in the hosted language 
+(type "whats my type")
 
-(def conference-name "Java2Days")
+(def conference-name "CodeMotion: Tel Aviv")
 
 
 ;; bind a name to a function (behaviour)
@@ -593,3 +593,105 @@ my-data
 (javax.swing.JOptionPane/showMessageDialog nil hello-message)
 
 
+;;;;;;;;;;;;;
+;; Working with mutable state
+
+
+;; Using an atom
+
+;; We want to manage players for an online card-game
+;; Use a vector wraped by an atom for safe mutable state
+
+(def players (atom []))
+
+;; Or we may want to limit the number of players
+
+(def players (atom [] :validator #(<= (count %) 4)))
+
+;; the second definition of players point the var name to something new
+;; we havent changed what players was, it just points to something diferent
+
+
+;; Add players
+(swap! players conj "Player One")
+
+;; View players
+(deref players)
+@players
+
+
+(swap! players conj "Player Two")
+(reset! players ["Player One"])
+
+(reset! players [])
+
+;; Add players by name
+(defn joining-game [name]
+  (swap! players conj name))
+
+(joining-game "Rachel")
+(joining-game "Harriet")
+(joining-game "Idan")
+(joining-game "Joe")
+;; (joining-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
+;; (joining-game "Sally" "Sam") ;; too many parameters
+
+@players
+
+
+
+(def game-account (ref 1000))
+(def toms-account (ref 500))
+(def dick-account (ref 500))
+(def harry-account (ref 500))
+(def betty-account (ref 500))
+
+@betty-account
+
+(defn credit-table [player-account]
+  (dosync
+   (alter player-account - 100)
+   (alter game-account + 100)))
+
+(defn add-to-table [name]
+  (swap! players conj name))
+
+(defn join-game [name account]
+  ;;  (if (< account 100 )
+  ;;    (println "You're broke")
+  (credit-table account)
+  (add-to-table name))
+
+(join-game "Betty" betty-account)
+
+
+
+
+
+
+;; Using a ref 
+
+(def all-the-cats (ref 3))
+
+(defn updated-cat-count [fn-key reference old-value new-value]
+  ;; Takes a function key, reference, old value and new value
+  (println (str "Number of cats was " old-value))
+  (println (str "Number of cats is now " new-value)))
+
+;; Watch for changes in the all-the-cats ref
+(add-watch all-the-cats :cat-count-watcher updated-cat-count)
+
+;; evaluate the following code to increment the cats
+;; view the results in the repl output (to see the println output)
+(dosync (alter all-the-cats inc))
+
+
+
+;;;;;;;;;;;;;
+;; Resources
+
+;; clojure.org
+;; clojuredocs.org
+;; 4clojure.org
+;; braveclojure.com
+;; jr0cket.co.uk
