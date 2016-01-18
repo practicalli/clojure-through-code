@@ -740,3 +740,24 @@ x
 ;; If our code does nothing wiith those elements, then they are simply ignored.
 
 (process-contact-map-destructured {:name "John" :address "Clojureville" :email "john@clj.com" :phone "07911000123"})
+
+
+;; another example of destructuring with maps
+;; displaying a user name that is held in a map, so long as the full name is supplied
+
+(defn display-name [user]
+  (let [{:keys [first-name last-name email-address]} user]
+    (if (not-any? nil? [first-name last-name])
+      (str first-name " " last-name)
+      (get user :email-address))))
+
+;; If both the first & last names are in the map passed as an argument then a combined
+;; first & last name is returned
+(display-name {:first-name    "John"
+               :last-name     "Stevenson"
+               :email-address "john@jr0cket.co.uk"})
+
+
+;; If the first or last name is missing, then just return the email address
+(display-name {:last-name     "Stevenson"
+               :email-address "john@jr0cket.co.uk"})
