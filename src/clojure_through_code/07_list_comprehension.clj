@@ -45,3 +45,22 @@
              (+ x y))]
   [x y])
 
+
+
+;; From http://integrallis.com/2010/12/on-mini-languages-and-clojure#.VorOFJfFs3y
+
+(for [x (range 10)] x)
+
+;;> (0 1 2 3 4 5 6 7 8 9)
+
+;; using the :when to filter out odd items
+(for [x (range 10) :when (even? x)] x)
+
+;> (0 2 4 6 8)
+
+;; using the :while keyword - Note that the evaluation
+;; stops when the first item, in this case 1 fails the predicate
+(for [x (range 10) :while (even? x)] x)
+
+;;> (0)
+
