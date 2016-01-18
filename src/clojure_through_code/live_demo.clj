@@ -12,14 +12,14 @@
 
 ;; Functional
 ;; - all functions return a value & can be used as arguments / parameters
-;; - declarative approach
+;; - deterministic: given the same input you get the same result
 
 ;; Dynamic
 ;; - types: making it faster to develop & test ideas
 ;; - runtime: continuously compiling & running code for fast feedback
 
 ;; Immutable
-;; - by default, making behaviour more deterministic
+;; - everything is immutable by default
 ;; - easier to reason and build concurrent systems
 ;; - easier to scale via paralelism
 
@@ -35,6 +35,10 @@
 ;; Managing State with Software Transactional Memory (STM)
 ;; - atoms / refs wrap data structures to make mutable state
 ;; - STM controls state changes (like having an in-memory acid database)
+
+;; Learning a new language helps improve how you use your current languages
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Namespaces
@@ -64,10 +68,10 @@
 my-data
 
 ;; See the types used in the hosted language 
-(type "whats my type")
+(type [1 2 3])
 
 (def conference-name "CodeMotion: Tel Aviv")
-
+(type conference-name)
 
 ;; bind a name to a function (behaviour)
 (defn do-stuff [data]
@@ -77,16 +81,25 @@ my-data
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evaluating Clojure
 
+;; Values evaluate to themselves
+
+1
+"String"
+[1 2 3 4 "Vector"]
+{:key "value"}
+
 ;; Names can be bound to data or functions and when you evaluate the name it returns a value
 
+;; Names built into the Clojure language
 ;; The full clojure version, major, minor & point version of Clojure
 *clojure-version*
 
 ;; Calling simple functions
 
 (+ 1 2 3 4 5)
-(+ 1 2 (- 4 -2) (* (/ 36 3) 4) 5)
 
+;; precidence is explicit - no uncertanty
+(+ 1 2 (- 4 -2) (* (/ 36 3) 4) 5)
 
 ;; calling a function we defined previously
 (do-stuff my-data)
@@ -117,11 +130,10 @@ my-data
 ;; Make the result prettier using the Clojure str function
 (str "Current Java version: " (System/getProperty "java.version"))
 
-;; More functions to get information from our environment
+;; Functions can be used as arguments to function calls
 (slurp "project.clj")
 (read-string (slurp "project.clj"))
 (nth (read-string (slurp "project.clj")) 2)
-
 
 ;; The above code is classic Lisp, you read it from the inside out, so in this case you
 ;; start with (slurp ...) and what it returns is used as the argument to read-string...
@@ -130,14 +142,13 @@ my-data
 ;; Read the text of that file using read-string
 ;; Select just the third string using nth 2 (using an index starting at 0)
 
-
 ;; You can format the code differently, but in this case its not much easier to read
 (nth
  (read-string
   (slurp "project.clj"))
  2)
 
-
+;; Macros
 ;; the same behaviour as above can be written using the threading macro
 ;; which can make code easier to read by reading sequentially down the list of functions.
 
@@ -146,6 +157,8 @@ my-data
  slurp
  read-string
  (nth 2))
+
+;; using the macroexpand function you can see what code is actually created
 
 ;; Using the threading macro, the result of every function is passed onto the next function
 ;; in the list.  This can be seen very clearly usng ,,, to denote where the value is passed
@@ -186,13 +199,13 @@ my-data
      (apply hash-map)
      (def project))
 
-
+project 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with strings & side-effects
 
 ;; You could use the Java-like function `println` to output strings.
 
-(println "Hello, whats different with me?  What value do I return")
+(str "Hello, whats different with me?  What value do I return")
 
 ;; However, something different happens when you evaluate this expression.  This is refered to as a side-effect because when you call this function it returns nil.  The actual text is output to the REPL or console.
 
@@ -219,13 +232,15 @@ my-data
 (- 2 1)
 (* 1 2)
 (/ 2 1)
+(/ 22 7)
 (/ 22 7.0)
 (/ 5 20)
-(/ (* 22/7 3) 3)
-(/ 22 7)
 (/ 38 4)
+(/ (* 22/7 3) 3)
 
-;; Ratios delay the need to drop into decimal numbers.  Once you create a decimal number then everything it touches had a greater potential to becoming a decimal
+;; Ratios delay the need to drop into decimal numbers.  Once you create a decimal number then everything it touches had a greater potential to becoming a decimal.
+
+;; Prefix motation means we can define a value of 22/7 as a value without it being interprested as an operation or function to evaluate.
 
 ;; Clojure uses Prefix notation, so math operations on many arguments is easy.
 (+ 1 2 3 4 5)
@@ -269,7 +284,7 @@ my-data
 ; Equality is =
 
 (= 1 1)
-(= 2 1) 
+(= 2 1)
 
 (identical? "foo" "bar")
 (identical? "foo" "foo")
@@ -285,6 +300,8 @@ my-data
 
 (def my-map {:foo "a"})
 
+my-map
+(def my-map [ 1 2 3 4 ])
 (= "a" (:foo my-map))
 
 
@@ -695,3 +712,17 @@ my-data
 ;; 4clojure.org
 ;; braveclojure.com
 ;; jr0cket.co.uk
+
+
+;; different map functions
+;; both functions will take a sequence of numbers for a point on a map, eg [24 -15]
+;; map will return a result as a list
+;; mapv will return a result as a vector
+
+(defn degrees->radians [point]
+  (map #(Math/toRadians %) point))
+
+(defn degrees->radians [point]
+  (mapv #(Math/toRadians %) point))
+
+(degrees->radians [1 10])
