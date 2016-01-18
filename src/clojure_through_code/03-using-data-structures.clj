@@ -178,6 +178,18 @@ developer-events
 (get luke :skill)
 
 
+;; Getting the keys or values in a map using keywords
+
+;; When you use a keyword, eg. :name, as the key in a map, then that keyword can be used as a function call on the map to return its associated value.
+;; Maps can also act as functions too.
+
+(:name luke)
+(luke :name)
+
+;; There are also functions that will give you all the keys of a map and all the values of that map
+(keys luke)
+(vals luke)
+
 ;; Set #{}
 ;; a unique set of elements
 
