@@ -98,6 +98,12 @@ name-of-new-string
 
 
 
+;; Example: Adding up values from 1 to 40 and return the overall total
+(apply + (range 1 40))
+(reduce + (range 1 40))
+
+;; Both the reply and reduce functions take 2 arguments, the first is the function to apply to a data structure, the second is the data structure.  In this example, rather than type out the Integer numbers from 1 to 40, we use the range function to generate them for us.
+
 ;; Functiors
 ;; - put simply a function that takes a value and a function as its arugments, eg map, apply
 ;; - the value, typically a collection (vector, map, string) is unpacked and each element is passed
