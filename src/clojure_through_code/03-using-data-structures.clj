@@ -129,7 +129,7 @@ portfolio
 (last portfolio)
 
 
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evaluating things you have defined
 
 person
@@ -190,6 +190,7 @@ developer-events
 (keys luke)
 (vals luke)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set #{}
 ;; a unique set of elements
 
