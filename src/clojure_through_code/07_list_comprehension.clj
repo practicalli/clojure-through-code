@@ -53,13 +53,12 @@
 
 ;;> (0 1 2 3 4 5 6 7 8 9)
 
-;; using the :when to filter out odd items
+;; filter out values :when they do not meet the condition
 (for [x (range 10) :when (even? x)] x)
 
 ;> (0 2 4 6 8)
 
-;; using the :while keyword - Note that the evaluation
-;; stops when the first item, in this case 1 fails the predicate
+;; iterate :while condition is met
 (for [x (range 10) :while (even? x)] x)
 
 ;;> (0)
