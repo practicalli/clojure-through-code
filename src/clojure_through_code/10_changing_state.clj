@@ -1,7 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Changing state in Clojure
 
-;; Example: Players for a game
+;; The examples in this section relate to an online gambling game in which players compete against each other and against the tame itself.
+;; The hands that the players are dealt and the money which they have in their account are mutable in these examples
+
+;; Note: You could make the card hand that each player holds immutable using a new persistent data structure for each game and only make the deck of cards they are drawing from immutable for a particular round of games.  Actually you could make both immutable.
+
+;; The only value that seems to really benefit from state is the current amount of a players account, however, even that could be immutable, so long as changes are written to a persistent storage 
 
 (ns clojure-through-code.10-changing-state)
 
@@ -30,18 +35,18 @@
 @players
 
 (swap! players conj "Player Two")
-(reset! players ["Player One"])
 
+(reset! players ["Player One"])
 (reset! players [])
 
 ;; Add players by name
-(defn joining-game [name]
+(defn join-game [name]
   (swap! players conj name))
 
-(joining-game "Rachel")
-(joining-game "Harriet")
-;; (joining-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
-;; (joining-game "Sally" "Sam") ;; too many parameters
+(join-game "Rachel")
+(join-game "Harriet")
+(join-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
+;; (join-game "Sally" "Sam") ;; too many parameters
 
 @players
 
@@ -52,10 +57,8 @@
 (reset! players [])
 
 
-(def game-account (ref 1000))
-(def toms-account (ref 500))
 (def dick-account (ref 500))
-(def harry-account (ref 500))
+(def toms-account (ref 500))
 (def betty-account (ref 500))
 
 @betty-account
@@ -77,24 +80,52 @@
 (join-game "Betty" betty-account)
 
 
+;;;;;;;;;;;;;;;;
+;; Using ref to manage multiple state changes
 
-(def player-ref (ref [] :validator #(<= (count %) 2)))
 
 @player-ref
 @toms-account
-@harry-account
+
 @betty-account
 
+(def players-ref (ref [] :validator #(<= (count %) 2)))
+(def game-account (ref 1000))
+(def harriet-account (ref 0))
 
-
-(defn join-game-safely [name player-account]
+(defn join-game-safely [name player-account game-account]
   (dosync
-   (alter player-ref conj name)
-   (alter player-account - 100)
-   (alter game-account + 100)))
+   (alter players-ref conj name)
+   (alter player-account + 100)
+   (alter game-account - 100)))
 
-(join-game-safely "Tom" toms-account)
-(join-game-safely "Harry" harry-account)
+(join-game-safely "Harriet" harriet-account game-account)
+
+@harriet-account
+
+@game-account
+
+@players-ref
+
+;; (alter game-account 1000)
+
+(join-game-safely "Tom" toms-account game-account)
+
+;; Refs are for Coordinated Synchronous access to "Many Identities".
+;; Atoms are for Uncoordinated synchronous access to a single Identity.
+
+;; Coordinated access is used when two Identities need to be changes together, the classic example being moving money from one bank account to another, it needs to either move completely or not at all.
+
+;; Uncoordinated access is used when only one Identity needs to update, this is a very common case. 
+
+
+;; Agents are for Uncoordinated asynchronous access to a single Identity.
+;; Vars are for thread local isolated identities with a shared default value.
+
+;; Synchronous access is where the call expects to wait until all the identities are settled before continuing.
+
+;; Asynchronous access is "fire and forget" and let the Identity reach its new state in its own time.
+
 ;; (join-game-safely "Betty" betty-account)
 
 
@@ -112,6 +143,7 @@
 ;; (io! (str "Debit John with £" stake))
 
 
+;;;;;;;;;;;;;
 ;; Futures
 ;; Can you do this in another thread
 ;; wrapper over the java futures
@@ -132,4 +164,3 @@
 (realized? my-delay)
 @my-delay
 (realized? my-delay)
-
