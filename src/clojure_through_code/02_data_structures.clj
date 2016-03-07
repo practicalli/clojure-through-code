@@ -154,7 +154,8 @@
       :sith   ["Darth Vader"
                "Darth Sideous"]
       :droids ["C3P0"
-               "R2D2"]}
+               "R2D2"
+               "BB-8"]}
     :ships {
       :rebel-alliance  ["Millenium Falcon"
                         "X-wing figher"]
