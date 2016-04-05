@@ -21,6 +21,7 @@
 
 ;; uses a global value rather than the argument so the result is indeterministic
 
+;;;;;;;;;;;;;;;;;;
 ;; impure function - random numbers
 
 (:import java.util.Date)
@@ -47,17 +48,51 @@
  even?
  (range 1 10))
 
+;; functions can be used as an arugument to other functions,
+;; because a function always evaluates to a value
+
+(map inc [1 2 3 4 5])
+
+(range 1 10)
+
+(reduce + (range 1 10))
+
+(reduce + '(1 2 3 4 5 6 7 8 9))
+
+(take 10 (range))
+
 
 ;;;;;;;;;;;;;;;;
 ;; Persistent data structures
 
 (def persistent-vector [0 1 2 3 4])
 
+;; lets add a value to our persistent vector
 (conj persistent-vector 5)
 
+persistent-vector
+;; and another..
+(conj persistent-vector 6)
+
+;; Chain two function calls using the threading macro 
 (-> persistent-vector
     (conj 5)
     (conj 6))
+
+
+;;;;;;;;;;;;;;;;
+;; Sequence / List comprehension
+
+(range 10)
+
+(for [x (range 10) :when (odd? x)] x)
+
+(for [x (range 10) :while (even? x)] x)
+
+(for [x (range 10)
+      y (range 10)]
+  [x y])
+
 
 
 ;;;;;;;;;;;;;;;
@@ -206,7 +241,17 @@ name-of-new-string
 (recursively-use-a-collection [1 2 3])
 
 
-;;;
+;; Polymorphism
+
+(defn i-am-polly
+  ([] (i-am-polly "My name is polly"))
+  ([message] (str message)))
+
+(i-am-polly)
+(i-am-polly "I call different behaviour depeding on arguments sent")
+
+
+;; recursion with polymorphism
 
 (defn sum
   ([vals] (sum vals 0))
@@ -262,6 +307,10 @@ name-of-new-string
 (join-game "Harriet")
 (join-game "Terry")      ;; cant add a third name due to the :validator condition on the atom
 
+(reset! players ["Player 1"])
+(reset! players [])
+
+deref players
 @players
 
 ;; updating multiple values with ref
