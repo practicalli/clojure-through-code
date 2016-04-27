@@ -32,7 +32,30 @@
   (println "hello, i am a side effect, please destroy me")
   "return some value")
 
+(when (> 3 2)
+  (println "3 is greater than 2")
+  "Higher")
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; while
+
+;; another example of a more procedural control flow
+
+
+;; create a counter using a mutable counter
+(def counter (atom 10))
+
+;; While the counter is positive (is a number greater than zero), print out the current value of the counter.
+(while (pos? @counter)
+  (do
+    (println @counter)
+    (swap! counter dec)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; 
 ;;; If you have multiple things to do, you can still use if with a little help from do or the threading macro
 
 (defn lower-public-spending []
