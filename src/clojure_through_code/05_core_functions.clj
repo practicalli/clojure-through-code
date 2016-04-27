@@ -1,26 +1,7 @@
 (ns clojure-through-code.05-core-functions)
 
-;; There are a lot of functions in the Clojure core library
 
-(count (ns-publics 'clojure.core))
-
-;; when I checked on 7th April 2015 there were 599 functions defined in Clojure Core for version 1.6
-
-;;;;;;;;;;;;;;;;;;;;;;;
-;; Data structures behave a little like functions
-
-;; we have already seen this
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Java
-
-;; java.lang is included in the namespace by default
-
-;; easy to import any other Java / JVM library (see calling java)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure Core
 
 ;; There is a core set of functions included by default in any Clojure program
@@ -32,14 +13,38 @@
 ;; There are a great number of functions defined in Clojure core
 (count (ns-publics 'clojure.core))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;
+*clojure-version*
+
+;; when I checked on 7th April 2015 there were 599 functions defined in Clojure Core for version 1.6.  Checking on the 19th April 2016, there were 621 functions in Clojure Core version 1.8.
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Java
+
+;; java.lang is included in the namespace by default
+
+;; easy to import any other Java / JVM library (see calling java)
+
+;; TODO java.lang commonly used functions
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Data structures behave a little like functions
+
+;; we have already seen this
+
+;; TODO examples of using data structures as functions
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with data structures
 
 ;; This section will become far too long, so need to refine the topic
 
 ;; Apply a function over the individual elements a data structure
-
-
 
 
 
@@ -51,7 +56,6 @@
 ;; ([f coll] [f c1 c2] [f c1 c2 c3] [f c1 c2 c3 & colls])
 ;;   Returns a lazy sequence consisting of the result of applying f to the set of first items of each coll, followed by applying f to the set of second items in each coll, until any one of the colls is exhausted.  Any remaining items in other colls are ignored. Function f should accept number-of-colls arguments.
 ;; nil
-
 
 
 (map + [1 2 3] [1 2 3])
