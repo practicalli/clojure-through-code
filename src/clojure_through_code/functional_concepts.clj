@@ -1,6 +1,6 @@
 (ns clojure-through-code.functional-concepts)
 
-;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pure Functions
 
 (defn increment-numbers [number-collection]
@@ -10,7 +10,10 @@
 
 ;; takes in a specific argument and returns a deterministic value
 
+
+;;;;;;;;;;;;;;;;;;
 ;; impure function
+
 
 (def global-value '(5 4 3 2 1))
 
@@ -19,18 +22,31 @@
 
 (impure-increment-numbers '(1 2 3 4 5))
 
-;; uses a global value rather than the argument so the result is indeterministic
+;; using a global value rather than the argument passed makes this function undeterministic
 
-;;;;;;;;;;;;;;;;;;
-;; impure function - random numbers
+
 
 (:import java.util.Date)
+
+;; side causes example
+(defn task-complete [task-name]
+  (str "Setting task " task-name " completed on " (java.util.Date.)))
+
+(task-complete "hack clojure")
+
+;; more pure approach
 (defn current-date []
   (java.util.Date.))
 
-(current-date)
+(defn task-complete [task-name completed-date]
+  (str "Setting task " task-name " completed on " completed-date))
 
-;; Random numbers should be generated outside the function and passed as an argument, keeping the function pure.
+(task-complete "hack clojure" (current-date))
+
+;; Random numbers can be generated outside a function and passed as an argument, keeping the function pure.
+
+
+;; very basic side effect example
 
 (defn print-to-console [value-to-print]
   (println "The value is:" value-to-print))
@@ -53,14 +69,22 @@
 
 (map inc [1 2 3 4 5])
 
+;; the above map funciton is roughly equivalent to
+;; (conj [] (inc 1) (inc 2) (inc 3) (inc 4) (inc 5))
+
+(map + [1 2 3 4] [5 6 7 8])
+
 (range 1 10)
 
 (reduce + (range 1 10))
 
 (reduce + '(1 2 3 4 5 6 7 8 9))
 
-(take 10 (range))
+;; the above reduce function is roughly equivalent to
+;; (+ 1 2 3 4 5 6 7 8 9)
 
+
+(take 10 (range))
 
 ;;;;;;;;;;;;;;;;
 ;; Persistent data structures
@@ -74,10 +98,21 @@ persistent-vector
 ;; and another..
 (conj persistent-vector 6)
 
-;; Chain two function calls using the threading macro 
+;; Chain two function calls using the threading macro
 (-> persistent-vector
     (conj 5)
     (conj 6))
+
+
+;; persistent data structures share memory, so even for large data structures the use of lists, maps, vectors & sets are efficient.
+
+;; persistent data structures also use a relatively flat tre structure (typically 1-2 levels, up to 6 levels for very large data).  This flat structue minimises the time required to parse the tre
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Keywords
+
+;; Can designing and accessing a map by classed as a Clojure pattern (or a simple idiom) ?
 
 
 ;;;;;;;;;;;;;;;;
@@ -200,7 +235,40 @@ name-of-new-string
 
 ;; Both the reply and reduce functions take 2 arguments, the first is the function to apply to a data structure, the second is the data structure.  In this example, rather than type out the Integer numbers from 1 to 40, we use the range function to generate them for us.
 
-;; Functiors
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Sequences
+
+
+;; data structures can be built by combining functions
+
+(cons 1 (cons 2  (cons 3  (cons 4  nil))))
+
+(->>
+ nil
+ (cons 4)
+ (cons 3)
+ (cons 2)
+ (cons 1))
+
+;; Sequence abstraction
+
+(first '(1 2 3 4 5))
+(rest '(1 2 3 4 5))
+(last '(1 2 3 4 5))
+
+(defn nth [items n]
+ (if (= n 0)
+   (first items)
+   (recur (rest items) (- n 1))))
+
+(define squares '(0 1 4 9 16 25))
+
+(nth squares 3)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functor
 ;; - put simply a function that takes a value and a function as its arugments, eg map, apply
 ;; - the value, typically a collection (vector, map, string) is unpacked and each element is passed
 ;; - to the function that as given as the argument.
@@ -217,6 +285,7 @@ name-of-new-string
 ;; if that is the case, then is reduce a functor, it would suggest not
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Polymorphism
 
 (defn i-am-polly
@@ -227,7 +296,7 @@ name-of-new-string
 (i-am-polly "I call different behaviour depeding on arguments sent")
 
 
-;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
 ;; recursion
 
 ;; processing a collection using recursion
@@ -241,6 +310,14 @@ name-of-new-string
 (recursively-use-a-collection [1 2 3])
 
 
+;; Other functions to consider
+;; - every
+;; - accumulating / accumulative
+;; - keep
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Polymorphism
 
 (defn i-am-polly
@@ -251,7 +328,8 @@ name-of-new-string
 (i-am-polly "I call different behaviour depeding on arguments sent")
 
 
-;; recursion with polymorphism
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Recursion with polymorphism
 
 (defn sum
   ([vals] (sum vals 0))
@@ -280,7 +358,9 @@ name-of-new-string
 
 (sum (vec (range 0 9999999)))
 
-;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
 ;; managing state
 
 ;; updating single values with atom
@@ -332,6 +412,42 @@ deref players
 @players-ref
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; private defn & def
+
+;; All def names are publicly available via their namespace.
+;; As def values are immutable, then keeping things private is of less concern than languages built around Object Oriented design.
+
+;; Private definitions syntax can be used to limit the access to def names to the namespace they are declared in.
+
+;; To limit the scope of a def, add the :private true metadata key value pair.
+
+(def ^{:private true} some-var :value)
+
+;; or
+(def ^:private some-var :value)
+
+
+;; private functions could help with encapsulation and document in the code which functions form the `API' for a namespace.
+
+(defn- my-private-function []
+  (str "I can only be called from within my namespace"))
+
+
+;; writing article on the curious case of defs
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Partial functions
+
+
+
+;; partially applying continuations
+;; -- this happens a lot when doing callbacks
+
+
 ;;;;;;;;;;;;;;;;;;
 ;; LISP features - extensibility via macros
 
@@ -349,4 +465,3 @@ deref players
 
 
 ;; Composable abstractions
-
