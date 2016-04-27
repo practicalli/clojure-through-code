@@ -188,12 +188,17 @@
 ;; Simple math to show you the basic structure of Clojure
 
 ; Math is straightforward
-(+ 1 1 2489 459 2.) ; => 2
+(+ 3 (/ 4 2) (* 3 5))
+ (+ 1 1 2489 459 2.7)
 (- 2 1) ; => 1
 (* 1 2) ; => 2
-(/ 2 1)
-(/ 22 7.0)
-(/ 5 20)
+(/ 1 2)
+(type  (/ 22 7.0))
+(/ 5000 20000)
+
+(type (Integer. "2"))
+
+Integer myInt = new Integer("2")
 
 (/ (* 22/7 3) 3)
 
@@ -222,6 +227,7 @@
 (max 1 2 3 5 8 13)
 
 (apply + [1 2 3])
+(reduce + [1 2 3])
 
 (apply / [1 2 3])
 (/ 53)
@@ -276,7 +282,11 @@
 (- 2)
 ; (class (/))  ;; wrong number of arguments error
 
-(if true "hello" "goodbye")
+(if false
+  "hello"
+  (do (+ 3 4)
+      (str  "goodbye")))
+
 (if false "one" "two")
 (if nil "uh" "oh")
 (if false "Hello word" "Goodbye crule world")
