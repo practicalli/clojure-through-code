@@ -160,6 +160,25 @@
      (apply hash-map)
      (def project))
 
+;; defining functions
+(def fred "I am free")
+
+;; defn is a macro that builds on def
+(defn my-function [] (str "I wish I was fred"))
+
+;; defining a function with def
+(def my-function
+  (fn [args] (str "behaviour")))
+
+;; anonymous function
+(fn [args] (str "behaviour"))
+
+;; anonymous function syntax sugar
+#(* % %)  ;; square a number
+#(+ % 3)
+
+;; % is a placeholder
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with strings
 
