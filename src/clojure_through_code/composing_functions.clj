@@ -123,7 +123,7 @@
 
 (g "x") ; "x123"
 
-(g "a" "x")
+;; (g "a" "x")
 ;; 1. Unhandled clojure.lang.ArityException
 ;;    Wrong number of args (2) passed to: user/f1
 
