@@ -3,14 +3,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; map over collections with partial
 
+;; We can map over a collection of words and increment them by writing an anonymous function.
 
 (map (fn [animal] (str animal "s")) ["pig" "cow" "goat" "cat" "dog" "rabbit"])
 
-;; or using the syntactic sugar for an anonymous function we get
+;; or using the syntactic sugar form of an anonymous function we get
 
 (map #(str % "s") ["pig" "cow" "goat" "cat" "dog" "rabbit"])
 
-;; by default map returns a list/sequence. We can specify a vector be returned instead using mapv
+;; by default map returns a list/sequence. We can specify a vector be returned instead using `mapv'
 
 (mapv #(str % "s") ["pig" "cow" "goat" "cat" "dog" "rabbit"])
 
@@ -31,7 +32,7 @@
 (map pluralise animals)
 
 
-;; using an if statement as a filter 
+;; using an if statement as a filter
 (defn pluralise
   "Pluralise a given string value"
   [string]
@@ -41,9 +42,9 @@
 
 (map pluralise animals)
 
-;; but there are quite a lot of things that do not have a plural form
+;; but there are quite a lot of animals that do not have a plural form
 
-;; define a collection of things that are not plural
+;; define a collection of animals that are not plural
 
 (def non-plural-words ["deer" "sheep" "shrimp" ])
 
@@ -71,7 +72,7 @@
 (map #(pluralise % non-plural-words) animals)
 
 
-;; we could also use a partical function, saving on having to create an anonymous
+;; we could also use a partial function, saving on having to create an anonymous
 
 (defn pluralise
   "Pluralise a given string value"
