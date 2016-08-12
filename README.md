@@ -12,7 +12,6 @@ Feel free to experiement with the code and submit pull requests with additional 
 
 ## License
 
-Copyright © 2014 Practicalli
+Copyright © 2016 John Stevenson @jr0cket
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the Creative Commons Attribution Share-Alike 4.0 International.
