@@ -106,7 +106,7 @@ dev-event-details
 ;; This is a vector of maps, as there will be one or more company stocks
 ;; to track.  Each map represents the stock information for a company.
 
-(def portfolio [ { :ticker "CRM" :lastTrade 233.12 :open 230.66}
+(def portfolio [ { :ticker "CRM"  :lastTrade 233.12 :open 230.66}
                  { :ticker "AAPL" :lastTrade 203.25 :open 204.50}
                  { :ticker "MSFT" :lastTrade 29.12  :open 29.08 }
                  { :ticker "ORCL" :lastTrade 21.90  :open 21.83 }])
@@ -127,6 +127,20 @@ portfolio
 (first portfolio)
 (rest portfolio)
 (last portfolio)
+
+;; To get specific information about the share in our portfolio, we can also use the keywords to get specific information
+
+(get (second portfolio) :ticker)
+;; => "AAPL"
+
+(:ticker (first portfolio))
+;; => "CRM"
+
+(map :ticker portfolio)
+;; => ("CRM" "AAPL" "MSFT" "ORCL")
+
+(mapv :ticker portfolio)
+;; => ["CRM" "AAPL" "MSFT" "ORCL"]
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -338,6 +352,17 @@ name1
 ;; with maps
 (let [{a :a, b :b, c :c, :as m :or {a 2 b 3}}  {:a 5 :c 6}]
   [a b c m])
+
+
+
+;; printing out data structures
+
+(def data-structure-vector-of-vectors [[1 2 3] [4 5 6] [7 8 9]])
+
+(defn- map-over-vector-of-vectors []
+  (map println data-structure-vector-of-vectors))
+
+(comp println map-over-vector-of-vectors)
 
 
 
