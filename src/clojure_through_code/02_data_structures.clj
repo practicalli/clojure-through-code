@@ -141,6 +141,13 @@
 
 {:a 1 :b 2 :c 3 }
 
+;; Define a simple shopping list, including how many of each items you want to buy
+(def shopping-list
+  {"cat food"  10
+   "soya milk" 4
+   "bread"     1
+   "cheese"    2})
+
 ;; Its also quite common to have maps made up of other maps
 
 ;; Here is an example of a map made up of a :keyword as the key and
@@ -177,6 +184,21 @@
    {:luke   {:fullname "Luke Skywarker" :skill "Targeting Swamp Rats"}
     :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
     :jarjar {:fullname "JarJar Binks"   :skill "Upsetting a generation of fans"}})
+
+;; updating maps with assoc-in
+(assoc-in starwars-characters [:vader :skill] "The Dark Side of the Force")
+;; => {:luke {:fullname "Luke Skywarker", :skill "Targeting Swamp Rats"}, :vader {:fullname "Darth Vader", :skill "The Dark Side of the Force"}, :jarjar {:fullname "JarJar Binks", :skill "Upsetting a generation of fans"}}
+
+(update)
+
+(def alphabet-soup {:a 1 :b 2 :c 3})
+
+(assoc alphabet-soup :d 4)
+;; => {:a 1, :b 2, :c 3, :d 4}
+
+(update alphabet-soup :a inc)
+;; => {:a 2, :b 2, :c 3}
+
 
 ;; Now we can refer to the characters using keywords
 
