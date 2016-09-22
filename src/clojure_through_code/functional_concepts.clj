@@ -1,18 +1,27 @@
 (ns clojure-through-code.functional-concepts)
 
+#_(defn myfunction
+  "This is a doc string"
+  [args]
+  (str "this is my behaviour"))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pure Functions
 
 (defn increment-numbers [number-collection]
   (map inc number-collection))
 
+;;(inc 1)
+
 (increment-numbers '(1 2 3 4 5))
 
 ;; takes in a specific argument and returns a deterministic value
 
 
-;;;;;;;;;;;;;;;;;;
-;; impure function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; impure functions - side causes & side effects
 
 
 (def global-value '(5 4 3 2 1))
@@ -22,11 +31,17 @@
 
 (impure-increment-numbers '(1 2 3 4 5))
 
+global-value
+
 ;; using a global value rather than the argument passed makes this function undeterministic
 
 
 
 (:import java.util.Date)
+
+;; Create a new date object with the current date using either the new or . sytax
+(new java.util.Date)
+(java.util.Date.)
 
 ;; side causes example
 (defn task-complete [task-name]
@@ -34,16 +49,17 @@
 
 (task-complete "hack clojure")
 
-;; more pure approach
-(defn current-date []
-  (java.util.Date.))
+
+;; A pure approach to the above
+
+(:import java.util.Date)
 
 (defn task-complete [task-name completed-date]
   (str "Setting task " task-name " completed on " completed-date))
 
-(task-complete "hack clojure" (current-date))
+(task-complete "hack clojure" (java.util.Date.))
 
-;; Random numbers can be generated outside a function and passed as an argument, keeping the function pure.
+;; Generated numbers can be created outside a function and passed as an argument, keeping the function pure.
 
 
 ;; very basic side effect example
@@ -54,11 +70,62 @@
 (print-to-console "a side effect")
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure: anonymous functions
+
+;; Define an anonymous in the general form as follows:
+
+(fn [arguments] (str "some behaviour, typically using the aguments passed:" arguments ))
+
+
+;; To get a value from evaluating this function you need to pass it a value (or anonther function) as an argument as well as calling it as a function
+
+((fn [arguments] (str "behaviour, typically using the aguments passed: " arguments ))"Is this the right room for an argument")
+;; => "behaviour, typically using the aguments passed: Is this the right room for an argument"
+
+;; TODO: add a more realistic use of anonymous fuctions
+
+;; syntactic sugar for anonymous functions
+
+;; In this example we use an anonymous function to add two numbers together
+
+#(+ 1 2)
+
+;; this just returns a pointer to the function.  To get the result we need to call this function as follows
+
+(#(+ 1 2))
+
+;; we can also pass arguments into anonymous functions
+
+( #(inc %) 1)
+
+
+;; the % is a placeholder for the argument and the argument is the value directly after the anonymous function.
+
+;; Specific arguments can be refered to by using %1, %2, etc
+;; sometimes position can be important as the following two versions of code demonstrate
+
+( #(/ %1 %2) 24 6)
+
+( #(/ %2 %1) 24 6)
+
+;; These two expressions give different values (and return different types, Integer and Ratio) as the positions of the arguments have been reversed.
+
+
 ;;;;;;;;;;;;;;;
 ;; Higher Order functions
 
 ;; functions can be used as an arugument to other functions,
 ;; because a function always evaluates to a value
+
+
+;; from wikipedia - is this example too abstract?  Isnt this just a simplification of the map function
+(defn twice [function-to-apply value]
+  (function-to-apply (function-to-apply value)))
+
+(twice #(+ % 3) 7)
+
+
 
 (filter
  even?
@@ -76,18 +143,61 @@
 
 (range 1 10)
 
+
 (reduce + (range 1 10))
 
 (reduce + '(1 2 3 4 5 6 7 8 9))
 
-;; the above reduce function is roughly equivalent to
-;; (+ 1 2 3 4 5 6 7 8 9)
-
+;; (range)
 
 (take 10 (range))
 
 ;;;;;;;;;;;;;;;;
-;; Persistent data structures
+;; Immutability - Values and Persistent data structures
+
+ ;; Immutable numbers
+
+ (def two-little-ducks 22)
+
+ (inc two-little-ducks)
+ ;; => 23
+
+ two-little-ducks
+ ;; => 22
+
+
+;; Immutable strings
+
+(def message "Strings are immutable")
+
+(str message "," " " "you cant change them")
+;; => "Strings are immutable, you cant change them"
+
+ message
+ ;; => "Strings are immutable"
+
+
+ ;; local bindings are immutable
+
+ (let [five 5]
+   (str "Within the let expression the value is " five))
+
+;;five
+ ;; => Unable to resolve symbol: five in this context
+
+ (let [number 5]
+   (inc number)
+   (str "The number is still " number))
+
+ ;; => "The number is still 5"
+
+
+;; just as with a def, a let binding can be redefined.  Any new definition over-rides the previous one.
+ (let [number 5
+       number 6]
+   number)
+ ;; => 6
+
 
 (def persistent-vector [0 1 2 3 4])
 
@@ -117,6 +227,84 @@ persistent-vector
 
 ;;;;;;;;;;;;;;;;
 ;; Sequence / List comprehension
+
+
+(for [number [1 2 3]
+      letter [:a :b :c]]
+  (str number letter))
+
+
+(mapcat (fn [number] (map (fn [letter] (str number letter)))))
+
+
+;; a 3 combination padlock
+
+;; model the combinations
+(for [tumbler-1 (range 10)
+      tumbler-2 (range 10)
+      tumbler-3 (range 10)]
+ [tumbler-1 tumbler-2 tumbler-3])
+
+
+;; now count the possible combinations
+(count (for [tumbler-1 (range 10)
+             tumbler-2 (range 10)
+             tumbler-3 (range 10)]
+         [tumbler-1 tumbler-2 tumbler-3]))
+
+
+(count (for [tumbler-1 (range 10)
+             tumbler-2 (range 10)
+             tumbler-3 (range 10)
+             :when (or (= tumbler-1 tumbler-2)
+                       (= tumbler-2 tumbler-3)
+                       (= tumbler-3 tumbler-1))]
+         [tumbler-1 tumbler-2 tumbler-3]))
+
+;; lets look at the combinations again, we can see that there is always at least 2 matching values.  This is probably the opposite of what we want in real life.
+(for [tumbler-1 (range 10)
+      tumbler-2 (range 10)
+      tumbler-3 (range 10)
+      :when (or (= tumbler-1 tumbler-2)
+                (= tumbler-2 tumbler-3)
+                (= tumbler-3 tumbler-1))]
+  [tumbler-1 tumbler-2 tumbler-3])
+
+
+
+;; generate ticket numbers in a certain patterns
+
+;; generate all the upper case letters of the alphabet
+(def capital-letters (map char (range (int \A) (inc (int \Z)))))
+capital-letters
+
+;; Exclude letters that can be mistaken for numbers
+(def blacklisted #{\I \O})
+
+(for [letter-1 capital-letters
+      letter-2 capital-letters
+      :when (and (not (blacklisted letter-1))
+                 (not (blacklisted letter-2)))]
+  (str letter-1 letter-2))
+
+
+
+(for [number [1 2 3]
+      :let [tripled (* number 3)]
+      :while (odd? tripled)]
+  tripled)
+
+
+;; project eular
+
+(defn- palindrome? [number]
+  (= (str number (clojure.string/reverse (str number)))))
+
+(apply max (for [three-digit-number-1 (range 100 1000)
+                  three-digit-number-2 (range 100 1000)
+                  :let [product (* three-digit-number-1 three-digit-number-2)]
+                  :when (palindrome? product)]
+              product))
 
 (range 10)
 
@@ -159,23 +347,14 @@ persistent-vector
 ;; The take function defines how much of a sequence that range should generate.  So we can call range without arguments and it will lazily generate the sequence.
 
 
-;;;;;;;;;;;;;;;;;;;
-;; Pattern matching
-
-
-;; destructuring
-
-; in function arguemnts, collections (maps, vectors)
-
-
 ;;;;;;;;;;;;;;;
 ;; Immutability
 
-"This is a string, consider me a value"
+(type  "This is a string, consider me a value")
 
 ["This is a string in a vector (think of it as an array for now)"]
 
-(def name-of-a-value ["This is a string in a vector, consider me a value"])
+(def name-of-a-value ["This is a string in a vector, consider me a change"])
 
 ;; Lets evaluate the name and see what value it returns
 name-of-a-value
@@ -199,8 +378,25 @@ name-of-new-string
 ;; sequence functions
 
 (first [1 2 3])
+(second [1 2 3])
 (rest [1 2 3])
 (last [1 2 3])
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Local assignment is immutable
+
+(:use 'clojure.string)
+
+(defn- letter->clack [letter]
+  (get alphabet letter))
+
+(def sentence "Codemotion Amsterdam")
+
+(let [words (clojure.string/upper-case sentence)]
+  (map letter->clack (map str words)))
+
+
 
 ;;;;;;;;;;;;;;;;;;
 ;; Programming with functions
@@ -225,11 +421,33 @@ name-of-new-string
 
 ;; Example: Adding up values from 1 to 40 and return the overall total
 
+(range 1 11)
+
+(+ (range 1 11))
+
 (apply + (range 1 40))
 
 (reduce + (range 1 10))
 
 (range 1 10)
+
+;; range will act differently dependent on the context in which it is called.
+;; TODO: these different types need some explaination.
+
+(type (range))
+;; => clojure.lang.Iterate
+
+(type (take 4 (range)))
+;; => clojure.lang.LazySeq
+
+(class (take 4 (range)))
+;; => clojure.lang.LazySeq
+
+(take 4 (range))
+;; => (0 1 2 3)
+
+(type (range 1 10))
+;; => clojure.lang.LongRange
 
 (reduce + (1 2 3 4 5 6 7 8 9))
 
@@ -242,7 +460,7 @@ name-of-new-string
 
 ;; data structures can be built by combining functions
 
-(cons 1 (cons 2  (cons 3  (cons 4  nil))))
+(cons 1 (cons 2 (cons 3 (cons 4 nil))))
 
 (->>
  nil
@@ -250,6 +468,8 @@ name-of-new-string
  (cons 3)
  (cons 2)
  (cons 1))
+
+;; C-C RET to call cider-macroexpand-1 and show how Clojure converts this macro into its equivalent code
 
 ;; Sequence abstraction
 
@@ -288,6 +508,8 @@ name-of-new-string
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Polymorphism
 
+(defn name [args] (,,,))
+
 (defn i-am-polly
   ([] (i-am-polly "My name is polly"))
   ([message] (str message)))
@@ -325,7 +547,7 @@ name-of-new-string
   ([message] (str message)))
 
 (i-am-polly)
-(i-am-polly "I call different behaviour depeding on arguments sent")
+(i-am-polly "I call different behaviour depending on arguments sent")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -340,7 +562,12 @@ name-of-new-string
 
 (sum [2 7 9 11 13])
 (sum [1])
-(sum [7 9 11 13] 9)
+(sum [2 7 9 11 13] 9)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Tail recursion
 
 ;; If we have a very large collection, we run the risk of blowing our heap space
 
@@ -414,6 +641,34 @@ deref players
 
 
 
+
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Work in progress
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; reduces in depth
+
+;; reduce takes 2 arguments, a function and a collections
+;; if val is supplied, returns the result of applying the function to the val and the first item in the collection, itterating through the colleciton
+
+
+
+;;;;;;;;;;;;;;;;;;;
+;; Pattern matching
+
+
+;; destructuring
+
+                                        ; in function arguemnts, collections (maps, vectors)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; private defn & def
 
@@ -439,14 +694,171 @@ deref players
 ;; writing article on the curious case of defs
 
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Chaining functions - Threading macro
+
+;; The chaining of functions may seem similar to the pipe in the Unix shell, where the output of one command is passed to the next command to process, eg. `ps ax | grep pattern'
+
+
+;; clojure.core/->
+;; -> is the thread first macro. It transforms code from a linear notation into nested notation. This is also known as “function chaining”. Clojure calls this “threading”.
+
+(-> x f1) is equivalent to (f1 x)
+(-> x f1 f2) is equivalent to (f2 (f1 x))
+(-> x f1 f2 f3) is equivalent to (f3 (f2 (f1 x)))
+
+;; examples of using thread first macro: ->
+
+(defn f1 "append \"1\" to a string" [x] (str x "1"))
+
+(defn f2 "append \"2\" to a string" [x] (str x "2"))
+
+(f1 "a") ; "a1"
+
+(f2 "a") ; "a2"
+
+;; pipe arg to function
+(-> "x" f1) ; "x1"
+
+;; pipe. function chaining
+(-> "x" f1 f2) ; "x12"
+
+;; You can format the code differently, but in this case its not much easier to read
+(nth
+ (read-string
+  (slurp "project.clj"))
+ 2)
+
+
+;; the same behaviour as above can be written using the threading macro
+;; which can make code easier to read by reading sequentially down the list of functions.
+
+(->
+ "./project.clj"
+ slurp
+ 
+ read-string
+ (nth 2))
+
+;; Using the threading macro, the result of every function is passed onto the next function
+;; in the list.  This can be seen very clearly usng ,,, to denote where the value is passed
+;; to the next function
+
+(->
+ "./project.clj"
+ slurp ,,,
+ read-string ,,,
+ (nth ,,, 2))
+
+;; Remember, commas in clojure are ignored
+
+
+
+
+
+(let [calculated-value (* 10 (reduce + (map inc (range 5))))]
+  calculated-value)
+
+
+
+
+;; • ->> is similar to ->, but pass arg into the last argument position of function. clojure.core/->>
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Pass Binding
+
+
+;; clojure.core/as->
+
+;; (as-> expr name form1 form2 form3 …)
+;; evaluate each form in turn, such that in form1 the name has value of expr, and in form2 the name has the value of form1's result, etc. Returns the result of the last form.
+
+;; In this example, first the value 4 is bound to the name x.  Then the first expression is evaluated, returning 4.  This result is passed to the nested expression, so its x name becomes bound to the value 4.  Finaly we return the result of evaluating (list 3 4)
+
+(as-> 4 x (list 3 x))
+;; => (3 4)
+
+
+(as-> "a" x     ; first bind the value "a" to the name x and pass on the result to the next expression
+  (list 1 x)    ; (list 1 a) => (1 "a") which is passed to the next expression
+  (list 2 x)    ; (list 2 (1 "a")) => (2 (1 "a"))
+  (list 3 x)    ; (list 3 (2 (1 "a"))) => (3 (2 (1 "a")))
+  (list 4 x)    ; (list 4 (2 (1 "a"))) => (4 (3 (2 (1 "a"))))
+  (list 5 x))   ; (list 5 (4 (3 (2 (1 "a"))))) => (5 (4 (3 (2 (1 "a")))))
+
+;; The 
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Partial functions
 
 
+(map (partial reduce +) [[1 2 3 4] [5 6 7 8]])
 
+
+(defn sum
+  "Sum two numbers together"
+  [number1 number2]
+  (+ number1 number2))
+
+(sum 1 2)
+;; => 3
+
+;; (sum 1)
+;; => clojure.lang.ArityException
+;; => Wrong number of args (1) passed to: functional-concepts/sum
+
+;; If we did need to call sum with fewer than the required arguments, for example if we are mapping sum over a vector, then we can use partial to help us call the sum function with the right number of arguments.
+
+;; Lets add the value 2 to each element in our collection
+(map (partial sum 2) [1 3 5 7 9])
+
+
+;; TODO
 ;; partially applying continuations
 ;; -- this happens a lot when doing callbacks
 
+
+;; currying in clojure
+
+;; Currying is the process of taking some function that accepts multiple arguments, and turning it into a sequence of functions, each accepting a single argument.  Or put another way, to transform a function with multiple arguments into a chain of single-argument functions.
+
+;; currying relies on having fixed argument sizes, whereas Clojure gets a lot of flexibility from variable argument lengths (variable arity).
+
+;; Clojure therefore has the partial function gives results similar to currying, however the partical function also works with variable functions.
+
+;; Partial refers to supplying some number of arguments to a function, and getting back a new function that takes the rest of the arguments and returns the final result
+
+;; Once advantage of partial is to avoid having to write your own anonymous functions
+
+;; Useful references
+;; http://andrewberls.com/blog/post/partial-function-application-for-humans
+
+
+(defn join-strings
+  "join one or more strings"
+  [& args]
+  (apply str args))
+
+;; the [& args] argument string says take all the arguments passed and refer to them by the name args.  Its the & character that has the semantic meaning, so any name after the & can be used, although args is common if there is no domain specific context involved.
+
+(join-strings "Hello" " " "Clojure" " " "world")
+;; ⇒ "Hello Clojure world"
+
+(def wrap-message (partial join-strings "Hello Clojurians in "))
+
+(wrap-message)
+;; => "Hello Clojurians in "
+
+ (wrap-message "London")
+ ;; => "Hello Clojurians in London"
 
 ;;;;;;;;;;;;;;;;;;
 ;; LISP features - extensibility via macros
@@ -462,6 +874,84 @@ deref players
 ;; Time, perception, values, identity, visibility, state, persistence, memory, transience, process, place, change, communication. We use these terms everyday. Yet, despite its real-world modeling flavor, OO has little to say about them. What do these terms mean, and why do they matter to our programs?
 
 
+;; chaining functions
+
+(let [calculated-value (* 10 (reduce +  (map inc (range 5))))]
+  calculated-value)
+
+
+
+
+;; things to figure out
+
+
+;; ## Loop & Recur 
+
+;; There are also `loop` and `recur` functions in Clojure that can be used for control flow, however they are considered low level operations and higher order functions are typically used.
+
+;; A common patter is to create a sequence of values (characters in a string, values in a map, vector, set or list) and apply one or more of clojure's sequence functions (doseq, dorun, take-while, etc.)
+
+;; The following example reads the first username from /etc/passwd on unix like systems.
+
+;; ```clojure
+(require '[clojure.java [io :as io]])
+
+(defn char-seq
+  "create a lazy sequence of characters from an input stream"
+  [i-stream]
+  (map char 
+   (take-while
+    (partial not= -1)
+    (repeatedly #(.read i-stream)))))
+
+;; process the sequence one token at a time
+;; with-open will automatically close the stream for us
+
+(with-open [is (io/input-stream "/etc/passwd")]
+  (doseq [c (take-while (partial not= \:) (char-seq is))]
+    ;; your processing is done here
+    (prn c)))
+;; ```
+
+;; Example taken from Stack Overflow http://stackoverflow.com/questions/1053926/clojure-while-loop
+
+
+
+;; zip should only take what it needs from the infinate sequence
+(zip "abc" #_(infinte sequence))
 
 
 ;; Composable abstractions
+
+
+
+(def alphabet {"A" [0 1 0 0 0 1]
+               "B" [0 0 1 0 1 0]
+               "C" [0 1 0 0 1 0]
+               "D" [1 0 1 0 0 0]
+               "E" [1 0 1 1 0 0]
+               "F" [1 1 0 1 0 0]
+               "G" [1 0 0 1 1 0]
+               "H" [1 0 1 0 0 1]
+               "I" [1 1 1 0 0 0]
+               "J" [0 0 1 1 1 1]
+               "K" [0 1 0 1 0 1]
+               "L" [1 1 1 0 0 1]
+               "M" [1 1 1 0 1 1]
+               "N" [0 1 1 1 0 1]
+               "O" [1 1 0 1 1 0]
+               "P" [1 1 1 1 1 0]
+               "Q" [1 0 1 1 1 0]
+               "R" [1 1 1 1 0 0]
+               "S" [0 1 1 1 1 0]
+               "T" [1 0 0 1 1 1]
+               "U" [0 0 1 0 1 1]
+               "V" [0 1 1 0 0 1]
+               "W" [1 1 0 1 0 1]
+               "X" [1 0 1 0 1 0]
+               "Y" [1 0 0 0 1 1]
+               "Z" [1 1 0 0 1 1]
+               "." [1 0 1 1 0 1]
+               " " [0 0 1 0 0 0]})
+
+
