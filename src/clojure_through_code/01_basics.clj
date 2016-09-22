@@ -3,7 +3,18 @@
 ;; namesaces help you use functions defined in one namespace in a different namespace
 ;; using the (use) function in clojure.
 
-(ns clojure-through-code.01-basics)
+(ns clojure-through-code.01-basics
+  (:require [clojure.string]))
+
+(clojure.repl/doc doc)
+
+;; (:require 'clojure.repl)
+
+;; (:require [clojure.repl] :refer :all)
+
+
+
+
 
 
 
@@ -160,8 +171,46 @@
      (apply hash-map)
      (def project))
 
+
+;; Threading macros and println statements
+
+;; If you use a print or println function in a threading macro, then part of the theaded value will be lost, as those functions return a value of nil.
+
+(-> "message"
+    (str " " "in a bottle")
+    println
+    (str ", The Police"))
+;; => ", The Police"
+
+;; The initial part of the message before the println funciton is called has been dropped because println returned nil.  Therefore nil was the value passed as the first argument to tne next function, rather than "message in a bottle".
+
+;; Using the doto function with println we can pass the value on as the return value and pass the value to be printed in the console.
+
+(doto "message in a bottle" println)
+;; => "message in a bottle"
+
+;; So putting this doto function in our threading macro now works
+
+(->> "message"
+    (str " " "in a bottle")
+    (doto  println)
+    (str ", The Police"))
+
+
+
 ;; defining functions
 (def fred "I am free")
+(def five 5)
+(def five 6)
+(def five [1 2 3 4 5 6 7 8])
+
+
+five
+
+(reduce + five)
+(reduce + [1 2 3 4 5 6 7 8])
+;; => 36
+
 
 ;; defn is a macro that builds on def
 (defn my-function [] (str "I wish I was fred"))
@@ -174,10 +223,15 @@
 (fn [args] (str "behaviour"))
 
 ;; anonymous function syntax sugar
-#(* % %)  ;; square a number
-#(+ % 3)
 
-;; % is a placeholder
+;; An anonymous function is defined with the #() syntax where % is a placeholder for the arguments.
+
+( #(* % %) 6)  ;; square a number (fn [num] (* num num))
+(#(+ % 3))    ;; add three (fn [num] (+ num 3))
+(#(+ %1 %3 %2 4 5) 1 2 3) ;; add 3 arguments (fn [arg1 arg2 arg3] (+ arg1 arg2 arg3 4 5))
+
+;; 
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with strings
@@ -208,7 +262,17 @@
 
 ; Math is straightforward
 (+ 3 (/ 4 2) (* 3 5))
- (+ 1 1 2489 459 2.7)
+(+ 1 1 2489 459 2.7)
+
+(->
+ (+ 12 144 20 (* 3 (Math/sqrt 4)))
+ (/ 7)
+ (+ (* 5 11))
+ (= (+ 0.0  (* 9 9))))
+
+
+(Math/sqrt 4)
+
 (- 2 1) ; => 1
 (* 1 2) ; => 2
 (/ 1 2)
@@ -217,7 +281,7 @@
 
 (type (Integer. "2"))
 
-Integer myInt = new Integer("2")
+;; The above is the same as the Java statement Integer myInt = new Integer("2")
 
 (/ (* 22/7 3) 3)
 
@@ -301,6 +365,14 @@ Integer myInt = new Integer("2")
 (- 2)
 ; (class (/))  ;; wrong number of arguments error
 
+(= 4 (inc 2))
+;; => false
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Conditionals
+
+;; if something is true, do this, else do that
+
 (if false
   "hello"
   (do (+ 3 4)
@@ -310,6 +382,26 @@ Integer myInt = new Integer("2")
 (if nil "uh" "oh")
 (if false "Hello word" "Goodbye crule world")
 
+;; cond - if condition true, do this, :otherwise do that
+
+(cond
+  (zero? (- (* 4 2) 8))
+  (= 4 (inc 2))
+  (= 4 (/ 8 2))
+  (= "Hello World" (str "Hello " "World"))
+  :otherwise "None of the above.")
+
+(cond
+  (= 7 (inc 2)) "(inc 2) is not 7, so this condition is false"
+  (= 16 (* 8 2)) "This is the first correct condition so its associated expression is returned"
+  (zero? (- (* 8 8) 64)) "This is true but not returned as a previous condition is true"
+  :otherwise "None of the above are true")
+
+
+;; when true do the following
+
+(when (> 8 2)
+  "Higher")
 
 
 ;; Predicates - take a value and return a boolean result (true | false)
@@ -350,6 +442,17 @@ Integer myInt = new Integer("2")
 
 (type (take 3 (range 10)))
 
+(take 10 (range))
+
+(type (Integer. "8080"))
+
+(type "This is a string")
+
+(type '(1 2 3 4))
+
+
+
+
 
 ;; Ratios
 ;; To help maintain the precision of numbers, Clojure has a type called Ratio
@@ -366,6 +469,13 @@ Integer myInt = new Integer("2")
 ;; numbers with a decimal point
 (class (/ 22 7.0))
 
+(/ 14 4)
+
+7/2
+
+(*  (/ 22 7) 7)
+
+(type 7.0)
 
 ;; Is something a thing
 
@@ -391,6 +501,14 @@ Integer myInt = new Integer("2")
 (Math/sqrt 4)
 
 (Math/sqrt 13)
+
+(Math/PI)
+
+(.toUpperCase "bla")
+
+
+;;(new yourObjectName)
+;; (. youObjectName)
 
 ;; Lets have some maths fun and see how Clojure deals with this
 
@@ -495,3 +613,14 @@ Integer myInt = new Integer("2")
 
 ;; Paredit
 ;; Alt-up - get rid of parent
+
+
+(def a "I have a name")
+
+;; (def :a "What about keywords")
+
+(class :a)
+(get {"a" "ay"} "a")
+
+
+(get-in {"a" {"aa" "You found me"}} ["a" "aa"])
