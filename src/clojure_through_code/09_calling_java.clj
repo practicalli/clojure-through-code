@@ -57,3 +57,13 @@ Math/PI
 
 ;; Miscellaneous
 
+;; Java calls are not first class functions, so you need to wrap them in a function (either named or anonymous) before you can use them with functions like map, apply etc
+
+;; So in this example, the direct use of Math/sqrt will fail because its not a first class function.
+
+;; (map Math/sqrt (range 1 10))
+
+;; however if you wrap the call to Math/sqrt in a function, in this case an anonymous function, then it will become a first calss function that can be mapped over a collection.
+
+(map #(Math/sqrt %) (range 1 10))
+
