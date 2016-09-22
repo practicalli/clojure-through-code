@@ -22,8 +22,8 @@
 
 (defn pluralise
   "Pluralise a given string value"
-  [string]
-  (str string "s"))
+  [animal]
+  (str animal "s"))
 
 ;; and give a name to our collection of animals
 
@@ -70,6 +70,8 @@
 
 ;; using an anonymous function we can send the two arguments required to the pluralise function, as map will replace the % character with an element from the animals collection for each element in the collection.
 (map #(pluralise % non-plural-words) animals)
+
+(map (fn [animal] (pluralise animal non-plural-words)) animals)
 
 
 ;; we could also use a partial function, saving on having to create an anonymous
@@ -158,6 +160,16 @@
 
 
 
+;; Applying a sequence with functions that take individual arguments
+
+(def my-square [10 8 20 12 4])
+
+(defn draw-square [x y width height corner]
+  (str "X: " x " Y: " y " Width: " width " Height: " height " Corner: " corner))
+
+(apply draw-square my-square)
+;; => "X: 10 Y: 8 Width: 20 Height: 12 Corner: 4"
+
 
 
 
@@ -179,4 +191,13 @@
 ;; clojure.core/memoize
 ;; (memoize f)
 ;; Returns a memoized version of a referentially transparent function. The memoized version of the function keeps a cache of the mapping from arguments to results and, when calls with the same arguments are repeated often, has higher performance at the expense of higher memory use. 
+
+
+
+;;; Processing maps problem  ???
+
+;; you have several maps which have name and id keys.  The value of the id becomes the new key and the name becomes the new value.
+
+[{:name "mike" :id 0} {:name "mike" :id 0} {:name "mike" :id 0}]
+
 
