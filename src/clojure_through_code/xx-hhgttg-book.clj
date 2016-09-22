@@ -23,6 +23,7 @@
      reverse)
 
 
+;; C-c C-p to show output in a seperate buffer (spacemacs)
 
 
 ;; Algorithm
