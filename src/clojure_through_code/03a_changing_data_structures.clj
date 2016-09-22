@@ -179,3 +179,9 @@ list-one
 (assoc alphabet-soup :d 4)
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Creating vectors
+
+(into [] (take 10 (range)))
