@@ -9,11 +9,45 @@
 ;; map (key / Value pairs, usually using clojure :keyword type for the keys,
 ;; set (unique elements, not ,ordered by default).
 ;; These data structures are typically used rather than defining your own types
+;; Thise 4 data structures are extremely efficient immutable data structures.
+
+;; You can also consider strings as collections to and use them in similar ways to the other built in collections.
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Strings
+
+
+;; Strings act as a collection of characters, so you can use the functions typically used for other collections - first, second, rest. last.
+
+(first "Clojure")
+;; => \C
+
+(second "Clojure")
+;; => \l
+
+(rest "Clojure")
+;; => (\l \o \j \u \r \e)
+
+;; The rest function returns a collection of the remaining characters after the first one.  This collection is in a list.  If you wish to return the rest of the characters as a string instead, you can apply the str function over the result of calling rest on the string.
+
+(apply str (rest "Clojure"))
+;; => "lojure"
+
+(last "Clojure")
+;; => \e
+
+;; The get function can also be used to return values at a specific position in the string (index).  Like arrays (vectors in Clojure) strings are indexed from 0 onwards.  So the first character in the string is at position 0.
+
+(get "Clojure" 3)
+;; => \j
+
+
+;; Note:  Clojure also has built in regular expressions which is useful for finding strings, sub-strings and filtering text.
+;; See the section on regular expressions (TODO)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Clojure Built-in data structures
+;; Clojure persistent data structures
 
 
 ;; list ()
@@ -35,7 +69,7 @@
 ;; further examples of mixing types
 
 (list )
-(list 1 2 3 4) 
+(list 1 2 3 4)
 
 (def five 5)  ;; bind the name five to the value 5, clojure's equivalent to assignment
 
@@ -269,3 +303,11 @@
 ; Only lists are seqs.
 (seq? '(1 2 3)) ; => true
 (seq? [1 2 3]) ; => false
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generating Data
+
+(take 20 (cycle ["foo" "bar"]))
+
