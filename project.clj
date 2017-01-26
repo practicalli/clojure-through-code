@@ -5,4 +5,5 @@
             :url "https://creativecommons.org"}
   :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
                  [org.clojure/core.match "0.3.0-alpha4"]
-                 [table "0.5.0"]])
+                 [table "0.5.0"]
+                 [proto-repl "0.3.1"]])
