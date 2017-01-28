@@ -2,7 +2,7 @@
 
 ;; The built in data structures of Clojure are great for representing simple and complex collections.
 
-;; A colleciton is like a collection of toys you have as a child, or a collection of music and videos you collect as a teenager and into adulthood.
+;; So what are examples of collecitons?  It could be all the movies you own or your music library.  It could be all the books you own, both paper and electronic.
 
 ;; How would you represent a simple collecion of music?
 
@@ -32,7 +32,8 @@
  {:album-name "Here comes the war"      :artist "New Model Army"}
  {:album-name "Thunder & Consolation"   :artist "New Model Army"}]
 
-;; If we give this music collection a name then it makes it easy to use with functions
+;; If we give this music collection a name then it makes it easy to use with functions.
+;; We will use this `album-collection' name to for the next examples to keep the examples simple to read.
 
 (def album-collection [{:album-name "Tubular Bells"           :artist "Mike Oldfield"}
                        {:album-name "Smells like teen spirit" :artist "Nirvana"}
@@ -40,21 +41,43 @@
                        {:album-name "Here comes the war"      :artist "New Model Army"}
                        {:album-name "Thunder & Consolation"   :artist "New Model Army"}])
 
-;; Lets say we want all the album titles in our collection
+;; We could get a specific album by its position in the collection, like pulling out a specific album out of the shelf that holds our collection.
 
+;; lets get the first album from our collection.  The first album is in position 0.
+(get album-collection 0)
+;; => {:album-name "Tubular Bells", :artist "Mike Oldfield"}
+
+;; Or we can use the collection functions to also get specific albums
+(first album-collection)
+;; => {:album-name "Tubular Bells", :artist "Mike Oldfield"}
+
+(last album-collection)
+;; => {:album-name "Thunder & Consolation", :artist "New Model Army"}
+
+
+;; If we want to get just the album name from a specific album. we first get the album as a result, as a map of key value pairs.
+;; Then using the relevant key in the map we extract just the album name
+(get (get album-collection 0) :album-name)
+;; => "Tubular Bells"
+
+
+;; Lets say we want all the album titles in our collection
 (map #(get % :album-name) album-collection)
 ;; => ("Tubular Bells" "Smells like teen spirit" "Vision Thing" "Here comes the war" "Thunder & Consolation")
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; what if we just want to see our albums for a specific artist ?
+;; what if we just want to see all our albums for a specific artist ?
 
 ;; We can filter out all the album maps in our collection and just return those maps that contain the given artist.
 
-;; First, lets look at how you get a value from a map using the get function
+;; First, lets remind ourselves how to get a specific value from a map using the get function and a key from the map
 (get {:album-name "Thunder & Consolation"   :artist "New Model Army"} :artist)
+;; => "New Model Army"
 
-;; Now we can test the result to see if it is the name of the artist
+;; Now we can test the result to see if it is the name of the artist, by using the = function with the name of the artist we are looking for.
 (= "New Model Army" (get {:album-name "Thunder & Consolation"   :artist "New Model Army"} :artist))
+;; => true
 
 ;; So we could take this test and apply it in turn to all of the album maps in our music collection
 
@@ -76,9 +99,15 @@
     true
     false))
 
-(is-album-by-artist? "New Model Army" {:album-name "Thunder & Consolation"   :artist "New Model Army"})
+(is-album-by-artist? "New Model Army" {:album-name "Thunder & Consolation" :artist "New Model Army"})
+;; => true
 
 
 
-(filter (partial is-by-artist? "New Model Army") album-collection)
+(filter (partial is-album-by-artist? "New Model Army") album-collection)
+;; => ({:album-name "Here comes the war", :artist "New Model Army"} {:album-name "Thunder & Consolation", :artist "New Model Army"})
 
+;; not quite right...
+
+;;(get (filter (partial is-album-by-artist? "New Model Army") album-collection) :album-name)
+;; => nil
