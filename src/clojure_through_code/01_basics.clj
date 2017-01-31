@@ -6,16 +6,9 @@
 (ns clojure-through-code.01-basics
   (:require [clojure.string]))
 
-(clojure.repl/doc doc)
-
 ;; (:require 'clojure.repl)
 
 ;; (:require [clojure.repl] :refer :all)
-
-
-
-
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -230,7 +223,7 @@ five
 (#(+ % 3))    ;; add three (fn [num] (+ num 3))
 (#(+ %1 %3 %2 4 5) 1 2 3) ;; add 3 arguments (fn [arg1 arg2 arg3] (+ arg1 arg2 arg3 4 5))
 
-;; 
+;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -247,7 +240,6 @@ five
 
 ;; join strings together with the function str
 (str "Hello" ", " "HackTheTower UK")
-
 
 ;; using println in LightTable shows the results in console window, as its a side affect
 ;; using srt you see the results of the evaluation inline with the code,
@@ -269,7 +261,6 @@ five
  (/ 7)
  (+ (* 5 11))
  (= (+ 0.0  (* 9 9))))
-
 
 (Math/sqrt 4)
 
@@ -319,9 +310,6 @@ five
 
 (repeat 4 9)
 
-
-
-
 ; Equality is =
 (= 1 1) ; => true
 (= 2 1) ; => false
@@ -345,7 +333,6 @@ five
 (def my-map {:foo "a"})
 
 (= "a" (:foo my-map))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Truethy experiments
@@ -397,12 +384,10 @@ five
   (zero? (- (* 8 8) 64)) "This is true but not returned as a previous condition is true"
   :otherwise "None of the above are true")
 
-
 ;; when true do the following
 
 (when (> 8 2)
   "Higher")
-
 
 ;; Predicates - take a value and return a boolean result (true | false)
 (true? true)
@@ -428,7 +413,6 @@ five
 (class nil)    ; The "null" value is called nil
 
 (class (list 1 2 3 4))
-
 
 (class true)
 (class ())
@@ -487,8 +471,6 @@ five
 
 (instance? java.util.Date #inst "2015-01-01")
 
-
-
 ;; Lets try and break clojure with Math
 
 ;; (/ 22 0)
@@ -506,7 +488,6 @@ five
 
 (.toUpperCase "bla")
 
-
 ;;(new yourObjectName)
 ;; (. youObjectName)
 
@@ -518,7 +499,6 @@ five
 ;; mathematical concepts like the square-root of minus one.
 
 ;; So what does NaN mean.  Well by consulting Stack Overflow, a NaN is produced if a floating point operation would produce an undefinable result.  Other examples include dividing 0.0 by 0.0 is arithmetically undefined.
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -541,9 +521,6 @@ five
 (namespace 'clojure-through-code.01-basics/my-map)
 (name 'clojure-through-code.01-basics/my-map)
 
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Documentation in Clojure & LightTable
 
@@ -556,9 +533,6 @@ five
 (class [])
 
 (map? [1 2 3 4])
-
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LightTable Settings
@@ -577,11 +551,8 @@ five
 ;; Settings: User behaviors
 
 
-
-
 ;; (doto)  ;; Chain functions together
 ;; ->
-
 
 
 ;;; cool stuff
@@ -621,6 +592,5 @@ five
 
 (class :a)
 (get {"a" "ay"} "a")
-
 
 (get-in {"a" {"aa" "You found me"}} ["a" "aa"])
