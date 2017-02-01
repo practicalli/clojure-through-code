@@ -219,8 +219,8 @@ five
 
 ;; An anonymous function is defined with the #() syntax where % is a placeholder for the arguments.
 
-( #(* % %) 6)  ;; square a number (fn [num] (* num num))
-(#(+ % 3))    ;; add three (fn [num] (+ num 3))
+(#(* % %) 6)  ;; square a number (fn [num] (* num num))
+(#(+ % 3) 6)    ;; add three (fn [num] (+ num 3))
 (#(+ %1 %3 %2 4 5) 1 2 3) ;; add 3 arguments (fn [arg1 arg2 arg3] (+ arg1 arg2 arg3 4 5))
 
 ;;
