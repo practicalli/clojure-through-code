@@ -434,9 +434,16 @@ five
 
 (type '(1 2 3 4))
 
-
-
-
+(type 1)
+(type "I am a string")
+(type :i-am-a-keyword)
+(type 22/7)
+(type 'def)
+(type 'defn)
+(type '(1 2 3 4))
+(type [1 2 3 4])
+(type {:a 1 :b 2})
+(type #{1 2 3 4})
 
 ;; Ratios
 ;; To help maintain the precision of numbers, Clojure has a type called Ratio
