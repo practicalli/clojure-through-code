@@ -596,6 +596,7 @@ five
 (def a "I have a name")
 
 ;; (def :a "What about keywords")
+;; => keywords cannot be used as names, as keywords point to themselves
 
 (class :a)
 (get {"a" "ay"} "a")
