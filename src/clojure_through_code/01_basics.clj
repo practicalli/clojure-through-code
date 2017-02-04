@@ -602,3 +602,35 @@ five
 (get {"a" "ay"} "a")
 
 (get-in {"a" {"aa" "You found me"}} ["a" "aa"])
+
+
+(let [reason "sick"]
+  (cond
+    (= reason "sick")  "I ache all over and am seeing green elephant-shaped spots"
+    (= reason "train") "That darn Southern Rail on strike again"
+    (= reason "pet")   "My pet ate my homework"))
+
+(let [greeting :fr]
+  (case greeting
+    :fr "bonjour monde clojure"
+    :en "hello clojure world"
+    :it "ciao mondo clojure"
+    :es "hola mundo clojure"))
+
+(let [language :fr
+      message (case language
+                :fr "bonjour monde clojure"
+                :en "hello clojure world"
+                :it "ciao mondo clojure"
+                :es "hola mundo clojure")
+      upper-case? true]
+  (if upper-case?
+    (clojure.string/upper-case message)
+    message))
+
+(let [reason "sick"]
+  (cond
+    (= reason "sick")  "I ache all over and am seeing green elephant-shaped spots"
+    (= reason "train") "That darn Southern Rail on strike again"
+    (= reason "pet")   "My pet ate my homework"))
+
