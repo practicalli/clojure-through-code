@@ -634,3 +634,45 @@ five
     (= reason "train") "That darn Southern Rail on strike again"
     (= reason "pet")   "My pet ate my homework"))
 
+(def my-details ["John" "Stevenson" "37" "Clojure" "London" "North Yorkshire" 12])
+
+(first my-details)
+(second my-details)
+(rest my-details)
+
+(nth ["John" "Stevenson" "37" "Clojure" "London" "North Yorkshire" 12] 2)
+
+(nth my-details 0)
+
+(first my-details)
+(first "John")
+(str (nth "John" 0))
+
+["string" ["fish" "rabit"]]
+
+{:key ["value1" "value2"]}
+
+{:bicycle ["wheels" "frame" "handlbars"]}
+
+{:meal ["starter" "main course" "desert"]}
+
+{:meal
+ ["starter" ["soup" "bread rolls"]
+  "main course" ["fish" "chips" "mushy peas"]
+  "desert" ["cheese" "wine"]]}
+
+{:meal
+ {"starter" ["soup" "bread rolls"]
+  "main course" ["fish" "chips" "mushy peas"]
+  "desert" ["cheese" "wine"]}}
+
+{:meal
+ {:starter ["soup" "bread rolls"]
+  :main-course  ["fish" "chips" "mushy peas"]
+  :desert ["cheese" "wine"]}}
+
+{:meal
+ {:ingredience []
+  :recipe []}}
+
+
