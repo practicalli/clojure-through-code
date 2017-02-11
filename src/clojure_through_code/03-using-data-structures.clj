@@ -143,6 +143,56 @@ portfolio
 ;; => ["CRM" "AAPL" "MSFT" "ORCL"]
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Map reduce sandwich
+
+;; http://www.datasciencecentral.com/forum/topics/what-is-map-reduce
+
+;; As several functions
+
+(defn slice [item]
+  (str "sliced " item))
+
+(def sandwich
+  (map slice ["bread" "cucumber" "pepper" "tomato" "lettuce" "onion"]))
+;; => #'clojure-through-code.03-using-data-structures/sandwich
+
+(def my-sandwich
+  (reduce str (interpose ", " sandwich)))
+
+(str "I have a tasty sandwich made with " my-sandwich)
+
+
+;; Or as one function
+(str "I have a tasty sandwich made with "
+     (reduce str (interpose ", " (map #(str "sliced " %) ["bread" "cucumber" "pepper" "tomato" "lettuce" "onion"]))))
+
+
+;; Or using the threading macro
+
+(->> ["bread" "cucumber" "pepper" "tomato" "lettuce" "onion"]
+     (map #(str "sliced ") ,,,)
+     (interpose ", " ,,,)
+     (reduce str ,,,)
+     (str "I have a tasty sandwich made with " ,,,))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Map and filter
+
+;; A collection of accounts, each account being a map with id and balance values
+(def accounts [{:id "fred" :balance 10}
+               {:id "betty" :balance 20}
+               {:id "wilma" :balance 5}])
+
+;; Get the balance for each account and add them together
+(apply + (map :balance accounts))
+
+;; We could also use reduce insdead of apply
+(reduce + (map :balance accounts))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evaluating things you have defined
 
