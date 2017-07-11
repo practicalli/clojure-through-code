@@ -84,3 +84,36 @@
 ;; 4Clojure entered solution
 [7 6 5 4 3]
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; problem 83: a half truth
+
+;; Write a function which takes a variable number of booleans.
+;; Your function should return true if some of the parameters are true, but not all of the parameters are true. Otherwise your function should return false.
+
+;; a full way of describing the algorithm and thinking behind it
+(fn [& args]
+    (let [not-all-true (not (every? true? args))
+          any-true (first (filter true? args))]
+      (= not-all-true any-true)))
+
+(fn [& args]
+  (= (not (every? true? args))
+     (first (filter true? args))))
+
+;; To get a better golf score (fewer characters) an anonymous function can be used
+;; The %& is a placeholder for all the parameters
+(#(=
+   (not (every? true? %&))
+   (first (filter true? %&))) true)
+
+
+  ;; From the first example, we can see that comparing true and false values
+;; with give a boolean result.  So what about just comparing the values
+
+;; If all the values are true => false
+;; If all the values are false => false
+;; If there is at lease one true & one false => true
+;; So comparing all of the parameters being equal gives the wrong result, false when true and vice versa.
+;; Inverting the comparison of all parameters give the correct result.
+not=
