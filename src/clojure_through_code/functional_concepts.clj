@@ -13,16 +13,25 @@
 (defn increment-numbers [number-collection]
   (map inc number-collection))
 
-;;(inc 1)
+(inc 1)
+;; => 2
 
-(increment-numbers '(1 2 3 4 5))
+(increment-numbers [1 2 3 4 5])
+;; => (2 3 4 5 6)
 
 ;; takes in a specific argument and returns a deterministic value
 
 
+(defn sum-numbers
+  "Sums up all the numbers in a given collection"
+  [collection]
+  (reduce + collection))
+
+(sum-numbers [3 5 8 13 21 34])
+;; => 84
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; impure functions - side causes & side effects
-
 
 (def global-value '(5 4 3 2 1))
 
@@ -30,18 +39,24 @@
   (map inc global-value))
 
 (impure-increment-numbers '(1 2 3 4 5))
+;; => (6 5 4 3 2)
 
 global-value
+;; => (5 4 3 2 1)
 
-;; using a global value rather than the argument passed makes this function undeterministic
+;; using a global value rather than the argument passed makes this function non-deterministic
 
 
+;; Another example of impurity - Java Interop
 
 (:import java.util.Date)
+;; => nil
+;; => nil
+;; => nil
 
-;; Create a new date object with the current date using either the new or . sytax
+;; Create a new date object with the current date using either the new or . syntax
 (new java.util.Date)
-(java.util.Date.)
+;;(java.util.Date.)
 
 ;; side causes example
 (defn task-complete [task-name]
@@ -112,45 +127,6 @@ global-value
 ;; These two expressions give different values (and return different types, Integer and Ratio) as the positions of the arguments have been reversed.
 
 
-;;;;;;;;;;;;;;;
-;; Higher Order functions
-
-;; functions can be used as an arugument to other functions,
-;; because a function always evaluates to a value
-
-
-;; from wikipedia - is this example too abstract?  Isnt this just a simplification of the map function
-(defn twice [function-to-apply value]
-  (function-to-apply (function-to-apply value)))
-
-(twice #(+ % 3) 7)
-
-
-
-(filter
- even?
- (range 1 10))
-
-;; functions can be used as an arugument to other functions,
-;; because a function always evaluates to a value
-
-(map inc [1 2 3 4 5])
-
-;; the above map funciton is roughly equivalent to
-;; (conj [] (inc 1) (inc 2) (inc 3) (inc 4) (inc 5))
-
-(map + [1 2 3 4] [5 6 7 8])
-
-(range 1 10)
-
-
-(reduce + (range 1 10))
-
-(reduce + '(1 2 3 4 5 6 7 8 9))
-
-;; (range)
-
-(take 10 (range))
 
 ;;;;;;;;;;;;;;;;
 ;; Immutability - Values and Persistent data structures
@@ -396,6 +372,47 @@ name-of-new-string
 (let [words (clojure.string/upper-case sentence)]
   (map letter->clack (map str words)))
 
+
+
+;;;;;;;;;;;;;;;
+;; Higher Order functions
+
+;; functions can be used as an arugument to other functions,
+;; because a function always evaluates to a value
+
+
+;; from wikipedia - is this example too abstract?  Isnt this just a simplification of the map function
+(defn twice [function-to-apply value]
+  (function-to-apply (function-to-apply value)))
+
+(twice #(+ % 3) 7)
+
+
+
+(filter
+ even?
+ (range 1 10))
+
+;; functions can be used as an arugument to other functions,
+;; because a function always evaluates to a value
+
+(map inc [1 2 3 4 5])
+
+;; the above map funciton is roughly equivalent to
+;; (conj [] (inc 1) (inc 2) (inc 3) (inc 4) (inc 5))
+
+(map + [1 2 3 4] [5 6 7 8])
+
+(range 1 10)
+
+
+(reduce + (range 1 10))
+
+(reduce + '(1 2 3 4 5 6 7 8 9))
+
+;; (range)
+
+(take 10 (range))
 
 
 ;;;;;;;;;;;;;;;;;;
