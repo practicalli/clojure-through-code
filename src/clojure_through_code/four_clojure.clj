@@ -1,10 +1,12 @@
 (ns clojure-through-code.four-clojure)
 
-
-;; 60
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; problem 60
 
 ;; Write a function which behaves like reduce, but returns each intermediate value of the reduction.
 ;; Your function must accept either two or three arguments, and the return sequence must be lazy.
+
+;; Special Restrictions: recursions
 
 ;; Notes from:
 ;; http://www.thesoftwaresimpleton.com/blog/2014/09/08/lazy-seq/
@@ -26,13 +28,11 @@
 ;; => clojure.lang.LazySeq
 
 
-
 ;; Solving the problem
 
 ;; (= (take 5 (map + (range))) [0 1 3 6 10])
 
 ;;(take 5 (map + (range)))
-
 
 (= (take 5 (
             (fn my-reduct
@@ -46,3 +46,17 @@
                                        (cons res (reduct f res (rest se)))))))]
                  (lazy-seq (cons firstArg (reduct func firstArg coll))))))
             + (range))) [0 1 3 6 10])
+
+;; 4Clojure entered solution
+
+(fn my-reduct
+  ([func coll]
+   (my-reduct func (first coll) (rest coll)))
+
+  ([func firstArg coll]
+   (letfn [(reduct [f init se]
+             (lazy-seq (when-not (empty? se)
+                         (let [res (f init (first se))]
+                           (cons res (reduct f res (rest se)))))))]
+     (lazy-seq (cons firstArg (reduct func firstArg coll))))))
+
