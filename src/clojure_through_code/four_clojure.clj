@@ -136,7 +136,23 @@
 ;; => [[:o :e :e] [:e :o :e] [:e :e :o]]
 
 
+;; let can be used with functions as well as values
+;; we can call the function using the local name winner,
+;; passing a board and a player character to see if they have won.
+;; We just use a single winning pattern here for simplicity.
+(let [winner (fn [[[a b c]
+                   [d e f]
+                   [g h i]]
+                  player]
+               (= player a b c))]
+  (winner board-x-first-row :x))
+;; => true
+
+
+;; We can streamline the let binding and anonymous function definition a little
 ;; letfn creates a function within the scope of the let expression.
+;; letfn takes the name of the function to create followed by its arguments,
+;; in this case the board patter we are destructuring and the player character.
 ;; For example:
 
 (letfn [(winner [[[a b c]
