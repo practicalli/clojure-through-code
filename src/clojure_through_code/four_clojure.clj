@@ -116,4 +116,20 @@
 ;; If there is at lease one true & one false => true
 ;; So comparing all of the parameters being equal gives the wrong result, false when true and vice versa.
 ;; Inverting the comparison of all parameters give the correct result.
-not=
+
+;; So by replacing the not and first expressions with their results I would get the following combinations of results
+
+(= true true)   ;; => true
+(= true false)  ;; => false
+(= false false) ;; => true
+
+;; These combinations give the opposite result we are looking for (false when it should be true, etc).
+;; So we can invert the result using not or better still use the not= function
+
+(not= true true)   ;; => false
+(not= true false)  ;; => true
+(not= false false) ;; => false
+
+;; 4Clojure entered solution
+;; not=
+
