@@ -179,7 +179,18 @@ list-one
 (assoc alphabet-soup :d 4)
 
 
+;;;; Creating default maps from a known set of keys
 
+(zipmap [:foo :bar :baz] (repeat nil))
+;; => {:foo nil, :bar nil, :baz nil}
+
+;; alternatively
+(into {} (for [k [:foo :bar :baz]] [k nil]))
+;; => {:foo nil, :bar nil, :baz nil}
+
+;; creating a map with random integer values (use rand for decimal)
+(zipmap [:foo :bar :baz] (repeatedly #(rand-int 11)))
+;; => {:foo 9, :bar 2, :baz 9}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Creating vectors
