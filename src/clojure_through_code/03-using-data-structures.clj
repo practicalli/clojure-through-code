@@ -430,11 +430,16 @@ name1
 
 
 ;; It is often the case that you will want to bind same-named symbols to the map keys. The :keys directive allows you to avoid the redundancy:
-(let [{fred :fred ethel :ethel lucy :lucy} m] )
+
+(def my-map {:fred "freddy" :ethel "ethanol" :lucy "goosey"})
+
+(let [{fred :fred ethel :ethel lucy :lucy} my-map]
+  [fred ethel lucy])
 
 ;; can be written:
 
-(let [{:keys [fred ethel lucy]} m] )
+(let [{:keys [fred ethel lucy]} my-map]
+  [fred ethel lucy])
 
 ;; As of Clojure 1.6, you can also use prefixed map keys in the map destructuring form:
 
