@@ -219,6 +219,12 @@
     :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
     :jarjar {:fullname "JarJar Binks"   :skill "Upsetting a generation of fans"}})
 
+(get starwars-characters :luke)
+(get (get starwars-characters :luke) :skill)
+(get-in starwars-characters [:luke :fullname])
+
+(:skill (:luke starwars-characters))
+
 ;; updating maps with assoc-in
 (assoc-in starwars-characters [:vader :skill] "The Dark Side of the Force")
 ;; => {:luke {:fullname "Luke Skywarker", :skill "Targeting Swamp Rats"}, :vader {:fullname "Darth Vader", :skill "The Dark Side of the Force"}, :jarjar {:fullname "JarJar Binks", :skill "Upsetting a generation of fans"}}
