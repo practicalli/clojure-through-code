@@ -1,5 +1,18 @@
+(ns clojure-through-code.10-changing-state)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Changing state in Clojure
+
+;; The most common way to manage changing state in Clojure is the atom.
+
+;; Essentially an atom is a box that can hold any other clojure data.  when you change the atom contents, you are essentially replacing one immutable value with another.
+
+;; An atom is a mutable container for any valid data in Clojure.  So you can put numbers, strings and collections into an atom.
+
+;; Unlike numbers, strings and collections, the contents of an atom changes when you use a function that changes a value or collection.
+
+;; However, the value or collection itself is immutable, so does not change. Its the atom that shows you a different value.
+
 
 ;; The examples in this section relate to an online gambling game in which players compete against each other and against the tame itself.
 ;; The hands that the players are dealt and the money which they have in their account are mutable in these examples
