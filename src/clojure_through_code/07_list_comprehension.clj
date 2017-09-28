@@ -63,3 +63,54 @@
 
 ;;> (0)
 
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Merge elements of collections to form game board grids
+;; - using list comprehension
+
+(def rows    "ABCDEFGHI")
+(def columns "123456789")
+
+(defn grid-reference
+"Generate all the combinations for a given collection of row and column names.
+
+  The collection of names can be in a string, set, list or vector.
+
+  The function will return all combinations up to the length of the collection with the fewest elements."
+
+  [row-names column-names]
+
+  (for [row-element row-names
+        column-element column-names]
+    (str row-element column-element)))
+
+(def board (grid-reference rows columns))
+
+board
+
+
+(defn grid-reference-as-keys
+  [row-names column-names]
+  (for [row-element row-names
+        column-element column-names]
+    (keyword (str row-element column-element))))
+
+(def board-with-keywords (grid-reference-as-keys rows columns))
+
+board-with-keywords
+
+
+(def alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+(defn tictactoe-board-grid
+"Create a TicTacToe board grid so each cell in the board has a unique reference.
+ Boards have the same number of rows and columns, so a typical 3x3 grid would have a row-column-size of 3"
+  [row-column-size]
+  (let [row-names (take row-column-size alphabet)
+        column-names (range 1 (+ row-column-size 1))]
+    (grid-reference-as-keys row-names column-names)))
+
+(tictactoe-board-grid 3)
