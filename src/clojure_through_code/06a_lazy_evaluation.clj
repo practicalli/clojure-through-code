@@ -1,3 +1,5 @@
+(ns clojure-through-code.06a-lazy-evaluation)
+
 ;;;;;;;;;;;;;;;;;;
 ;; Lazy evaluation
 
@@ -10,6 +12,35 @@
 
 (take 10 (iterate inc 0))
 (take 10 (iterate dec 0))
+
+
+;; Seeing Lazy evaluation in action
+
+;; By creating a lazy sequence
+
+(defn lazy-random-numbers
+  "Lazy evaluation of a random number generator, generates only the numbers required at evaluation time.  Once a number is generated though, it does not need to be generated again."
+  [maximum-number]
+  (lazy-seq
+   (println "I just created a number in the lazy sequence")
+   (cons (rand-int maximum-number)
+         (lazy-random-numbers maximum-number))))
+
+(def random-numbers
+  (take 10 (lazy-random-numbers 100)))
+
+;; to see the laziness of the sequence (list of numbers), just take a few of them
+
+(first random-numbers)
+;; sends 1 println to the REPl
+;; => 36
+
+(nth random-numbers 3)
+;; sends 3 println to the REPl
+
+(count random-numbers)
+;; sends 6 println to the REPl first time this is called
+;; sends 0 println to the REPl all consecutive times as all the numbers are now cached
 
 
 
