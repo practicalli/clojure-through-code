@@ -69,6 +69,13 @@
 (map + [1 2 3])
 
 
+
+(take 8 (cycle ["foo" "bar"]))
+;; => ("foo" "bar" "foo" "bar" "foo" "bar" "foo" "bar")
+
+
+
+
 (def fibonacci-sequence [1 2 3 5 8 13 21 34 55 89 144 278])
 
 (take 20 fibonacci-sequence)
