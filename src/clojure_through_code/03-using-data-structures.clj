@@ -144,6 +144,18 @@ portfolio
 ;; => ["CRM" "AAPL" "MSFT" "ORCL"]
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Map reduce
+
+(def my-numbers [1 2 3 4 5])
+
+(map even? my-numbers)
+;; => (false true false true false)
+
+;; Reduce to see if all the numbers are even, otherwise return false.
+;; or is a macro so is quoted so its evaluated only when called by reduce
+(reduce 'or (map even? my-numbers))
+;; => false
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -204,20 +216,14 @@ portfolio
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evaluating things you have defined
 
-person
-
-developer-events
-
-
-
+;; person
+;; developer-events
 ;; (dev-event-details)
+
 (dev-event-details :devoxxuk)
-
-
 
 (first portfolio)
 (next portfolio)
-
 
 ;;; First and next are termed as sequence functions in Clojure,
 ;;; unlike other lisps, you can use first and next on other data structures too
@@ -239,8 +245,6 @@ developer-events
 (apply str (rest person))
 
 
-
-
 ;; You can get the value of this map
 
 (def luke {:name "Luke Skywarker" :skill "Targeting Swamp Rats"})
@@ -248,6 +252,7 @@ developer-events
 (def jarjar {:name "JarJar Binks"   :skill "Upsetting a generation of fans"})
 
 (get luke :skill)
+(first luke)
 
 
 ;; Getting the keys or values in a map using keywords
@@ -262,11 +267,10 @@ developer-events
 (keys luke)
 (vals luke)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set #{}
 ;; a unique set of elements
-
-
 
 (#{:a :b :c} :c)
 (#{:a :b :c} :z)
@@ -444,22 +448,3 @@ name1
 (let [m {::x 42}
       {:keys [::x]} m]
   x)
-
-
-
-;; 4Clojure - exercise 65
-
-;; Clojure has many sequence types, which act in subtly different ways. The core functions typically convert them into a uniform "sequence" type and work with them that way, but it can be important to understand the behavioral and performance differences so that you know which kind is appropriate for your application.
-
-;; Write a function which takes a collection and returns one of :map, :set, :list, or :vector - describing the type of collection it was given.
-;; You won't be allowed to inspect their class or use the built-in predicates like list? - the point is to poke at them and understand their behavior.
-
-(= :map (if (keyword? (first(first {:a 1, :b 2}))) :map))
-
-(if (keyword? (first(first {:a 1 :b 2}))) :map )
-
-(first (first {:a 1 :b 2}))
-
-(first {:a 1 :b 2})
-
-(if (keyword? (first(first %))) :map )
