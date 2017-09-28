@@ -14,6 +14,22 @@
 ;; However, the value or collection itself is immutable, so does not change. Its the atom that shows you a different value.
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Using fictional characters to show atoms in action
+;; (work in progress)
+
+(def human-characters [])
+
+(def mutant-characters (atom []))
+
+(defn add-mutant [mutant]
+  (swap! mutants conj mutant))
+
+(add-mutant "Black Widow")
+(add-mutant "Hulk")
+(add-mutant "Ariel")
+
+
 ;; The examples in this section relate to an online gambling game in which players compete against each other and against the tame itself.
 ;; The hands that the players are dealt and the money which they have in their account are mutable in these examples
 
