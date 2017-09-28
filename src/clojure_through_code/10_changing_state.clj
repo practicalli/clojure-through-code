@@ -30,14 +30,18 @@
 (add-mutant "Ariel")
 
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Gambling Game example of state
+
+
 ;; The examples in this section relate to an online gambling game in which players compete against each other and against the tame itself.
 ;; The hands that the players are dealt and the money which they have in their account are mutable in these examples
 
 ;; Note: You could make the card hand that each player holds immutable using a new persistent data structure for each game and only make the deck of cards they are drawing from immutable for a particular round of games.  Actually you could make both immutable.
 
-;; The only value that seems to really benefit from state is the current amount of a players account, however, even that could be immutable, so long as changes are written to a persistent storage 
+;; The only value that seems to really benefit from state is the current amount of a players account, however, even that could be immutable, so long as changes are written to a persistent storage
 
-(ns clojure-through-code.10-changing-state)
 
 ;; Imagine we have a list of players and we want to add a new player.
 ;; We have a table and we only have two places at the table as a maximum.
@@ -109,6 +113,10 @@
 (join-game "Betty" betty-account)
 
 
+;; NOTE: If a map is used in the atom that has all the relevant information that needs changing you may not need to use the following ref example
+
+
+
 ;;;;;;;;;;;;;;;;
 ;; Using ref to manage multiple state changes
 
@@ -117,6 +125,15 @@
 @toms-account
 
 @betty-account
+
+(def game-world (atom {:players [{:id 0 :name "harriet" :account 100}]
+                       :game-account 0}))
+
+#_(swap! update-in game-world
+       :game-account add-player
+
+       )
+
 
 (def players-ref (ref [] :validator #(<= (count %) 2)))
 (def game-account (ref 1000))
