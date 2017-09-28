@@ -36,7 +36,14 @@
   (println "3 is greater than 2")
   "Higher")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; for
 
+;; process the items in a collection with destructing
+
+(for [[i j k]
+      [[0 1 2] [0 2 3] [1 0 4] [2 1 4] [3 2 4] [0 3 4]]]
+  (println "i: " i "j: " j " and k: " k))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; while
@@ -166,7 +173,7 @@
 
 ;; To a programmer familiar with the concepts of functional programming, it's quite clear what the above function does. Let's read it out for all of us .. From a list of accounts, filter the ones with type as savings, get their balances and report the sum of them. That was easy .. but did you notice that we read it inside out from the implementation, which btw is a 4 level nested function ?
 
-;; Enter Thrush ..
+;; Enter Thrush (Threading macro)
 
 ;; Being a permuting combinator, Thrush enables us to position the functions outside in, in the exact sequence that the human mind interprets the problem. In our Scala version we had to implement something custom .. with Clojure, it comes with the standard library .. have a look ..
 
@@ -187,3 +194,10 @@
 ;; ->> has a related cousin ->, which is same as ->>, but only threads the forms as the second argument of the next form instead of the last. These macros implement Thrush in Clojure. Idiomatic Clojure code is concise and readable and using a proper ubiquitous language of the domain, makes a very good DSL. Think about using Thrush when you feel that reordering the forms will make your API look more intuitive to the user.
 
 ;; Thrush also helps you implement the Decorator pattern in a very cool and concise way. In my upcoming book, DSLs In Action I discuss these techniques in the context of designing DSLs in Clojure.
+
+
+
+
+
+;; Idea
+;; A searchable website of examples in clojure by topic, function name, concept, or any combination of them
