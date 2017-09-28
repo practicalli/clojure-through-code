@@ -311,3 +311,19 @@
 
 (take 20 (cycle ["foo" "bar"]))
 
+
+;; Conjoining collections together
+
+(conj {:a 1} '(:b 2) )
+
+(cons {:a 1} (map inc '(1 2)))
+
+(conj {:a 1} (map inc '(1 2)))
+
+
+(conj)
+;; => []
+
+;; why do we get a class cast error when we try to conj a list into a map,
+;; however we can conj a map and a vector
+;; situation occurred whilst show and tell of 4clojure exercises at February Thoughtworks dojo
