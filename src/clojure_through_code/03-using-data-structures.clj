@@ -139,6 +139,7 @@ portfolio
 (map :ticker portfolio)
 ;; => ("CRM" "AAPL" "MSFT" "ORCL")
 
+;; return the portfolio in a vector rather than a list using mapv function
 (mapv :ticker portfolio)
 ;; => ["CRM" "AAPL" "MSFT" "ORCL"]
 
