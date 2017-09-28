@@ -155,15 +155,18 @@ portfolio
 
 (defn slice [item]
   (str "sliced " item))
+;; => #'clojure-through-code.03-using-data-structures/slice
+;; => #'clojure-through-code.03-using-data-structures/slice
 
-(def sandwich
+(def prepared-ingredience
   (map slice ["bread" "cucumber" "pepper" "tomato" "lettuce" "onion"]))
 ;; => #'clojure-through-code.03-using-data-structures/sandwich
 
-(def my-sandwich
-  (reduce str (interpose ", " sandwich)))
+(def make-sandwich
+  (reduce str (interpose ", " prepared-ingredience)))
 
-(str "I have a tasty sandwich made with " my-sandwich)
+(str "I have a tasty sandwich made with " make-sandwich)
+;; => "I have a tasty sandwich made with sliced bread, sliced cucumber, sliced pepper, sliced tomato, sliced lettuce, sliced onion"
 
 
 ;; Or as one function
@@ -174,10 +177,14 @@ portfolio
 ;; Or using the threading macro
 
 (->> ["bread" "cucumber" "pepper" "tomato" "lettuce" "onion"]
-     (map #(str "sliced ") ,,,)
+     (map #(str "sliced " %) ,,,)
      (interpose ", " ,,,)
      (reduce str ,,,)
      (str "I have a tasty sandwich made with " ,,,))
+
+
+
+;; => "I have a tasty sandwich made with sliced bread, sliced cucumber, sliced pepper, sliced tomato, sliced lettuce, sliced onion"
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
