@@ -58,6 +58,18 @@
 ;; Create a channel with a simple transducer.
 ;; The transducer increments the value of the message added to the channel.
 
+;; A transducer is an expression to transform values, that does not immediately
+;; need those values.
+
+;; In this example, map used the inc function to transform the collection of numbers
+
+;; (map inc [1 2 3 4])
+
+;; To make this a transducer, we simply do not include the value to be transformed
+;; (the collection in this example) in the expression
+;; Our transducer equivalent is (map inc)
+;; and the value to be transformed is passed at run time, when the transducer is called
+
 (def channel-increment (chan 1 (map inc)))
 
 (put! channel-increment 41)
@@ -86,6 +98,7 @@
 
 (take! channel-filtered-values #(println % "filtered results from channel"))
 
+;; if we could see whats in the channel we would know when the transducer works...
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
