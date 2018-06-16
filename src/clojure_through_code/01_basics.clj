@@ -155,6 +155,18 @@
  (str " is")
  (str "backwards"))
 
+
+;; Threading macro is very useful for passing a collection through a number of functions,
+;; each function manipulating that collection in a specific way before passing it on to the next.
+
+(-> [2 5 4 1 3 6]
+    (reverse)
+    (rest)
+    (sort)
+    (last))
+
+
+
 ;; add all project information to a map
 (->> "project.clj"
      slurp
@@ -184,10 +196,11 @@
 
 ;; So putting this doto function in our threading macro now works
 
-(->> "message"
+(-> "Message"
     (str " " "in a bottle")
     (doto  println)
-    (str ", The Police"))
+    (str " - " "The Police"))
+;; => "Message in a bottle - The Police"
 
 
 
