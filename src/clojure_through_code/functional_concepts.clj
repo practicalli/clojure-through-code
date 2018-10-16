@@ -729,6 +729,69 @@ deref players
 ;; Pattern matching
 
 
+;; Pattern mantching example
+
+;; The classic fizzbuzz game were you substitute any number cleanly divisible by 3 with fix and any number cleanly divisible by 5 with buzz.
+;; If the number is cleanly divisible by 3 & 5 then substitute fizzbuzz.
+
+
+;; Include the library that has the match function
+
+(require '[clojure.core.match :refer [match]])
+
+(defn fizzbuzz
+  [number]
+  (match [(mod number 3) (mod number 5)]
+         [0 0] :fizzbuzz
+         [0 _] :fizz
+         [_ 0] :buzz
+         :else number))
+
+
+;; This is an example of a simple pattern matching problem.
+
+;; First we calculate the modulus of the number given as an argument by 3 then the same number by 5.
+;; If the modulus value is 0 then the number is divisible exactly without remainder.
+;; The result of these two function calls are the elements of a vector (an array-like strucutre)
+;;
+;; Using the require function we include the match function from the library clojure/core.match
+;; https://github.com/clojure/core.match
+;; (match may seem similar to a case statement from other languages).
+;; We use match to compare the two results returned from the modulus functions.
+
+;; There are 3 possible patterns to match against, each returns the appropriate value (fizz, buzz, or fizzbuzz)
+;; If there is no match, then the original number is returned.
+;; The underscore character, _, means that any number will match in that position.
+
+
+;; If you would like to try this out in the REPL, dont forget to include this namespace if you are not currently in it
+;; (require '[clojure-through-code.live-demo :refer :all])
+
+;; Now we can call fizbuzz for a specfic number
+
+(fizzbuzz 1)
+(fizzbuzz 3)
+(fizzbuzz 4)
+(fizzbuzz 15)
+
+;; If we want to convert a sequence of numbers, then we can call fizzbuzz over a collection (eg, a vector) of numbers
+;; using the map function
+
+(map fizzbuzz [1 2 3 4 5])
+
+
+;; We can make a function called play-fizzbuzz to make it easy to use
+;; The function takes the highest number in the range and generates all the numbers from 0 to that number.
+;; Finally, we convert the results into strings
+(defn play-fizbuzz [max-number]
+  (->> (range max-number)
+       (map fizzbuzz)
+       (map str)))
+
+;; Now, lets call our play-fizzbuzz function with the highest number in the range of numbers we want to play fizzbuzz on.
+(play-fizbuzz 30)
+
+
 ;; destructuring
 
                                         ; in function arguemnts, collections (maps, vectors)
