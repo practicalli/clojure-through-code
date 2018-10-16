@@ -391,13 +391,14 @@ name-of-new-string
 
 (:use 'clojure.string)
 
-(defn- letter->clack [letter]
+(defn- letter->clack [alphabet letter]
   (get alphabet letter))
 
 (def sentence "Codemotion Amsterdam")
+(def alphabet {"a" [001001] ,,,})
 
 (let [words (clojure.string/upper-case sentence)]
-  (map letter->clack (map str words)))
+  (map #(letter->clack alphabet %) (map str words)
 
 
 
@@ -412,7 +413,7 @@ name-of-new-string
 (defn twice [function-to-apply value]
   (function-to-apply (function-to-apply value)))
 
-(twice #(+ % 3) 7)
+(twice #(+ % 3) 7)))
 
 
 
@@ -435,11 +436,31 @@ name-of-new-string
 
 (reduce + (range 1 10))
 
-(reduce + '(1 2 3 4 5 6 7 8 9))
+(reduce + (quote (1 2 3 4 5 6 7 8 9)))
 
 ;; (range)
 
 (take 10 (range))
+
+(def sybol-name "value")
+
+(defn function-name []
+  (str "I am a function"))
+
+(def function-name (fn [] (str "iaomdfiodjfod")))
+
+(function-name)
+
+(map (fn [number] (* number number)) [1 2 3 4])
+(map #(* %1 %2) [1 2 3 4] [3 4 5 6])
+
+
+
+
+
+
+
+
 
 
 ;;;;;;;;;;;;;;;;;;
@@ -700,7 +721,7 @@ deref players
 ;; reduces in depth
 
 ;; reduce takes 2 arguments, a function and a collections
-;; if val is supplied, returns the result of applying the function to the val and the first item in the collection, itterating through the colleciton
+;; if val is supplied, returns the result of applying the function to the val and the first item in the collection, itterating through the collection
 
 
 
