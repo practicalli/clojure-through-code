@@ -198,7 +198,20 @@ persistent-vector
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keywords
 
-;; Can designing and accessing a map by classed as a Clojure pattern (or a simple idiom) ?
+;; A simple idiom is using keywords for keys in a map
+
+(let [fishes {:fish "trout"}]
+  (get fishes :fish))
+
+
+;; Keywords can be used as short-cut for the get function
+
+(let [fishes {:fish "trout"}]
+  (:fish fishes))
+
+;; Maps also act like the get function when given a key as an argument
+(let [fishes {:fish "trout"}]
+  (:fish fishes))
 
 
 ;;;;;;;;;;;;;;;;
@@ -214,8 +227,10 @@ persistent-vector
 
 
 ;; a 3 combination padlock
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; model the combinations
+;; each tumbler wheel is a lazy sequence from 0 to 9
 (for [tumbler-1 (range 10)
       tumbler-2 (range 10)
       tumbler-3 (range 10)]
@@ -223,19 +238,30 @@ persistent-vector
 
 
 ;; now count the possible combinations
+;; for is a simple macro for iterating through data structures
+;; each loop creates a vector containing a combination
+;; the for macro returns a list of all combinations created
+;; as it iterates through each tumbler data structure.
 (count (for [tumbler-1 (range 10)
              tumbler-2 (range 10)
              tumbler-3 (range 10)]
          [tumbler-1 tumbler-2 tumbler-3]))
+;; => 1000
 
 
+;; count the possible combinations
+;; where no numbers are the same in any combination
+;; e.g. dont count 1,1,1 or similar combinations
 (count (for [tumbler-1 (range 10)
              tumbler-2 (range 10)
              tumbler-3 (range 10)
-             :when (or (= tumbler-1 tumbler-2)
-                       (= tumbler-2 tumbler-3)
-                       (= tumbler-3 tumbler-1))]
+             :when (not (or (= tumbler-1 tumbler-2)
+                             (= tumbler-2 tumbler-3)
+                             (= tumbler-3 tumbler-1)))]
          [tumbler-1 tumbler-2 tumbler-3]))
+;; => 720
+
+
 
 ;; lets look at the combinations again, we can see that there is always at least 2 matching values.  This is probably the opposite of what we want in real life.
 (for [tumbler-1 (range 10)
@@ -245,6 +271,7 @@ persistent-vector
                 (= tumbler-2 tumbler-3)
                 (= tumbler-3 tumbler-1))]
   [tumbler-1 tumbler-2 tumbler-3])
+;; => ([0 0 0] [0 0 1] [0 0 2] [0 0 3] [0 0 4] [0 0 5] [0 0 6] [0 0 7] [0 0 8] [0 0 9] [0 1 0] [0 1 1] [0 2 0] [0 2 2] [0 3 0] [0 3 3] [0 4 0] [0 4 4] [0 5 0] [0 5 5] [0 6 0] [0 6 6] [0 7 0] [0 7 7] [0 8 0] [0 8 8] [0 9 0] [0 9 9] [1 0 0] [1 0 1] [1 1 0] [1 1 1] [1 1 2] [1 1 3] [1 1 4] [1 1 5] [1 1 6] [1 1 7] [1 1 8] [1 1 9] [1 2 1] [1 2 2] [1 3 1] [1 3 3] [1 4 1] [1 4 4] [1 5 1] [1 5 5] [1 6 1] [1 6 6] [1 7 1] [1 7 7] [1 8 1] [1 8 8] [1 9 1] [1 9 9] [2 0 0] [2 0 2] [2 1 1] [2 1 2] [2 2 0] [2 2 1] [2 2 2] [2 2 3] [2 2 4] [2 2 5] [2 2 6] [2 2 7] [2 2 8] [2 2 9] [2 3 2] [2 3 3] [2 4 2] [2 4 4] [2 5 2] [2 5 5] [2 6 2] [2 6 6] [2 7 2] [2 7 7] [2 8 2] [2 8 8] [2 9 2] [2 9 9] [3 0 0] [3 0 3] [3 1 1] [3 1 3] [3 2 2] [3 2 3] [3 3 0] [3 3 1] [3 3 2] [3 3 3] [3 3 4] [3 3 5] [3 3 6] [3 3 7] [3 3 8] [3 3 9] ...)
 
 
 
