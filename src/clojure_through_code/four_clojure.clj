@@ -227,6 +227,84 @@
      (lazy-seq (cons firstArg (reduct func firstArg coll))))))
 
 
+
+
+;; #61 - Map Construction
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Difficulty:	Easy
+;; Topics:	core-functions
+;; Special Restrictions: zipmap
+
+;; Write a function which takes a vector of keys and a vector of values and constructs a map from them.
+
+;; Tests
+(= (__ [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3})
+(= (__ [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"})
+(= (__ [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"})
+
+;; If we could use zipmap then the answer would be simple
+
+(zipmap [:a :b :c] [1 2 3])
+;; => {:a 1, :b 2, :c 3}
+
+(= (zipmap [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3})
+;; => true
+
+;; So now we have to figure out the algorithm that zipmap uses
+
+;; Analyse the problem
+;; We want to create a paring of values from the first and second vectors
+;; Then each pair should be made into a key value pair within a map data structure.
+
+;; The map function will work over multiple collections, returning a single collection
+
+;; A simple example of map function in action:
+(map str [:a :b :c] [1 2 3])
+;; => (":a1" ":b2" ":c3")
+
+;; In stead of string, we could use hash-map
+
+(map hash-map [:a :b :c] [1 2 3])
+;; => ({:a 1} {:b 2} {:c 3})
+
+;; now we just need to put all the maps into one map, so perhaps merge will work
+
+(merge (map hash-map [:a :b :c] [1 2 3]))
+;; => ({:a 1} {:b 2} {:c 3})
+
+
+(conj (map hash-map [:a :b :c] [1 2 3]))
+;; => ({:a 1} {:b 2} {:c 3})
+
+(reduce conj (map hash-map [:a :b :c] [1 2 3]))
+;; => {:c 3, :b 2, :a 1}
+
+
+
+;; (reduce conj (map vectork ks vs))
+
+((fn [key-sequence value-sequence]
+   (into {}
+         (map vector key-sequence value-sequence)))
+ [:a :b :c] [1 2 3])
+;; => {:a 1, :b 2, :c 3}
+
+
+;; Other ideas
+;; Partition - this only works on a single collection, as does other partition variants.  Also saw group-by but this is only one collection as well.
+
+
+
+;; Answer
+
+(fn [ks vs]
+  (into {}
+        (map vector ks vs)))
+
+
+;; Code Golf Score: 64
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; problem 68: recur
 
