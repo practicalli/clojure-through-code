@@ -1,7 +1,70 @@
 (ns clojure-through-code.four-clojure)
 
+;; #18 - Sequences: filter
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; problem 60
+;; Difficulty:	Elementary
+
+;; Description
+;; The filter function takes two arguments: a predicate function (f) and a sequence (s). Filter returns a new sequence consisting of all the items of s for which (f item) returns true.
+
+;; Tests
+(=  (filter #(> % 5) '(3 4 5 6 7)))
+
+
+;; Analysis of the problem
+;; filter will return a collection of all the elements that match the predicate (function).
+;; filter is another function that iterates over a collection and returns a collection of results.  In this sense filter is very much like the map function.
+
+;; Clojuredocs.org: clojure.core/filter
+;; Available since 1.0 (source)
+;; (filter pred)
+;; (filter pred coll)
+;; Returns a lazy sequence of the items in coll for which (pred item) returns logical true. pred must be free of side-effects.
+;; Returns a transducer when no collection is provided.
+
+
+;; The simplest way to see what filter is doing is to run that part of the expression in the REPL.
+(filter #(> % 5) '(3 4 5 6 7))
+;; => (6 7)
+
+;; So filter returns the values that return true when passed to the `#(> % 5)` function.  This function is called the predicate.
+
+;; If we used the same predicate function with map instead of filter, we would get part of the answer
+(map #(> % 5) '(3 4 5 6 7))
+;; => (false false false true true)
+
+;; In the source code of filter, we can see that each value of the collection is taken and the predicate function applied.
+;; If the predicate function returns true, then the value is constructed into a list along with any other matching results
+;; Additional matching results are evaluated in a loop via a function call to the filter function, using the rest of the values.
+
+;; (let [f (first s) r (rest s)]
+;;   (if (pred f)
+;;     (cons f (filter pred r))
+;;     (filter pred r)))
+
+
+;; The remove function does the inverse (complement) of filter and returns the values that return false from the predicate function.
+;; It is essentailly a wrapper around the filter function, using the complement function to invert the result of the predicate function results.
+;; So if the predicate function returned true, then complement would change that to false (and false would be changed to true).
+
+;; (defn remove
+;;   ([pred] (filter (complement pred)))
+;;   ([pred coll]
+;;    (filter (complement pred) coll)))
+
+
+;; Answer
+[6 7] ;; Code Golf Score: 4
+
+;; The following would also be correct answers, although would give bigger golf scores
+
+'(6 7) ;; As we are treating the list as just data, then we need to quote the list to avoid the REPL calling a function called 6 which does not exist.
+
+(quote (6 7))  ;; is simply the long form of the above answer.
+
+;; NOTE: In Clojure it is idiomatic to use Vectors rather than lists for data representation
+
+
 
 ;; Write a function which behaves like reduce, but returns each intermediate value of the reduction.
 ;; Your function must accept either two or three arguments, and the return sequence must be lazy.
