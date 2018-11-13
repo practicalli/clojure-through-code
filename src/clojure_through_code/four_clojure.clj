@@ -66,6 +66,109 @@
 
 
 
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; #26 - Fibonacci Sequence
+
+;; http://www.4clojure.com/problem/26#prob-title
+;; Difficulty:	Easy
+;; Topics:	Fibonacci seqs
+
+;; Write a function which returns the first X fibonacci numbers.
+
+;; Tests
+#_(= (__ 3) '(1 1 2))
+#_(= (__ 6) '(1 1 2 3 5 8))
+#_(= (__ 8) '(1 1 2 3 5 8 13 21))
+
+;; First though is that we want to generate a range of numbers
+
+(range 1 6)
+;; => (1 2 3 4 5)
+
+;; Looking at the range source code does not help that much as range is just a wrapper for clojure.lang.Range which is a Java class.
+
+
+;; Analyse the problem
+;; Looking at the tests we see that all fibonacci sequences start with `1 1`.
+;; To get the third value in the sequence we add the first numbers together.  This is specific to the third value in the sequence.
+;; To get each new value in the sequence we add the last to values in the sequence together
+
+;; The problem asks us to write a function, so lets start there.
+
+;; The function takes the size of fibonacci sequence to generate as an argument
+;; and creates a local name to represent the initial fibonacci sequence.
+;; Test to see if the fibonacci sequence is big enough and iterate if its too small.
+(fn [size]
+  (let [initial-sequence [1 1]]
+    (if (< (count initial-sequence) size)
+      "iterate"
+      initial-sequence)))
+
+;; Now we just need to iterate until we get a big enough fibonacci sequence
+;; A simple way to iterate is to use loop recur, as we only only pass the size of fibonacci to generate as an argument to the function we are writing.
+;; In each iteration we conjoin the result of adding all the values in the fib sequence together.
+(fn fibs [size]
+  (loop [fib [1 1]]
+    (if (< (count fib) size)
+      (recur (conj fib (reduce + fib)))
+      fib)))
+
+;; Test our function, generating a fibonacci sequence of size 3
+((fn fibs [size]
+   (loop [fib [1 1]]
+     (if (< (count fib) size)
+       (recur (conj fib (reduce + fib)))
+       fib)))
+ 3)
+;; => [1 1 2]
+
+;; Test our function, generating a fibonacci sequence of size 6
+((fn fibs [size]
+   (loop [fib [1 1]]
+     (if (< (count fib) size)
+       (recur (conj fib (reduce + fib)))
+       fib)))
+ 6)
+;; => [1 1 2 4 8 16]
+;; Although this generate a sequence of the right size, it is not the fibonacci sequence.
+;; We need to add the last two values in the current sequence for each iteration
+
+;; Change our recur to take the last and second to last values from the current value of fib.
+;; As there is no second-last function, we reverse the sequence and take the second value.
+(fn fibs [size]
+  (loop [fib [1 1]]
+    (if (< (count fib) size)
+      (recur (conj fib (+ (second (reverse fib)) (last fib))))
+      fib)))
+
+
+((fn fibs [size]
+   (loop [fib [1 1]]
+     (if (< (count fib) size)
+       (recur (conj fib (+ (second (reverse fib)) (last fib))))
+       fib)))
+ 8)
+;; => [1 1 2 3 5 8 13 21]
+
+;; Code Golf Score: 101
+
+
+;; NOTE: use a fibonacci sequence to draw a spiral using SVG for the clojurebridge exercises
+
+
+;; Other solutions of note
+;; There was one cheeky answer that caught my eye.  It does meet the current requirements of this problem very simply and is a way to codify your understanding of what result needs to be generated.
+
+;; _pcl's solution:
+;; TDD principle: Write the minimum amount of code required to make the test pass :)
+(fn [i] (take i '(1 1 2 3 5 8 13 21)))
+
+;; Obviously as soon as the requirements change to be a larger number than 8 for the fibonacci sequence, then this code is going to fail.
+
+
 ;; Write a function which behaves like reduce, but returns each intermediate value of the reduction.
 ;; Your function must accept either two or three arguments, and the return sequence must be lazy.
 
