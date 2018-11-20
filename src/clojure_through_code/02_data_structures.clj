@@ -184,9 +184,12 @@
 
 
 
+;; ASCII code generator
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Defining ascii codes in a collection
+;; Create an ascii code generator for an alphabet
 
-;; Defining ascii codes using a map
-
+;; Simple definition of ascii codes using a map.
 (def ascii-codes
   {65 "a" 66 "b" 67 "c"})
 
@@ -194,22 +197,28 @@
 ;; => "a"
 
 
-(def english-alphabet ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"])
+;; We want to convert an alphabet, which could be defined as follows
+(def english-alphabet
+  ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"])
 
 
+;; Or if we are give an alphabet in a single string, then we can create a more suitable colllection
 (clojure.string/split "a b c d e f g h i j k l m n o p q r s t u v w x y z" #" ")
 ;; => ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"]
 
 
+;; Lets generate a hash-map of ascii codes for a given alphabet.
+;; Lower case a is ascii code 65, so that will be our starting code value.
+;; Using the map function we can take an element from each collection,
+;; the alphabet and a generated range of numbers, and combine them in pairs.
+;; The pairs are placed into a hashmap
+;; The generated ascii codes are a generate range between the start code and the start code plus the number of letters in the alphabet.
+(defn generate-ascii-codes [alphabet code-start]
+  (map hash-map
+       alphabet
+       (range 65 (+ code-start (count english-alphabet)))))
 
-;; Lets generate a map of ascii codes for a given alphabet.  In ascii, lower case a is code 65
-
-(defn generate-ascii-codes [alphabet]
-  (let [ascii-code-a 65]
-    (for [letter alphabet]
-      (into {} (assoc letter ascii-code-a) ))))
-
-(generate-ascii-codes english-alphabet)
+(generate-ascii-codes english-alphabet 65)
 
 
 ;; Its also quite common to have maps made up of other maps
