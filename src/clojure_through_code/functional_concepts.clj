@@ -298,16 +298,47 @@ capital-letters
   tripled)
 
 
-;; project eular
+;; Palindrome checker aproaches
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Inline anonymous function
+;; reverse will return a sequence of characters as a result
+;; so we need to compare that with a seq of the string
+
+((﻿fn [string-to-test]
+     (= (seq string-to-test)
+        (reverse string-to-test)))
+ "racecar")
+
+
+;; Using the clojure.string library we can simply compare strings as they are
+
+((fn [string-to-test]
+   (= string-to-test
+      (clojure.string/reverse string-to-test)))
+ "racecar")
+
 
 (defn- palindrome? [number]
-  (= (str number (clojure.string/reverse (str number)))))
+  (= (str number )
+     (clojure.string/reverse (str number))))
 
-(apply max (for [three-digit-number-1 (range 100 1000)
+
+
+;; create a collection of boolean results for testing each word
+
+
+
+
+;; Something unusual
+;; Generate two sets of numbers from 100 to 999
+;; Multiply each number in each set
+(apply min (for [three-digit-number-1 (range 100 1000)
                   three-digit-number-2 (range 100 1000)
                   :let [product (* three-digit-number-1 three-digit-number-2)]
                   :when (palindrome? product)]
               product))
+
 
 (range 10)
 
@@ -318,6 +349,19 @@ capital-letters
 (for [x (range 10)
       y (range 10)]
   [x y])
+
+
+(for [three-digit-number-1 (range 100 1000)
+      three-digit-number-2 (range 100 1000)
+      :let [product (* three-digit-number-1 three-digit-number-2)]]
+  product)
+
+(for [three-digit-number-1 (range 100 1000)
+      three-digit-number-2 (range 100 1000)
+      :let [product (* three-digit-number-1 three-digit-number-2)]
+      :when (palindrome? product)]
+  product)
+
 
 
 
