@@ -182,6 +182,36 @@
    "bread"     1
    "cheese"    2})
 
+
+
+
+;; Defining ascii codes using a map
+
+(def ascii-codes
+  {65 "a" 66 "b" 67 "c"})
+
+(get ascii-codes 65)
+;; => "a"
+
+
+(def english-alphabet ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"])
+
+
+(clojure.string/split "a b c d e f g h i j k l m n o p q r s t u v w x y z" #" ")
+;; => ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"]
+
+
+
+;; Lets generate a map of ascii codes for a given alphabet.  In ascii, lower case a is code 65
+
+(defn generate-ascii-codes [alphabet]
+  (let [ascii-code-a 65]
+    (for [letter alphabet]
+      (into {} (assoc letter ascii-code-a) ))))
+
+(generate-ascii-codes english-alphabet)
+
+
 ;; Its also quite common to have maps made up of other maps
 
 ;; Here is an example of a map made up of a :keyword as the key and
@@ -203,6 +233,7 @@
       :imperial-empire ["Intergalactic Cruser"
                         "Destroyer"
                         "Im just making these up now"]}}}
+;; => {:starwars {:characters {:jedi ["Luke Skywalker" "Obiwan Kenobi"], :sith ["Darth Vader" "Darth Sideous"], :droids ["C3P0" "R2D2" "BB-8"]}, :ships {:rebel-alliance ["Millenium Falcon" "X-wing figher"], :imperial-empire ["Intergalactic Cruser" "Destroyer" "Im just making these up now"]}}}
 
 
 
