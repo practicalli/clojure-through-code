@@ -7,6 +7,8 @@
 
 ;; Lets get the text of a book from a website using the slurp function
 
+(ns clojure-through-code.hhgttg-book-common-words)
+
 (def book (slurp "./hhgttg.txt"))
 
 (def common-english-words
@@ -14,8 +16,16 @@
       (clojure.string/split #",")
       set))
 
+;; The same as above but in normal lisp style
+;; (set
+;;   (clojure.string/split
+;;     (slurp "common-english-words.txt")
+;;     #"," ))
+
+
+
 (->> book
-     (re-seq #"[a-zA-Z0-9|']+")
+     (re-seq #"[a-zA-Z0-9|']+" ,,,)
      (map #(clojure.string/lower-case %))
      (remove common-english-words)
      frequencies
@@ -23,7 +33,19 @@
      reverse)
 
 
-;; C-c C-p to show output in a seperate buffer (spacemacs)
+;; The same as above but in normal lisp style
+;; (reverse
+;;   (sort-by
+;;     val
+;;     (frequencies
+;;       (remove common-english-words
+;;               (map #(clojure.string/lower-case %)
+;;                    (re-seq #"[a-zA-Z0-9|']+" book))))))
+
+
+;; cider-eval-pprint-last-sexp will show output in a separate buffer
+;; , e P  in Spacemacs
+;; C-c C-p   in Emacs
 
 
 ;; Algorithm
@@ -35,9 +57,11 @@
 ;; * Reverse the collection so the most commonly used word is the first element in the map
 
 
+;; TODO: Create a transducers version of the above code
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Offline sources of book and common English words
+;; On-line sources of book and common English words
 
 ;; (def book (slurp "http://clearwhitelight.org/hitch/hhgttg.txt"))
 
