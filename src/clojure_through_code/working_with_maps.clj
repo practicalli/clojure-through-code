@@ -203,3 +203,42 @@
 project-capex-hours;; => (7 6)
 
 (reduce + project-capex-hours)
+
+
+
+
+;; Generating hash-maps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; simple hash-maps
+
+(zipmap [:a :b :c :d :e] (range 0 5))
+
+
+;; Generate nested hash-maps
+
+(into {}
+      (for [character [:a :b :c :d :e]
+            :let      [map-key character
+                       map-value  (zipmap [:a :b :c :d :e] (range 0 5))]]
+        {map-key map-value}))
+;; => {:a {:a 0, :b 1, :c 2, :d 3, :e 4}, :b {:a 0, :b 1, :c 2, :d 3, :e 4}, :c {:a 0, :b 1, :c 2, :d 3, :e 4}, :d {:a 0, :b 1, :c 2, :d 3, :e 4}, :e {:a 0, :b 1, :c 2, :d 3, :e 4}}
+
+
+;; pretty print the output of a nested map
+
+(require 'clojure.pprint)
+
+(clojure.pprint/pprint
+  (into {}
+        (for [character [:a :b :c :d :e]
+              :let      [map-key character
+                         map-value  (zipmap [:a :b :c :d :e] (range 0 5))]]
+          {map-key map-value}))
+  )
+;; {:a {:a 0, :b 1, :c 2, :d 3, :e 4},
+;;  :b {:a 0, :b 1, :c 2, :d 3, :e 4},
+;;  :c {:a 0, :b 1, :c 2, :d 3, :e 4},
+;;  :d {:a 0, :b 1, :c 2, :d 3, :e 4},
+;;  :e {:a 0, :b 1, :c 2, :d 3, :e 4}}
