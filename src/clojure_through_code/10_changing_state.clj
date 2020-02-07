@@ -90,6 +90,26 @@
 (reset! players [])
 
 
+;; Atom and assoc with multiple keyword updates
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(def accounts
+  {:betty  280
+   :jenny  460
+   :sammy  100
+   :dealer 100000})
+
+(update accounts
+        :betty (dec 50)
+        :jenny (dec 75)
+        :dealer (dec 100))
+
+
+;; Clojure ref types
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 (def dick-account (ref 500))
 (def toms-account (ref 500))
 (def betty-account (ref 500))
@@ -162,7 +182,7 @@
 
 ;; Coordinated access is used when two Identities need to be changes together, the classic example being moving money from one bank account to another, it needs to either move completely or not at all.
 
-;; Uncoordinated access is used when only one Identity needs to update, this is a very common case. 
+;; Uncoordinated access is used when only one Identity needs to update, this is a very common case.
 
 
 ;; Agents are for Uncoordinated asynchronous access to a single Identity.
@@ -180,8 +200,8 @@
 
 
 ;; Agents
-;(def flashes (agent {:green 0 :red 0 :blue 0}))
-;(send flashes update-in [:red] inc)
+                                        ;(def flashes (agent {:green 0 :red 0 :blue 0}))
+                                        ;(send flashes update-in [:red] inc)
 
 ;; Create an agent called cashier (that has not state)
 ;; (send-off cashier str "Debit X with £" stake)
