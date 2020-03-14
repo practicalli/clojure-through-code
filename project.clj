@@ -4,6 +4,6 @@
   :license {:name "Creative Commons Attribution Share-Alike 4.0 International"
             :url "https://creativecommons.org"}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/core.match "0.3.0-alpha4"]
+                 [org.clojure/core.match "1.0.0"]
                  [table "0.5.0"]
                  [proto-repl "0.3.1"]])
