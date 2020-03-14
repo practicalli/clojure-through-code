@@ -214,6 +214,7 @@ project-capex-hours;; => (7 6)
 ;; simple hash-maps
 
 (zipmap [:a :b :c :d :e] (range 0 5))
+;; => {:a 0, :b 1, :c 2, :d 3, :e 4}
 
 
 ;; Generate nested hash-maps
@@ -242,3 +243,146 @@ project-capex-hours;; => (7 6)
 ;;  :c {:a 0, :b 1, :c 2, :d 3, :e 4},
 ;;  :d {:a 0, :b 1, :c 2, :d 3, :e 4},
 ;;  :e {:a 0, :b 1, :c 2, :d 3, :e 4}}
+
+
+;; Transforming collections of maps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def music-collection
+  [{:album-name "Tubular Bells" :artist "MikeOldfield"}
+   {:album-name "Smells like teen spirit" :artist "Nirvana"}
+   {:album-name "Vision Thing" :artist "Sisters of Mercy"}
+   {:album-name "Here comes the war" :artist "NewModelArmy"}
+   {:album-name "Thunder & Consolation" :artist "NewModelArmy"}])
+
+
+;; if we want albums by artist
+
+{"Mike Oldfield"    ["Tubular Bells"]
+ "Nirvana"          ["Smells like teen spirit"]
+ "Sisters of Mercy" ["Vision Thing"]
+ "New Model Army"   ["Here comes the war" "Thunder & Consolation"]}
+
+
+
+#_(reduce (fn [result [key value]]
+            (assoc result value key))
+          {} music-collection)
+
+
+#_(into {} (map (fn [album]
+                  )))
+
+
+(loop [albums    music-collection
+       by-artist {}]
+  (let [album (first albums)]
+    (if (empty? albums)
+      by-artist
+      (recur (rest albums)
+             (update by-artist
+                     (keyword (:artist album))
+                     conj (:album-name album))))))
+;; => {:Mike Oldfield ("Tubular Bells"), :Nirvana ("Smells like teen spirit"), :Sisters of Mercy ("Vision Thing"), :New Model Army ("Thunder & Consolation" "Here comes the war")}
+
+
+(group-by :artist music-collection)
+;; => {"Mike Oldfield" [{:album-name "Tubular Bells", :artist "Mike Oldfield"}], "Nirvana" [{:album-name "Smells like teen spirit", :artist "Nirvana"}], "Sisters of Mercy" [{:album-name "Vision Thing", :artist "Sisters of Mercy"}], "New Model Army" [{:album-name "Here comes the war", :artist "New Model Army"} {:album-name "Thunder & Consolation", :artist "New Model Army"}]}
+
+
+(group-by (fn [album] {:artist [:album-name]})
+          music-collection)
+
+
+(reduce-kv
+  (fn [albums artist title]
+    (if (empty? title)
+      (assoc albums (:artist) [:title])
+      (update albums artist conj title)) )
+  {}
+  music-collection )
+
+
+
+(defn albums-by-artist [album f]
+  (reduce-kv
+    (fn [m k v]
+      (assoc m (:artist album) (f (:album-name album)))) {} album))
+
+(map #(albums-by-artist % conj) music-collection)
+
+
+(defn albums-by-artist [album f]
+  (reduce
+    (fn [m k v]
+      (assoc m (:artist album) (f (:album-name album)))) {} album))
+
+
+(group-by :artist music-collection)
+;; => {"Mike Oldfield" [{:album-name "Tubular Bells", :artist "Mike Oldfield"}], "Nirvana" [{:album-name "Smells like teen spirit", :artist "Nirvana"}], "Sisters of Mercy" [{:album-name "Vision Thing", :artist "Sisters of Mercy"}], "New Model Army" [{:album-name "Here comes the war", :artist "New Model Army"} {:album-name "Thunder & Consolation", :artist "New Model Army"}]}
+
+
+
+#_(into {}
+        (map (fn [album]
+               (:artist album) )))
+
+
+
+
+
+;; Renaming keys from a JSON rest call
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+REST API represents an account and returns JSON:
+
+{ "userName" : "foo", "password" : "bar", "emailId" : "baz" }
+
+Existing Clojure function creates an account:
+
+(create-account {:username "foo" :password "bar" :email "baz"})
+
+Transform the Clojure keywords to the form of the REST API keywords
+
+A low abstraction approach would be:
+
+(def args {:username "foo" :password "bar" :email "baz"})
+
+(def clj->rest {:username :userName
+                :email    :emailId})
+
+(apply hash-map
+       (flatten (map
+                  (fn [[k v]] [(or (clj->rest k) k) v])
+                  args)))  ;; args is the arguments to create-account, as above
+
+
+;; improved abstraction using into, more idiomatic
+
+(into {} (map
+           (fn [[k v]] [(or (clj->rest k) k) v])
+           args))
+
+
+;; or
+
+(defn kmap [f m]
+  (into {} (map #(update-in % [0] f) m)))
+
+(def clj->rest {:username :userName
+                :password :password
+                :email    :emailId})
+
+(kmap clj->rest args)
+
+
+;; using clojure.set/rename-keys is even nicer
+
+(clojure.set/rename-keys args clj->rest)
+
+
+;; clojure.data.json/write-str is probably the most idiomatic approach.
+
+;; Add clojure.data.json as a dependency
+
+#_(clojure.data.json/write-str args)
