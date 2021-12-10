@@ -453,3 +453,36 @@ name1
 (let [m {::x 42}
       {:keys [::x]} m]
   x)
+
+
+;; Pretty Printing Clojure data stuctures
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; Pretty print hash-maps
+
+(require '[clojure.pprint])
+
+(clojure.pprint/pprint
+ {:account-id 232443344 :account-name "Jenny Jetpack" :balance 9999 :last-update "2021-12-12" :credit-score :aa})
+
+{:account-id   232443344,
+ :account-name "Jenny Jetpack",
+ :balance      9999,
+ :last-update  "2021-12-12",
+ :credit-score :aa}
+
+
+;; Showing data structures as a table
+
+(clojure.pprint/print-table
+ [{:location "Scotland" :total-cases 42826 :total-mortality 9202}
+  {:location "Wales" :total-cases 50876 :total-mortality 1202}
+  {:location "England" :total-cases 5440876 :total-mortality 200202}])
+
+
+;; | :location | :total-cases | :total-mortality |
+;; |-----------+--------------+------------------|
+;; |  Scotland |        42826 |             9202 |
+;; |     Wales |        50876 |             1202 |
+;; |   England |      5440876 |           200202 |
