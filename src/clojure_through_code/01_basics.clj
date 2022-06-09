@@ -143,7 +143,7 @@
 
 (->
  (str "This" " " "is" " ")
- (str "the" " " "treading" " " "macro")
+ (str "the" " " "treading" " " "macro" " ")
  (str "in" " " "action."))
 
 ;; Using the ->> threading macro, the result of a function is passed as the last parameter
@@ -151,9 +151,9 @@
 ;; our text comes out backwards.
 
 (->>
- (str " This")
- (str " is")
- (str "backwards"))
+ (str "This" " ")
+ (str "is" " ")
+ (str "backwards" " "))
 
 
 ;; Threading macro is very useful for passing a collection through a number of functions,
@@ -687,5 +687,3 @@ five
 {:meal
  {:ingredience []
   :recipe []}}
-
-
