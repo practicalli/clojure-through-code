@@ -228,6 +228,34 @@ x
 ; You can have multi-variadic functions too
 ;; one function that behaves differently dependant on the number or arugments passed
 
+(defn iampolly
+  "Polymorphism by argument arity - number of arguments
+  Common to see zero arity branch call other branches with default values"
+  ([] (iampolly "hello"))
+  ([message] (str "Polly says " message)))
+
+(comment
+  (iampolly)
+  (iampolly "woot")
+  #_())
+
+
+;; Alternative approach would be to use the & character to denote variable arity
+
+(defn iampolly-variable-arity
+  [& arguments]
+  (str "Polly says " (or (first arguments) "hello")))
+
+(defn iampolly-variable-arity
+  [& arguments]
+  (str "Polly says " (or (first arguments) "hello")))
+
+(comment
+  (iampolly-variable-arity)
+  (iampolly-variable-arity "woot")
+  #_())
+
+
 (defn hello-polly-function
   ([] "Hello Hackference")
   ([name] (str "Hello " name ", hope your talk is awesome at Hackference")))
@@ -382,7 +410,7 @@ x
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scope of functions
 
-;; 
+;;
 
 
 
@@ -650,8 +678,9 @@ x
 ;; I don’t like this pattern for two reasons.
 
 ;; One. Because it’s variable arity, the function foo accepts any number of arguments. You won’t get an error if you call it with extra arguments, they will just be silently ignored.
+;; The error is picked up by clj-kondo lint tool though.
 
-(foo 5 6 7 8)
+;; (foo 5 6 7 8)
 ;; Required argument a is 5
 ;; Optional argument b is 6
 ;;=> nil
