@@ -196,3 +196,21 @@ list-one
 ;; Creating vectors
 
 (into [] (take 10 (range)))
+
+
+(def player-data [{:name "Oliver", :score 100} {:name "Revilo", :score 50}])
+
+
+(require '[hiccup.page :refer [html5]])
+
+;; Whilst you could use map to iterate over the hiccup data structure
+(html5 (for [row player-data]
+         [:tr (map (fn [x] [:td (val x)]) row)]))
+;; => "<!DOCTYPE html>\n<html><tr><td>Oliver</td><td>100</td></tr><tr><td>Revilo</td><td>50</td></tr></html>"
+
+;; Its more idiomatic to use a let form to define local names that are then used in the hiccup data structure
+(html5 (for [row player-data
+             :let [player (:name row)
+                   score (:score row)]]
+         [:tr [:td player] [:td score]]))
+;; => "<!DOCTYPE html>\n<html><tr><td>Oliver</td><td>100</td></tr><tr><td>Revilo</td><td>50</td></tr></html>"
