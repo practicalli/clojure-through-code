@@ -114,3 +114,20 @@ board-with-keywords
     (grid-reference-as-keys row-names column-names)))
 
 (tictactoe-board-grid 3)
+
+
+
+
+;; Simple sequence generator
+(comment
+  (for [x (range 10)]
+    [x x x])
+
+  ;; combination
+  (let [dimension 3]
+    (for [x (range dimension)
+          y (range dimension)
+          z (range dimension)]
+      [x y z]))
+
+  #_())
