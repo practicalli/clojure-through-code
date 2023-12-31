@@ -10,10 +10,8 @@
 
 ;; (:require [clojure.repl] :refer :all)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure Syntax
-
 
 ;; Clojure uses a prefix notation and () [] : {} # @ ! special characters
 ;; no need for lots of ; , and other silly things...
@@ -38,7 +36,6 @@
 ;; :minor and/or :major, bugfix releases will increment :incremental.
 ;; Possible values of :qualifier include "GA", "SNAPSHOT", "RC-x" "BETA-x"
 
-
 ;; The directory where the Clojure compiler will create the .class files for the current project
 ;; This directory must be in the classpath for 'compile' to work.
 *compile-path*
@@ -48,7 +45,6 @@
 
 ;; A clojure.lang.Namespace object representing the current namespace
 *ns*
-
 
 ;; most recent repl values
 *1
@@ -76,7 +72,6 @@
 
 ;; We can also get the version of the project
 (System/getProperty "clojure-through-code.version")
-
 
 ;; Chaining a few Clojure functions together, to read from
 ;; the Leiningen project file
@@ -108,13 +103,11 @@
 ;; Read the text of that file using read-string
 ;; Select just the third string using nth 2 (using an index starting at 0)
 
-
 ;; You can format the code differently, but in this case its not much easier to read
 (nth
  (read-string
   (slurp "project.clj"))
  2)
-
 
 ;; the same behaviour as above can be written using the threading macro
 ;; which can make code easier to read by reading sequentially down the list of functions.
@@ -155,7 +148,6 @@
  (str "is" " ")
  (str "backwards" " "))
 
-
 ;; Threading macro is very useful for passing a collection through a number of functions,
 ;; each function manipulating that collection in a specific way before passing it on to the next.
 
@@ -165,17 +157,13 @@
     (sort)
     (last))
 
-
-
 ;; add all project information to a map
 (->> "project.clj"
      slurp
      read-string
      (drop 2)
      (cons :version)
-     (apply hash-map)
-     (def project))
-
+     (apply hash-map))
 
 ;; Threading macros and println statements
 
@@ -202,31 +190,29 @@
     (str " - " "The Police"))
 ;; => "Message in a bottle - The Police"
 
+;; defining namespace scoped names
+(def literal-value-string "I am free")
+(def literal-value-five 5)
+(def literal-value-six 6)
+(def collection-of-values [1 2 3 4 5 6 7 8])
 
+;; names evaluate to the values they are bound to
+literal-value-five
 
-;; defining functions
-(def fred "I am free")
-(def five 5)
-(def five 6)
-(def five [1 2 3 4 5 6 7 8])
-
-
-five
-
-(reduce + five)
+(reduce + collection-of-values)
 (reduce + [1 2 3 4 5 6 7 8])
 ;; => 36
 
-
-;; defn is a macro that builds on def
-(defn my-function [] (str "I wish I was fred"))
+;;;; Defining functions
+;; defn is a macro for defining functions
+(defn my-function [] (str "I wish I was free"))
 
 ;; defining a function with def
-(def my-function
-  (fn [args] (str "behaviour")))
+(def my-function-expanded
+  (fn [args] (str "behaviour" (clojure.string/join args))))
 
 ;; anonymous function
-(fn [args] (str "behaviour"))
+(fn [args] (str "behaviour" (clojure.string/join args)))
 
 ;; anonymous function syntax sugar
 
@@ -237,7 +223,6 @@ five
 (#(+ %1 %3 %2 4 5) 1 2 3) ;; add 3 arguments (fn [arg1 arg2 arg3] (+ arg1 arg2 arg3 4 5))
 
 ;;
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with strings
@@ -260,7 +245,6 @@ five
 
 ;; Avoid code that creates side-effects where possible to keep your software less complex.
 ;; using the fast feedback of the REPL usually works beter than println statements in debuging
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Simple math to show you the basic structure of Clojure
@@ -332,7 +316,6 @@ five
 ; You need not for logic, too
 (not true) ; => false
 
-
 (identical? "foo" "bar")
 (identical? "foo" "foo")
 (= "foo" "bar")
@@ -385,17 +368,16 @@ five
 ;; cond - if condition true, do this, :otherwise do that
 
 (cond
-  (zero? (- (* 4 2) 8))
-  (= 4 (inc 2))
-  (= 4 (/ 8 2))
-  (= "Hello World" (str "Hello " "World"))
-  :otherwise "None of the above.")
+  (zero? (- (* 4 2) 8)) "The result is zero"
+  (= 4 (inc 2))         "The result is 4"
+  (= "Hello World" (str "Hello " "World")) "Hello World"
+  :else                 "None of the above.")
 
 (cond
-  (= 7 (inc 2)) "(inc 2) is not 7, so this condition is false"
-  (= 16 (* 8 2)) "This is the first correct condition so its associated expression is returned"
+  (= 7 (inc 2))          "(inc 2) is not 7, so this condition is false"
+  (= 16 (* 8 2))         "This is the first correct condition so its associated expression is returned"
   (zero? (- (* 8 8) 64)) "This is true but not returned as a previous condition is true"
-  :otherwise "None of the above are true")
+  :else                  "None of the above are true")
 
 ;; when true do the following
 
@@ -520,7 +502,6 @@ five
 
 ;; So what does NaN mean.  Well by consulting Stack Overflow, a NaN is produced if a floating point operation would produce an undefinable result.  Other examples include dividing 0.0 by 0.0 is arithmetically undefined.
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure projects
 
@@ -537,13 +518,11 @@ five
 ;; A namespace is a way to organise your clojure code (data structure and function definitions)
 ;; The namespace represents the underlying directory and filename which contain specific data structure and function definitions
 
-
 (namespace 'clojure-through-code.01-basics/my-map)
 (name 'clojure-through-code.01-basics/my-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Documentation in Clojure & LightTable
-
 
 ;; Clojure functions have Documentation
 ;; - in LightTable you can right-click on a function name and select "show docs"
@@ -570,10 +549,8 @@ five
 ;; General configuration settings for LightTable - eg, Fonts, themes, editor settings
 ;; Settings: User behaviors
 
-
 ;; (doto)  ;; Chain functions together
 ;; ->
-
 
 ;;; cool stuff
 
@@ -601,10 +578,8 @@ five
 ;; user> (true? nil)
 ;; false
 
-
 ;; Paredit
 ;; Alt-up - get rid of parent
-
 
 (def a "I have a name")
 
@@ -615,7 +590,6 @@ five
 (get {"a" "ay"} "a")
 
 (get-in {"a" {"aa" "You found me"}} ["a" "aa"])
-
 
 (let [reason "sick"]
   (cond
@@ -687,3 +661,8 @@ five
 {:meal
  {:ingredience []
   :recipe []}}
+
+(map
+ inc
+ [1 2 3 4 5])
+
