@@ -42,7 +42,24 @@
 ;; sends 6 println to the REPl first time this is called
 ;; sends 0 println to the REPl all consecutive times as all the numbers are now cached
 
+(defn accumulate
+  [operation value]
+  (loop [result []
+         args value]
+    (if (empty? args)
+      result
+      (recur (conj result (operation (first args))) (rest args)))))
 
+(accumulate #(* %) [1 2 3])
+
+(defn accumulate_v1 [operation arguments]
+  (loop [result [] args arguments]
+    (if (empty? args)
+      (reverse result)
+      (recur (cons (operation (first args)) result) (rest args)))))
+
+
+(accumulate_v1 #(* %) [1 2 3])
 
 ;;; Move to list section
 
@@ -127,4 +144,3 @@
 (filter #{:b} [:a :b :c])
 
 ;; (get-in [{:a "A" :b "B"} {0 :a}])
-
