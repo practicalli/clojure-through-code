@@ -1,11 +1,14 @@
 (ns clojure-through-code.09-calling-java
-  (import java.util.Date))
+  (:import java.util.Date))
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; From java.lang
 
 (.toUpperCase "fred")
 
 (.getName String)
+
+;; (java.util.Date)
+(Date.)
 
 ;; From java.lang.System getProperty() as documented at:
 ;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
@@ -32,11 +35,10 @@ Math/PI
 (let [d (java.util.Date.)]
   (. d getTime))
 
-;; or more commonly use object Instantiation
+;; or more commonly use object instance
 
 (let [d (java.util.Date.)]
-  (.getTime d)
-
+  (.getTime d))
 
 ;; Mixing Clojure and Java together in code
 
@@ -46,12 +48,12 @@ Math/PI
 
 ;; You can also use the bean function to wrap a Java bean in an immutable Clojure map.
 
-(bean (new Person "Alexandre" "Martins"))
+;; (bean (new Person "Alexandre" "Martins"))
 ;; -> {:firstName "Alexandre", :lastName "Martins"}
 
 ;; Once converted, you can manipulate the new map using any of Clojure’s map functions, like:
 
-(:firstName (bean (new Person "Alexandre" "Martins")))
+;; (:firstName (bean (new Person "Alexandre" "Martins")))
 ;; -> Alexandre
 
 
