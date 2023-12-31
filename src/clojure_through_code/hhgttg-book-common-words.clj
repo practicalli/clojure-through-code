@@ -69,3 +69,17 @@
 ;;   (-> (slurp "http://www.textfixer.com/resources/common-english-words.txt")
 ;;       (clojure.string/split #",")
 ;;       set))
+
+
+(re-seq #"\w+" "Morning-room in Algernon's flat in Half-Moon Street.")
+;; => ("Morning" "room" "in" "Algernon" "s" "flat" "in" "Half" "Moon" "Street")
+
+
+(re-seq #"[a-zA-Z0-9]+" "Morning-room in Algernon's flat in Half-Moon Street.")
+;; => ("Morning" "room" "in" "Algernon" "s" "flat" "in" "Half" "Moon" "Street")
+
+(re-seq #"[a-zA-Z0-9|'-]+" "Morning-room in Algernon's flat in Half-Moon Street.");; => ("Morning-room" "in" "Algernon's" "flat" "in" "Half-Moon" "Street")
+
+
+(re-seq #"[\w |'-]+" "Morning-room in Algernon's flat in Half-Moon Street.")
+;; => ("Morning-room in Algernon's flat in Half-Moon Street")
