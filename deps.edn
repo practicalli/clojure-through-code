@@ -1,1 +1,21 @@
-{}
+{:paths ["src" "resources"]
+
+ :deps
+ {org.clojure/clojure {:mvn/version "1.11.1"}
+
+  ;; Logic
+  org.clojure/core.match {:mvn/version "1.0.0"}
+
+  ;; table/table {:mvn/version "0.5.0"}  ;; use clojure.pprint/print-table instead
+
+  ;; Date and time
+  clojure.java-time/clojure.java-time {:mvn/version "0.3.2"}
+
+  ;; HTML generation
+  hiccup/hiccup {:mvn/version "2.0.0-alpha1"}}
+
+ :aliases
+ {};; Aliases from practicalli/clojure-deps-edn included via .dir-locals
+
+ #_()}
+
