@@ -1,10 +1,45 @@
 (ns clojure-through-code.working-with-maps)
 
+;; Generating hash-maps
+
+(hash-map)
+;; => {}
+
+;; Arguments must be a key value pair (or pairs)
+#_(hash-map :key-without-value)
+;; java.lang.IllegalArgumentException
+;; No value supplied for key: :key-without-value
+
+
+(hash-map :movie "The Last Jedi")
+;; => {:movie "The Last Jedi"}
+
+
+;; Arguments that include the same key will use the value associated with the last key in the argument list
+(hash-map :movie "The Last Jedi" :movie "The Empire Strikes Back")
+;; => {:movie "The Empire Strikes Back"}
+
+
+;; example: defining pseudonyms that are author's nom de plume (writing names)
+;; A vector of strings is used as the value as an author may have more than one writing name
+(hash-map "Samuel Langhorne Clemens" ["Mark Twain" "Sieur Louis de Conte"]
+          "Mary Ann Evans" ["George Eliot"]
+          "Charlotte Brontë" ["Currer Bell"]
+          "Anne Brontë" ["Anne Bell"]
+          "Ellis Brontë" ["Acton Bell"]
+          "Alice B. Sheldon" ["James Tiptree Jr"]
+          "Charles Dodgson" ["Lewis Carroll"]
+          "Robert A. Heinlein" ["Anson MacDonald" "Caleb Strong"]
+          "Stephen King" ["Richard Bachman"])
+
+;; Hash-map designs can be as intricate as required to model the data of the system.
+;; However, the more complex a data structure is, the more complex it may be to work with
+
+
+;; Accessing hash-maps
 
 (def best-movie {:name "Empire Strikes Back"
-                 :actors {"Leia" "Carrie Fisher",
-                          "Luke" "Mark Hamill",
-                          "Han" "Harrison Ford"}})
+                 :actors {"Leia" "Carrie Fisher" "Luke" "Mark Hamill" "Han" "Harrison Ford"}})
 
 (get best-movie :name)
 ;; => "Empire Strikes Back"
@@ -18,6 +53,26 @@
 ;; access nested maps:
 (get-in best-movie [:actors "Leia"])
 ;; => "Carrie Fisher"
+
+
+;; => "Empire Strikes Back"
+
+;; keywords are also functions
+;; who look themselves up in maps!
+(:name best-movie)
+;; => "Empire Strikes Back"
+
+(best-movie :actors)
+
+(-> best-movie :actors)
+
+;; access nested maps:
+(get-in best-movie [:actors "Leia"])
+;; => "Carrie Fisher"
+
+(-> best-movie :actors "leia")
+
+
 
 
 
@@ -42,6 +97,18 @@
 
 (keys planets)
 ;; => (:mercury :venus)
+
+
+
+
+;; Combining data structures into maps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(merge {:a 1 :b 2 :c 3} {:b 24 :d 4})
+;; => {:a 1, :b 24, :c 3, :d 4}
+
+(merge {:recipie "tofu curry"})
+
 
 
 ;; Iterate over nested maps
@@ -196,8 +263,8 @@
 (def project-capex-hours
   (let [projects (keys project-management)]
     (for [project projects
-          :let [hours (get-in project-management [project "hours"])]
-          :when (get-in project-management [project "capex"])]
+          :let    [hours (get-in project-management [project "hours"])]
+          :when   (get-in project-management [project "capex"])]
       hours)))
 
 project-capex-hours;; => (7 6)
@@ -334,17 +401,17 @@ project-capex-hours;; => (7 6)
 ;; Renaming keys from a JSON rest call
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-REST API represents an account and returns JSON:
+;; REST API represents an account and returns JSON:
 
-{ "userName" : "foo", "password" : "bar", "emailId" : "baz" }
+;; { "userName": "foo", "password": "bar", "emailId": "baz" }
 
-Existing Clojure function creates an account:
+;; Existing Clojure function creates an account:
 
-(create-account {:username "foo" :password "bar" :email "baz"})
+;; (create-account {:username "foo" :password "bar" :email "baz"})
 
-Transform the Clojure keywords to the form of the REST API keywords
+;; Transform the Clojure keywords to the form of the REST API keywords
 
-A low abstraction approach would be:
+;; A low abstraction approach would be:
 
 (def args {:username "foo" :password "bar" :email "baz"})
 
@@ -386,3 +453,135 @@ A low abstraction approach would be:
 ;; Add clojure.data.json as a dependency
 
 #_(clojure.data.json/write-str args)
+
+
+
+(def operands {"+" + "/" /})
+
+((operands "/") 4 3)
+
+
+;; ## keys in maps
+
+(def recipe-map {:ingredients "tofu"})
+
+(contains? recipe-map :ingredients)
+;; => true
+
+(some #{"tofu"} recipe-map)
+;; => nil
+
+(vals recipe-map)
+;; => ("tofu")
+
+
+(some #{"tofu"} (vals recipe-map))
+;; => "tofu"
+
+
+
+;; Testing for values in a map
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Does a collection of maps contain a value?
+
+(map #(= (:category %) "base") [{:category "base"}])
+
+(map #(= (:category %) "base") [{:category "base"} {:category "refinement"}])
+
+(map #(= (:category %) "base") [{:category "base"} {:category "refinement"} {:category "amendment"}])
+
+(some #(= (:category %) "base") [{:category "base"} {:category "refinement"} {:category "amendment"}])
+
+(some #(= (:category %) "base") [ {:category "refinement"} {:category "amendment"}])
+
+(some (comp #{"base"} :category) [{:category "base"} {:category "refinement"} {:category "amendment"}])
+
+(some (comp #(= "base" %) :category) [{:category "base"} {:category "refinement"} {:category "amendment"}])
+
+(some (comp #{"base"} :category) [ {:category "refinement"} {:category "amendment"}])
+
+(map #(= (:key %) "fish") [{:key "fish"} {:key "chips"} {:key "peas"}])
+
+(and true (seq [1 2 3]) true)
+
+
+
+;; Merging maps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Try avoid using deep merging of maps and get the level of maps you need to merge
+
+
+;;;;;;;;;;;;;;;;;;;
+
+(some->> [{:category "base"} {:category "refinement"} {:category "amendment"}]
+                          (filter #(= "base" (:category %))))
+;; => ({:category "base"})
+
+(filter #(= "base" (:category %)) [{:category "base"} {:category "refinement"} {:category "amendment"}])
+;; => ({:category "base"})
+
+
+
+[{:category "base" :payload {:team-id 1}}
+ {:category "refinement" :payload {:body-part "right-foot"}}
+ {:category "refinement" :payload {:height "ground"}}]
+
+
+(reduce merge [{:category "base" :payload {:team-id 1}}
+ {:category "refinement" :payload {:body-part "right-foot"}}
+ {:category "refinement" :payload {:height "ground"}}])
+
+
+(merge [{:category "base" :payload {:team-id 1}}
+        {:payload {:body-part "right-foot"}}
+        {:payload {:height "ground"}}])
+;; => [{:category "base", :payload {:team-id 1}} {:payload {:body-part "right-foot"}} {:payload {:height "ground"}}]
+
+(reduce merge [{:category "base" :payload {:team-id 1}}
+               {:payload {:body-part "right-foot"}}
+               {:payload {:height "ground"}}])
+;; => {:category "base", :payload {:height "ground"}}
+
+
+(apply merge [{:category "base" :payload {:team-id 1}}
+               {:payload {:body-part "right-foot"}}
+               {:payload {:height "ground"}}])
+;; => {:category "base", :payload {:height "ground"}}
+
+
+(map merge [{:category "base" :payload {:team-id 1}}
+               {:payload {:body-part "right-foot"}}
+               {:payload {:height "ground"}}])
+;; => ({:category "base", :payload {:team-id 1}} {:payload {:body-part "right-foot"}} {:payload {:height "ground"}})
+
+
+(merge-with merge [{:category "base" :payload {:team-id 1}}
+               {:payload {:body-part "right-foot"}}
+               {:payload {:height "ground"}}])
+
+
+(into {:category "base" :payload {:team-id 1}}
+      (map :payload []))
+
+
+(update {:category "base" :payload {:team-id 1}} :payload merge  {:body-part "right-foot"})
+;; => {:category "base", :payload {:team-id 1, :body-part "right-foot"}}
+
+
+(update {:category "base" :payload {:team-id 1}} :payload merge  {:body-part "right-foot"} {:height "ground"})
+;; => {:category "base", :payload {:team-id 1, :body-part "right-foot", :height "ground"}}
+
+
+
+(update {:category "base" :payload {:team-id 1}} :payload merge  [{:body-part "right-foot"} {:height "ground"}])
+;; => {:category "base", :payload {:team-id 1, {:body-part "right-foot"} {:height "ground"}}}
+
+
+(update {:category "base" :payload {:team-id 1}} :payload #(apply merge % [{:body-part "right-foot"} {:height "ground"}]))
+;; => {:category "base", :payload {:team-id 1, :body-part "right-foot", :height "ground"}}
+
+
+
+;;;;;;;;;;;;;;;;;;;
