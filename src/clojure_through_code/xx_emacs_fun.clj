@@ -24,3 +24,9 @@
 
 
 ;; FIXME: surprisingly some of my code needs fixing
+
+(comment
+  ;; Reload the current namespace and print loaded namespaces in REPL buffer
+  (require '[clojure-through-code.xx-emacs-fun] :reload :verbose)
+
+  #_()) ;; End of rich comment
