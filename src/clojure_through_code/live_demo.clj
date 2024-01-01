@@ -199,7 +199,7 @@ my-data
      (apply hash-map)
      (def project))
 
-project 
+;; project
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Working with strings & side-effects
 
@@ -279,7 +279,7 @@ project
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Equality & Identity
-;; Clojure values make these things relatively trivial 
+;; Clojure values make these things relatively trivial
 
 ; Equality is =
 
@@ -416,20 +416,20 @@ my-map
 
 ;; Combination of data structures
 
-{:starwars {
-            :characters {
-                         :jedi   ["Luke Skywalker"
-                                  "Obiwan Kenobi"]
-                         :sith   ["Darth Vader"
-                                  "Darth Sideous"]
-                         :droids ["C3P0"
-                                  "R2D2"]}
-            :ships {
-                    :rebel-alliance  ["Millenium Falcon"
-                                      "X-wing figher"]
-                    :imperial-empire ["Intergalactic Cruser"
-                                      "Destroyer"
-                                      "Im just making these up now"]}}}
+{:starwars
+ {:characters
+  {:jedi   ["Luke Skywalker"
+            "Obiwan Kenobi"]
+   :sith   ["Darth Vader"
+            "Darth Sideous"]
+   :droids ["C3P0"
+            "R2D2"]}
+  :ships
+  {:rebel-alliance  ["Millenium Falcon"
+                     "X-wing figher"]
+   :imperial-empire ["Intergalactic Cruser"
+                     "Destroyer"
+                     "Im just making these up now"]}}}
 
 
 
@@ -455,7 +455,7 @@ my-map
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
-;; Using Functions 
+;; Using Functions
 
 
 ;; Lets define a very simple anonymous function, that returns a string
@@ -463,7 +463,7 @@ my-map
 (fn [] "Hello Clojurian, hope you are enjoying the REPL")
 
 
-;; Anonnymous function that squares a number 
+;; Anonnymous function that squares a number
 
 (fn [x] (* x x))
 
@@ -502,7 +502,7 @@ my-map
 
 (greet)
 
-;; When greet is called with no arguments, then the first line of the functions behaviour is called.  If you look closely, you see this is not adding duplicate code to our function as 
+;; When greet is called with no arguments, then the first line of the functions behaviour is called.  If you look closely, you see this is not adding duplicate code to our function as
 
 (greet "World")
 
@@ -686,7 +686,7 @@ my-map
 
 
 
-;; Using a ref 
+;; Using a ref
 
 (def all-the-cats (ref 3))
 
