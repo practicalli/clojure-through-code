@@ -23,7 +23,7 @@
 (def mutant-characters (atom []))
 
 (defn add-mutant [mutant]
-  (swap! mutants conj mutant))
+  (swap! mutant-characters conj mutant))
 
 (add-mutant "Black Widow")
 (add-mutant "Hulk")
