@@ -1,9 +1,0 @@
-(defproject clojure-through-code "20.1.5-SNAPSHOT"
-  :description "Learning Clojure by evaluating code on the fly"
-  :url "https://github.com/practicalli/clojure-through-code"
-  :license {:name "Creative Commons Attribution Share-Alike 4.0 International"
-            :url "https://creativecommons.org"}
-  :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/core.match "1.0.0"]
-                 [table "0.5.0"]
-                 [proto-repl "0.3.1"]])
