@@ -1,14 +1,67 @@
-;; namespaces are similar to packages in Java, in that they are a grouping of data and behaviour
-;; namespaces allow you to structure your Clojure code into logical groupings
-;; namesaces help you use functions defined in one namespace in a different namespace
-;; using the (use) function in clojure.
+;; ---------------------------------------
+;; Fundamentals of Clojure syntax
+;;
+;; Comments
+;; quote - read code as data, dont evaluate
+;; nil
+;; Creating namespaces
+;; Evaluating functions
+;; Dynamic vars
+;; ---------------------------------------
+
+;; ---------------------------------------
+;; Comments
+
+;; Two semi-colons define a line comment    ; single semi-colon is an end of line comment
+
+(comment
+  (str "The comment form is used to separate code "
+       "from the rest of the namespace")
+
+  (str "All expressions within `comment` are ignored by the Clojure REPL"
+       "\n"
+       "The `comment` function returns the `nil` value"))
+
+;; ---------------------------------------
+
+;; ---------------------------------------
+;; ns - define a namespace
+
+;; namespaces are used to organise Clojure code into logical groupings
+;; names of namespaces are used to give context to the code
+;; ns definitions can include a documentation string, `doc-string`, after the namespace name
+;;
+;; Namespace is similar to a package in Java, they are a grouping of data and behaviour
 
 (ns clojure-through-code.01-basics
-  (:require [clojure.string]))
+  "Communicate the purpose of a namespace via a doc-string.
+   Include descriptions of data models defined in the namespace.")
 
-;; (:require 'clojure.repl)
+;; The `require` function includes the code from another namespace into the current namespace
 
-;; (:require [clojure.repl] :refer :all)
+(ns clojure-through-code.01-basics
+  "Communicate the purpose of a namespace via a doc-string.
+   Include descriptions of data models defined in the namespace.
+   `:require` key defines additional namespaces to include into the current namespace."
+  (:require
+   [clojure.string :refer [join split trim]]
+   [practicalli.clojure-through-code.spec :as spec]))
+
+;; `require` is also a function
+;; e.g. optionally including a namespace within a `comment` form
+
+;; Basic `require` form:
+;; (:require 'clojure.string)
+
+;; Include specific parts of another namespace
+;; (require
+;;  '[clojure.string] :refer [join split trim])
+
+;; If a namespace is predominantly using the required namespace
+;; (:require [clojure.test] :refer :all)
+
+;; End of Namespace
+;; ---------------------------------------------------------
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure Syntax
@@ -78,10 +131,8 @@
 
 ;; Getting the version number of the project
 
-;; Information can be read from the Clojure project.clj file using the slurp function
-(slurp "project.clj")
-
-;; => "(defproject clojure-through-code \"20.1.5-SNAPSHOT\"\n  :description \"Learning Clojure by evaluating code on the fly\"\n  :url \"http://jr0cket.co.uk\"\n  :license {:name \"Eclipse Public License\"\n            :url \"http://www.eclipse.org/legal/epl-v10.html\"}\n  :dependencies [[org.clojure/clojure \"1.6.0\"]])\n\n"
+;; Information can be read from the Clojure project configuration file using the slurp function
+(slurp "deps.edn")
 
 ;; The value returned by slurp is a bit messy, so we can tidy it up with read-string
 
@@ -665,4 +716,3 @@ literal-value-five
 (map
  inc
  [1 2 3 4 5])
-
