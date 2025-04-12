@@ -2,6 +2,7 @@
 
 (def salary 60000)
 
+
 ;; (if test then else)
 ;; to put that in rough english: if something is true, then do this, else do the other thing
 ;; The if function evaluates the test returning the value in the "then" position
@@ -14,6 +15,7 @@
 
 (if (> 50000 salary) "Fat cat" "Salt")
 
+
 ;; What happens with no values after the test ?
 ;; (if (> salary 40000))
 
@@ -24,7 +26,7 @@
 ;; (if (> salary 80000) "Yay, you have a job")
 
 
-;;;; Using when instead of if
+;; Using when instead of if
 ;; You can use the when function if you have multiple things you want to do if true,
 ;; and you know there will never be an else condition
 
@@ -32,11 +34,13 @@
   (println "hello, i am a side effect, please destroy me")
   "return some value")
 
+
 (when (> 3 2)
   (println "3 is greater than 2")
   "Higher")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
 ;; for
 
 ;; process the items in a collection with destructing
@@ -45,7 +49,8 @@
       [[0 1 2] [0 2 3] [1 0 4] [2 1 4] [3 2 4] [0 3 4]]]
   (println "i: " i "j: " j " and k: " k))
 
-;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
 ;; while
 
 ;; another example of a more procedural control flow
@@ -54,6 +59,7 @@
 ;; create a counter using a mutable counter
 (def counter (atom 10))
 
+
 ;; While the counter is positive (is a number greater than zero), print out the current value of the counter.
 (while (pos? @counter)
   (do
@@ -61,15 +67,19 @@
     (swap! counter dec)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; 
-;;; If you have multiple things to do, you can still use if with a little help from do or the threading macro
+;; If you have multiple things to do, you can still use if with a little help from do or the threading macro
 
-(defn lower-public-spending []
+(defn lower-public-spending
+  []
   (println "No more silk ties for ministers"))
 
-(defn raise-public-spending []
+
+(defn raise-public-spending
+  []
   (println "Time for a new duck castle, including a moat"))
+
 
 (if (> salary 50000)
   (do
@@ -78,6 +88,7 @@
   (do
     (lower-public-spending)
     "You are the salt of the earth"))
+
 
 ;; You can also use the threading macro, especially if the expressions take each others result as an argument
 
@@ -88,33 +99,36 @@
 ;; Thread-first macro
 ;; The result of the first evaluation is past as the first argument to the next function
 (->
- 7
- (/ 22))
+  7
+  (/ 22))
+
 
 ;; Thread-last macro
 ;; The result of the first evaluation is past as the last argument to the next function
 (->>
- 7
- (/ 22))
+  7
+  (/ 22))
+
 
 ;; Tip: if you find the threading macro hard to read,
 ;; you can place ,,, where the result of the evaluation would be in the following function
 ;; as commas are treated as whitespace
 
 (->
- 7
- (/ ,,, 22))
+  7
+  (/ ,,, 22))
+
 
 (->>
- 7
- (/ 22 ,,,))
+  7
+  (/ 22 ,,,))
 
 
 ;; Its common to formatting the threading macro with each expression on a new line
 
 
 
-;;;; Threading macro examples
+;; Threading macro examples
 
 
 
@@ -194,8 +208,6 @@
 ;; ->> has a related cousin ->, which is same as ->>, but only threads the forms as the second argument of the next form instead of the last. These macros implement Thrush in Clojure. Idiomatic Clojure code is concise and readable and using a proper ubiquitous language of the domain, makes a very good DSL. Think about using Thrush when you feel that reordering the forms will make your API look more intuitive to the user.
 
 ;; Thrush also helps you implement the Decorator pattern in a very cool and concise way. In my upcoming book, DSLs In Action I discuss these techniques in the context of designing DSLs in Clojure.
-
-
 
 
 

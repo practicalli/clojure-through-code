@@ -1,10 +1,18 @@
 (ns clojure-through-code.debugging-with-cider)
 
-(defn bar [x]  (inc x))
 
-(defn foo [x] (bar x))
+(defn bar
+  [x]
+  (inc x))
+
+
+(defn foo
+  [x]
+  (bar x))
+
 
 (foo 9)
+
 
 ;; Debugging workflow - work-around for the lack of support for Evil mode in cider debugging
 
@@ -23,4 +31,3 @@
 ;; `n` to finish with the result showing on (foo 9) function call...
 
 ;; You could instrument both functions, which is viable in small example, however, it would be impractical when there are many functions you want to step into that are called by a function, or when those function call other functions that you want to step into... etc.
-

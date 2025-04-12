@@ -1,16 +1,18 @@
 ;; Fibonachi series
 ;; simple description: the next number is the sum of the previous two, starting with 1 and 2
 
-;;;;; Some references
+;; Some references
 ;; http://squirrel.pl/blog/2010/07/26/corecursion-in-clojure/
 
 
 ;; could define a data structure, large enough for any series length you want
 (def fibonachi-data #{1 2 3 5 8 13 21 34 55 89 144 223})
 
+
 ;; The evaluation of the set is not ordered, so use a function to create a sorted output
 ;; We can sort in accending < order, or decending > order
 (sorted-set-by > 1 2 3 5 8 13 21 34 55 89 144 223)
+
 
 ;; We can of course also create an ordered set to start with and give it a name,
 ;; so when we refer to the set by name it always gives us an ordered set
@@ -23,45 +25,52 @@ fibonachi-data
 ;; Clojure is very good at generating data structures and only calculating the part of the data structure needed at that time
 
 ;; need to work out a good algorithm for generating the fibonachi series
-(defn fibonachi-series [series-length]
+(defn fibonachi-series
+  [series-length]
   (let [x series-length]
     x))
+
 
 (fibonachi-series 8)
 
 
 ;; we just want to have a certain number of integers in the series, so we can use take
-(take 2 '(1 2 3 5 ))
+(take 2 '(1 2 3 5))
+
 
 ;; How do we generate a number sequence ?
 
 (inc 3)
 
+
 ;; lets create a sequence to play with
 (def my-sequence '(1 2 3 4 5))
+
 
 ;; I can get the first element of the sequence, or the rest of the sequence
 (first my-sequence)
 (rest my-sequence)
 
+
 ;; Add a condition, based on whether there is anything in the sequence
 (if (not-empty ()) 1 -1)
 (if (not-empty (rest my-sequence)) 1 2)
 
-(defn gen-lazy-sequence [length]
+
+(defn gen-lazy-sequence
+  [length]
   (let [fib
         [length]]
     fib))
 
+
 (gen-lazy-sequence 4)
 
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Other solutions to fibonachi
 
-;;Programming in Clojure p. 136
+;; Programming in Clojure p. 136
 
 ;; (defn fibo [] (map first (iterate (fn [[a b]] [b (+ a b)]) [0 1])))
 
@@ -146,7 +155,7 @@ fibonachi-data
 ;;        x)))
 
 
-;;;;; Thrush operator
+;; Thrush operator
 
 ;; You can use the thrush operator to clean up #3 a bit (depending on who you ask; some people love this style, some hate it; I'm just pointing out it's an option):
 
@@ -167,7 +176,7 @@ fibonachi-data
 ;; ;;output (0 1 1 2 3 5 8 13 21 34)
 
 
-;;;;; Avoiding recursion ?
+;; Avoiding recursion ?
 
 ;; In Clojure it's actually advisable to avoid recursion and instead use the loop and recur special forms.
 ;; This turns what looks like a recursive process into an iterative one, avoiding stack overflows and
@@ -185,4 +194,3 @@ fibonachi-data
 ;; The loop construct takes a series of bindings, which provide initial values, and one or more body forms.
 ;; In any of these body forms, a call to recur will cause the loop to be called recursively with the
 ;; provided arguments.
-

@@ -1,6 +1,6 @@
 ;; How to work with libraries in Clojure
 
-;;;; What is in every namespace
+;; What is in every namespace
 
 ;; clojure.core
 ;; java.lang
@@ -11,7 +11,7 @@
 ;; Java SDK ?
 ;; Leiningen ?
 
-;;;; Dependencies
+;; Dependencies
 
 ;; Add dependencies using Leiningen in the project.clj file (see leiningen section)
 ;; or Maven pom.xml (see google)
@@ -21,4 +21,4 @@
 
 ;; use
 
-(use )
+(use)

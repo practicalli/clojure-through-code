@@ -1,7 +1,8 @@
 (ns clojure-through-code.four-clojure)
 
+
 ;; #18 - Sequences: filter
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Difficulty:	Elementary
 
 ;; Description
@@ -25,12 +26,16 @@
 
 ;; The simplest way to see what filter is doing is to run that part of the expression in the REPL.
 (filter #(> % 5) '(3 4 5 6 7))
+
+
 ;; => (6 7)
 
 ;; So filter returns the values that return true when passed to the `#(> % 5)` function.  This function is called the predicate.
 
 ;; If we used the same predicate function with map instead of filter, we would get part of the answer
 (map #(> % 5) '(3 4 5 6 7))
+
+
 ;; => (false false false true true)
 
 ;; In the source code of filter, we can see that each value of the collection is taken and the predicate function applied.
@@ -54,22 +59,19 @@
 
 
 ;; Answer
-[6 7] ;; Code Golf Score: 4
+[6 7] ; Code Golf Score: 4
 
 ;; The following would also be correct answers, although would give bigger golf scores
 
-'(6 7) ;; As we are treating the list as just data, then we need to quote the list to avoid the REPL calling a function called 6 which does not exist.
+'(6 7) ; As we are treating the list as just data, then we need to quote the list to avoid the REPL calling a function called 6 which does not exist.
 
-(quote (6 7))  ;; is simply the long form of the above answer.
+(quote (6 7))  ; is simply the long form of the above answer.
 
 ;; NOTE: In Clojure it is idiomatic to use Vectors rather than lists for data representation
 
 
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; #26 - Fibonacci Sequence
 
 ;; http://www.4clojure.com/problem/26#prob-title
@@ -83,9 +85,12 @@
 #_(= (__ 6) '(1 1 2 3 5 8))
 #_(= (__ 8) '(1 1 2 3 5 8 13 21))
 
+
 ;; First though is that we want to generate a range of numbers
 
 (range 1 6)
+
+
 ;; => (1 2 3 4 5)
 
 ;; Looking at the range source code does not help that much as range is just a wrapper for clojure.lang.Range which is a Java class.
@@ -107,50 +112,63 @@
       "iterate"
       initial-sequence)))
 
+
 ;; Now we just need to iterate until we get a big enough fibonacci sequence
 ;; A simple way to iterate is to use loop recur, as we only only pass the size of fibonacci to generate as an argument to the function we are writing.
 ;; In each iteration we conjoin the result of adding all the values in the fib sequence together.
-(fn fibs [size]
+(fn fibs
+  [size]
   (loop [fib [1 1]]
     (if (< (count fib) size)
       (recur (conj fib (reduce + fib)))
       fib)))
 
+
 ;; Test our function, generating a fibonacci sequence of size 3
-((fn fibs [size]
+((fn fibs
+   [size]
    (loop [fib [1 1]]
      (if (< (count fib) size)
        (recur (conj fib (reduce + fib)))
        fib)))
  3)
+
+
 ;; => [1 1 2]
 
 ;; Test our function, generating a fibonacci sequence of size 6
-((fn fibs [size]
+((fn fibs
+   [size]
    (loop [fib [1 1]]
      (if (< (count fib) size)
        (recur (conj fib (reduce + fib)))
        fib)))
  6)
+
+
 ;; => [1 1 2 4 8 16]
 ;; Although this generate a sequence of the right size, it is not the fibonacci sequence.
 ;; We need to add the last two values in the current sequence for each iteration
 
 ;; Change our recur to take the last and second to last values from the current value of fib.
 ;; As there is no second-last function, we reverse the sequence and take the second value.
-(fn fibs [size]
+(fn fibs
+  [size]
   (loop [fib [1 1]]
     (if (< (count fib) size)
       (recur (conj fib (+ (second (reverse fib)) (last fib))))
       fib)))
 
 
-((fn fibs [size]
+((fn fibs
+   [size]
    (loop [fib [1 1]]
      (if (< (count fib) size)
        (recur (conj fib (+ (second (reverse fib)) (last fib))))
        fib)))
  8)
+
+
 ;; => [1 1 2 3 5 8 13 21]
 
 ;; Code Golf Score: 101
@@ -166,6 +184,7 @@
 ;; TDD principle: Write the minimum amount of code required to make the test pass :)
 (fn [i] (take i '(1 1 2 3 5 8 13 21)))
 
+
 ;; Obviously as soon as the requirements change to be a larger number than 8 for the fibonacci sequence, then this code is going to fail.
 
 
@@ -180,17 +199,22 @@
 ;; (= (take 5 (__ + (range))) [0 1 3 6 10])
 
 ;; Range by itself generates and infinate number of integer values, blowing up your heap eventually
-;;(range)
+;; (range)
 
 ;; we can specify the range to generated
 (range 10)
 
+
 ;; or we can use the lazy sequence nature of range to get just the values we want
 
 (take 10 (range))
+
+
 ;; => (0 1 2 3 4 5 6 7 8 9)
 
 (class (take 10 (range)))
+
+
 ;; => clojure.lang.LazySeq
 
 
@@ -198,20 +222,21 @@
 
 ;; (= (take 5 (map + (range))) [0 1 3 6 10])
 
-;;(take 5 (map + (range)))
+;; (take 5 (map + (range)))
 
-(= (take 5 (
-            (fn my-reduct
+(= (take 5 ((fn my-reduct
               ([func coll]
                (my-reduct func (first coll) (rest coll)))
 
               ([func firstArg coll]
-               (letfn [(reduct [f init se]
+               (letfn [(reduct
+                         [f init se]
                          (lazy-seq (when-not (empty? se)
                                      (let [res (f init (first se))]
                                        (cons res (reduct f res (rest se)))))))]
                  (lazy-seq (cons firstArg (reduct func firstArg coll))))))
             + (range))) [0 1 3 6 10])
+
 
 ;; 4Clojure entered solution
 
@@ -220,17 +245,16 @@
    (my-reduct func (first coll) (rest coll)))
 
   ([func firstArg coll]
-   (letfn [(reduct [f init se]
+   (letfn [(reduct
+             [f init se]
              (lazy-seq (when-not (empty? se)
                          (let [res (f init (first se))]
                            (cons res (reduct f res (rest se)))))))]
      (lazy-seq (cons firstArg (reduct func firstArg coll))))))
 
 
-
-
 ;; #61 - Map Construction
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Difficulty:	Easy
 ;; Topics:	core-functions
 ;; Special Restrictions: zipmap
@@ -242,12 +266,17 @@
 (= (__ [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"})
 (= (__ [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"})
 
+
 ;; If we could use zipmap then the answer would be simple
 
 (zipmap [:a :b :c] [1 2 3])
+
+
 ;; => {:a 1, :b 2, :c 3}
 
 (= (zipmap [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3})
+
+
 ;; => true
 
 ;; So now we have to figure out the algorithm that zipmap uses
@@ -260,23 +289,33 @@
 
 ;; A simple example of map function in action:
 (map str [:a :b :c] [1 2 3])
+
+
 ;; => (":a1" ":b2" ":c3")
 
 ;; In stead of string, we could use hash-map
 
 (map hash-map [:a :b :c] [1 2 3])
+
+
 ;; => ({:a 1} {:b 2} {:c 3})
 
 ;; now we just need to put all the maps into one map, so perhaps merge will work
 
 (merge (map hash-map [:a :b :c] [1 2 3]))
+
+
 ;; => ({:a 1} {:b 2} {:c 3})
 
 
 (conj (map hash-map [:a :b :c] [1 2 3]))
+
+
 ;; => ({:a 1} {:b 2} {:c 3})
 
 (reduce conj (map hash-map [:a :b :c] [1 2 3]))
+
+
 ;; => {:c 3, :b 2, :a 1}
 
 
@@ -287,6 +326,8 @@
    (into {}
          (map vector key-sequence value-sequence)))
  [:a :b :c] [1 2 3])
+
+
 ;; => {:a 1, :b 2, :c 3}
 
 
@@ -305,7 +346,7 @@
 ;; Code Golf Score: 64
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; problem 68: recur
 
 
@@ -314,6 +355,7 @@
   (if (> x 0)
     (recur (dec x) (conj result (+ 2 x)))
     result))
+
 
 ;; => [7 6 5 4 3]
 
@@ -329,7 +371,7 @@
 [7 6 5 4 3]
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; problem 73 - analyse tic-tac-toe board
 
 ;; A tic-tac-toe board is represented by a two dimensional vector. X is represented by :x, O is represented by :o, and empty is represented by :e.
@@ -339,17 +381,23 @@
 
 ;; Define some tic-tac-toe board pattern to test
 
-(def board-empty [[:e :e :e]
-                  [:e :e :e]
-                  [:e :e :e]])
+(def board-empty
+  [[:e :e :e]
+   [:e :e :e]
+   [:e :e :e]])
 
-(def board-x-first-row [[:x :x :x]
-                        [:e :e :e]
-                        [:e :e :e]])
 
-(def board-o-diagonal [[:o :e :e]
-                       [:e :o :e]
-                       [:e :e :o]])
+(def board-x-first-row
+  [[:x :x :x]
+   [:e :e :e]
+   [:e :e :e]])
+
+
+(def board-o-diagonal
+  [[:o :e :e]
+   [:e :o :e]
+   [:e :e :o]])
+
 
 ;; Algorithm
 ;; 1) Extract all the values from the board  (destructuring with let)
@@ -362,12 +410,16 @@
 
 (let [[a b c] board-empty]
   [a b c])
+
+
 ;; => [[:e :e :e] [:e :e :e] [:e :e :e]]
 
 ;; Now a b and c will represent the elements of the first row of the board pattern.
 
 (let [[[a b c]] board-x-first-row]
   [a b c])
+
+
 ;; => [:o :e :e]
 
 
@@ -377,6 +429,8 @@
        [d e f]
        [g h i]] board-o-diagonal]
   [[a b c] [d e f] [g h i]])
+
+
 ;; => [[:o :e :e] [:e :o :e] [:e :e :o]]
 
 
@@ -390,6 +444,8 @@
                   player]
                (= player a b c))]
   (winner board-x-first-row :x))
+
+
 ;; => true
 
 
@@ -399,14 +455,17 @@
 ;; in this case the board patter we are destructuring and the player character.
 ;; For example:
 
-(letfn [(winner [[[a b c]
-                  [d e f]
-                  [g h i]]
-                 player])])
+(letfn [(winner
+          [[[a b c]
+            [d e f]
+            [g h i]]
+           player])])
+
 
 ;; Using macro-expansion we can see the letfn creates a function called winner
 ;; with two arguments: a board pattern and player
 (letfn* [winner (fn winner [[[a b c] [d e f] [g h i]] player])])
+
 
 ;; We can call the local winner function whilst inside the letfn expression,
 ;; however we have not yet added any behaviour to that function.
@@ -416,13 +475,16 @@
 ;; attempt at defining the function behaviour.
 ;; If the first row matches the player character then we should get true.
 
-(letfn [(winner [[[a b c]
-                  [d e f]
-                  [g h i]]
-                 player]
-          (println (str "first row: " [a b c])) ;; debugging
+(letfn [(winner
+          [[[a b c]
+            [d e f]
+            [g h i]]
+           player]
+          (println (str "first row: " [a b c])) ; debugging
           (= player a b c))]
   (winner board-x-first-row :x))
+
+
 ;; => true
 
 ;; Note: A simple println statement was added to show the intermediate values,
@@ -433,10 +495,11 @@
 ;; To test both players, we add a condition around calling the winner function for each player
 
 
-(letfn [(winner [[[a b c]
-                  [d e f]
-                  [g h i]]
-                 player]
+(letfn [(winner
+          [[[a b c]
+            [d e f]
+            [g h i]]
+           player]
           (or (= player a b c)
               (= player d e f)
               (= player g h i)
@@ -448,6 +511,8 @@
   (cond (winner board-x-first-row :x) :x
         (winner board-x-first-row :o) :o
         :else (str "No Winner for this board: " board-x-first-row)))
+
+
 ;; => :x
 
 ;; The letfn expression was tested with each of the three board patterns defined, giving the correct results.
@@ -455,10 +520,11 @@
 ;; 4Clojure entered solution
 
 (fn [board]
-  (letfn [(winner [[[a b c]
-                    [d e f]
-                    [g h i]]
-                   player]
+  (letfn [(winner
+            [[[a b c]
+              [d e f]
+              [g h i]]
+             player]
             (or (= player a b c)
                 (= player d e f)
                 (= player g h i)
@@ -476,9 +542,10 @@
 
 ;; I quite like the solution by tclamb, its similar to the submitted solution in approach
 
-(fn winner [[[a b c :as top]
-             [d e f :as middle]
-             [g h i :as bottom]]]
+(fn winner
+  [[[a b c :as top]
+    [d e f :as middle]
+    [g h i :as bottom]]]
   (let [left     [a d g]
         center   [b e h]
         right    [c f i]
@@ -491,8 +558,7 @@
       (first winner))))
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; problem 83: a half truth
 
 ;; Write a function which takes a variable number of booleans.
@@ -500,22 +566,24 @@
 
 ;; a full way of describing the algorithm and thinking behind it
 (fn [& args]
-    (let [not-all-true (not (every? true? args))
-          any-true (first (filter true? args))]
-      (= not-all-true any-true)))
+  (let [not-all-true (not (every? true? args))
+        any-true (first (filter true? args))]
+    (= not-all-true any-true)))
+
 
 (fn [& args]
   (= (not (every? true? args))
      (first (filter true? args))))
 
+
 ;; To get a better golf score (fewer characters) an anonymous function can be used
 ;; The %& is a placeholder for all the parameters
 (#(=
-   (not (every? true? %&))
-   (first (filter true? %&))) true)
+    (not (every? true? %&))
+    (first (filter true? %&))) true)
 
 
-  ;; From the first example, we can see that comparing true and false values
+;; From the first example, we can see that comparing true and false values
 ;; with give a boolean result.  So what about just comparing the values
 
 ;; If all the values are true => false
@@ -526,21 +594,21 @@
 
 ;; So by replacing the not and first expressions with their results I would get the following combinations of results
 
-(= true true)   ;; => true
-(= true false)  ;; => false
-(= false false) ;; => true
+(= true true)   ; => true
+(= true false)  ; => false
+(= false false) ; => true
 
 ;; These combinations give the opposite result we are looking for (false when it should be true, etc).
 ;; So we can invert the result using not or better still use the not= function
 
-(not= true true)   ;; => false
-(not= true false)  ;; => true
-(not= false false) ;; => false
+(not= true true)   ; => false
+(not= true false)  ; => true
+(not= false false) ; => false
 
 ;; 4Clojure entered solution
 ;; not=
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; #80 Perfect numbers
 
 ;; Description
@@ -567,10 +635,14 @@
 ;; Put simply, we can add the range of numbers that we know are the divisors,
 ;; then compare them with the potential perfect number.
 (= (+ 1 2 3) 6)
+
+
 ;; => true
 
 ;; This expression also works for the second test
 (= (+ 1 2 3) 7)
+
+
 ;; => false
 
 ;; So far we have just hard-coded the range of divisors, which we knew in advance.
@@ -586,27 +658,40 @@
 ;; So we can generate the whole range of numbers from 1 to 6
 (range 1 6)
 
+
 ;; or just the range from 1 to half way
 (range 1 3)
+
+
 ;; => (1 2)
 
 ;; Range is exclusive of the last number, so it stops before it gets 3.  However, if we use one number higher, then we get the right results.
 (range 1 4)
+
+
 ;; => (1 2 3)
 
 ;; We can get the half way point by dividing the perfect number by 2
 (range 1 (/ 6 2))
+
+
 ;; => (1 2)
 
 
 ;; although we have to add 1 to the result of dividing the perfect number by 2
 (range 1 (+ 1 (/ 6 2)))
+
+
 ;; => (1 2 3)
 
 (range 1 (/ 7 2))
+
+
 ;; => (1 2 3)
 
 (range 1 3.5)
+
+
 ;; => (1 2 3)
 
 ;; When reviewing the code after the dojo, I tried a decimal number with the range function and it worked just fine
@@ -615,38 +700,53 @@
     (clojure.lang.LongRange/create start end)
     (clojure.lang.Range/create start end))
 
+
 ;; The way I chose to deal with numbers that do not divide into the perfect number exactly is to use the quot function.
 ;; The quot function returns the number of times one number goes into another.  Any remainder is discarded.
 (quot 6 2)
+
+
 ;; => 3
 
 (quot 7 2)
+
+
 ;; => 3
 
 ;; combining range and quot we can get can get the range
 ;; Lets put them into an anonymous function and test it out
 
 ((fn [number] (range 1 (+ 1 (quot number 2)))) 6)
+
+
 ;; => (1 2 3)
 
 
 ((fn [number] (range 1 (+ 1 (quot number 2)))) 7)
+
+
 ;; => (1 2 3)
 
 ;; now we have the range of numbers we can add them up using reduce to iterate the + function over the sequence.
 (reduce + ((fn [number] (range 1 (+ 1 (quot number 2)))) 6))
+
+
 ;; => 6
 
 ;; add a comaparison to see if the result of adding up the divisors passes the test
 ((fn [number]
    (= number
       (reduce + ((fn [number] (range 1 (+ 1 (quot number 2)))) number)))) 6)
+
+
 ;; => true
 
 ;; Passes test as we are expecting false
 ((fn [number]
    (= number
       (reduce + ((fn [number] (range 1 (+ 1 (quot number 2)))) number)))) 7)
+
+
 ;; => false
 
 
@@ -654,22 +754,30 @@
 ((fn [number]
    (= number
       (reduce + ((fn [number] (range 1 (+ 1 (quot number 2)))) number)))) 496)
+
+
 ;; => false
 
 ;; So what is going on?  Lets take a look at what is happening inside this expression.
 
 ;; If we see the total number of all the numbers in the range we see that number is far higher than the perfect number.
 (reduce + ((fn [number] (range 1 (+ 1 (quot number 2)))) 496))
+
+
 ;; => 30876
 
 ;; Looking at the range of numbers we see that some of these numbers are not divisors
 ((fn [number] (range 1 (+ 1 (quot number 2)))) 496)
+
+
 ;; => (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 ...)
 
 
 ;; If we filter out only those number that divide into our perfect number with a remainder of zero, then we will have a range of just divisors for the perfect number
 (filter #(= 0 (rem 496 %))
         ((fn [number] (range 1 (+ 1 (quot number 2)))) 496))
+
+
 ;; => (1 2 4 8 16 31 62 124 248)
 
 ;; Adding this filter to our expression should now pass the test for any number
@@ -685,12 +793,16 @@
 
 ;; For example
 (/ 496 37)
+
+
 ;; => 496/37
 
 ;; So we could use a filter that checks if the result is a ratio
 
 (filter #(ratio? (/ 496 %))
         ((fn [number] (range 1 (+ 1 (quot number 2)))) 496))
+
+
 ;; => (3 5 6 7 9 10 11 12 13 14 15 17 18 19 20 21 22 23 24 25 26 27 28 29 30 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 ...)
 
 ;; filter generates all the numbers from the range that are ratio? types, so we want the inverse of this.
@@ -698,12 +810,16 @@
 
 (filter #(not (ratio? (/ 496 %)))
         ((fn [number] (range 1 (+ 1 (quot number 2)))) 496))
+
+
 ;; => (1 2 4 8 16 31 62 124 248)
 
 
 ;; Or we can use the a function that does the inverse of filter, a function called remove
 (remove #(ratio? (/ 496 %))
         ((fn [number] (range 1 (+ 1 (quot number 2)))) 496))
+
+
 ;; => (1 2 4 8 16 31 62 124 248)
 
 

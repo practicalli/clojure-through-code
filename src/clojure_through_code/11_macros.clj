@@ -1,5 +1,6 @@
 (ns clojure-through-code.11-macros)
 
+
 ;; The language of Clojure is built on a small number special forms
 
 ;; if let loop recur do set! quote var
@@ -9,28 +10,32 @@
 
 ;; Everything else can be built with macros, data structures & functions
 
-;;;;;;;;;;;;;;;;;;;
+;;
 ;; Example: defn
 ;; defn is a macro to make it easier to create functions as well as keeping
 ;; the clojure code nice and clean
 
 ;; So lets define a function taking one argumentand a simple body:
 
-(defn my-function [args]
+(defn my-function
+  [args]
   (str args " " "is a macro"))
+
 
 ;; To write this out without defn, we would use def function
 (def my-function (fn [args] (str args " " "is a macro")))
 
 (my-function "defn")
 
+
 ;; We can check that we understand what the macro expands to
 ;; by using the function macroexpand.
 ;; The expression we want to expand needs to be quoted so its not evaluated
 
 (macroexpand
- '(defn my-function [args]
-    (str args " " "is a macro")))
+  '(defn my-function
+     [args]
+     (str args " " "is a macro")))
 
 
 ;; Is def a macro ?
@@ -57,7 +62,7 @@
 ;;     :dependencies [[org.clojure/clojure "1.7.0"]]))
 
 
-;;;;;;;;;;;;;;;;;;;
+;;
 ;; Example: or
 ;; Lets see how or is actually created
 
@@ -81,12 +86,15 @@
 
 (macroexpand '(or x y))
 
+
 ;; You can make the output formatted, however using pprint will send the output
 ;; to the console if you are in LightTable or another IDE.
 (clojure.pprint/pprint (macroexpand '(or x y)))
 
+
 (macroexpand '(let [local-param x]
-  (if local-param local-param y)))
+                (if local-param local-param y)))
+
 
 ;; Many common functions are actually macros, built using the core primatives
 ;; of clojure (if def let ...)
@@ -95,13 +103,15 @@
 ;; these core primatives of Clojure.  Can you work out which one ?
 
 (macroexpand
- '(cond
-    (< n 0) "negative"
-    (> n 0) "positive"
-    :else "zero"))
+  '(cond
+     (< n 0) "negative"
+     (> n 0) "positive"
+     :else "zero"))
+
 
 ;; Time is an example of a more complex macro
 (macroexpand '(time (print "timing")))
+
 
 ;; [TODO] not sure what this expression does
 (time (print "timing"))

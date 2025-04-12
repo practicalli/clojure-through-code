@@ -1,18 +1,28 @@
 (ns xx-swing-example
-  (:import [javax.swing JFrame JLabel JButton]
-           [java.awt.event WindowListener]))
+  (:import
+    (java.awt.event
+      WindowListener)
+    (javax.swing
+      JButton
+      JFrame
+      JLabel)))
 
-(defn swing []
+
+(defn swing
+  []
   (let [frame (JFrame. "Fund manager")
         label (JLabel. "Exit on close")]
     (doto frame
       (.add label)
       (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
       (.addWindowListener
-       (proxy [WindowListener] []
-         (windowClosing [evt]
-           (println "Whoop"))))
+        (proxy [WindowListener] []
+          (windowClosing
+            [evt]
+            (println "Whoop"))))
       (.setVisible true))))
 
-(defn -main [& args]
+
+(defn -main
+  [& args]
   (swing))

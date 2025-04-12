@@ -1,6 +1,7 @@
 (ns clojure-through-code.10-changing-state)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
 ;; Changing state in Clojure
 
 ;; The most common way to manage changing state in Clojure is the atom.
@@ -14,7 +15,7 @@
 ;; However, the value or collection itself is immutable, so does not change. Its the atom that shows you a different value.
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Using fictional characters to show atoms in action
 ;; (work in progress)
 
@@ -22,16 +23,18 @@
 
 (def mutant-characters (atom []))
 
-(defn add-mutant [mutant]
+
+(defn add-mutant
+  [mutant]
   (swap! mutant-characters conj mutant))
+
 
 (add-mutant "Black Widow")
 (add-mutant "Hulk")
 (add-mutant "Ariel")
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Gambling Game example of state
 
 
@@ -54,10 +57,12 @@
 
 (def players (atom []))
 
+
 ;; We also add a :validator as a condition to ensure we dont put more than
 ;; 2 players into the game
 
 (def players (atom [] :validator #(<= (count %) 2)))
+
 
 ;; the second definition of players point the var name to something new
 ;; we havent changed what players was, it just points to something diferent
@@ -72,18 +77,22 @@
 (reset! players ["Player One"])
 (reset! players [])
 
+
 ;; Add players by name
-(defn join-game [name]
+(defn join-game
+  [name]
   (swap! players conj name))
+
 
 (join-game "Rachel")
 (join-game "Harriet")
-(join-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
+(join-game "Terry")         ; cant add a third name due to the :validator condition on the atom
 ;; (join-game "Sally" "Sam") ;; too many parameters
 
 @players
 
-;;(defn reset-game
+
+;; (defn reset-game
 ;; (reset! players [nil]))
 ;; reset! should be a vector
 
@@ -91,7 +100,7 @@
 
 
 ;; Atom and assoc with multiple keyword updates
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 
 (def accounts
@@ -100,6 +109,7 @@
    :sammy  100
    :dealer 100000})
 
+
 (update accounts
         :betty (dec 50)
         :jenny (dec 75)
@@ -107,7 +117,7 @@
 
 
 ;; Clojure ref types
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 
 (def dick-account (ref 500))
@@ -116,19 +126,26 @@
 
 @betty-account
 
-(defn credit-table [player-account]
-  (dosync
-   (alter player-account - 100)
-   (alter game-account + 100)))
 
-(defn add-to-table [name]
+(defn credit-table
+  [player-account]
+  (dosync
+    (alter player-account - 100)
+    (alter game-account + 100)))
+
+
+(defn add-to-table
+  [name]
   (swap! players conj name))
 
-(defn join-game [name account]
-;;  (if (< account 100 )
-;;    (println "You're broke")
+
+(defn join-game
+  [name account]
+  ;;  (if (< account 100 )
+  ;;    (println "You're broke")
   (credit-table account)
   (add-to-table name))
+
 
 (join-game "Betty" betty-account)
 
@@ -137,7 +154,7 @@
 
 
 
-;;;;;;;;;;;;;;;;
+;;
 ;; Using ref to manage multiple state changes
 
 
@@ -146,8 +163,11 @@
 
 @betty-account
 
-(def game-world (atom {:players [{:id 0 :name "harriet" :account 100}]
-                       :game-account 0}))
+
+(def game-world
+  (atom {:players [{:id 0 :name "harriet" :account 100}]
+         :game-account 0}))
+
 
 #_(swap! update-in game-world
        :game-account add-player
@@ -159,11 +179,14 @@
 (def game-account (ref 1000))
 (def harriet-account (ref 0))
 
-(defn join-game-safely [name player-account game-account]
+
+(defn join-game-safely
+  [name player-account game-account]
   (dosync
-   (alter players-ref conj name)
-   (alter player-account + 100)
-   (alter game-account - 100)))
+    (alter players-ref conj name)
+    (alter player-account + 100)
+    (alter game-account - 100)))
+
 
 (join-game-safely "Harriet" harriet-account game-account)
 
@@ -173,9 +196,11 @@
 
 @players-ref
 
+
 ;; (alter game-account 1000)
 
 (join-game-safely "Tom" toms-account game-account)
+
 
 ;; Refs are for Coordinated Synchronous access to "Many Identities".
 ;; Atoms are for Uncoordinated synchronous access to a single Identity.
@@ -200,8 +225,8 @@
 
 
 ;; Agents
-                                        ;(def flashes (agent {:green 0 :red 0 :blue 0}))
-                                        ;(send flashes update-in [:red] inc)
+;; (def flashes (agent {:green 0 :red 0 :blue 0}))
+;; (send flashes update-in [:red] inc)
 
 ;; Create an agent called cashier (that has not state)
 ;; (send-off cashier str "Debit X with £" stake)
@@ -209,7 +234,7 @@
 ;; (io! (str "Debit John with £" stake))
 
 
-;;;;;;;;;;;;;
+;;
 ;; Futures
 ;; Can you do this in another thread
 ;; wrapper over the java futures

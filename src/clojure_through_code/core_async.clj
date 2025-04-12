@@ -1,17 +1,20 @@
 ;; Include core.async in the project definition and the namespace it will be used in
 
 (ns clojure-through-code.core-async
-  (:require [clojure.core.async
-             :refer
-             [<! <!! >! >!! alts!! chan go put! take! timeout]]))
+  (:require
+    [clojure.core.async
+     :refer
+     [<! <!! >! >!! alts!! chan go put! take! timeout]]))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
 ;; Manually putting and taking messages from a channel
 
 ;; Define a name for a channel
 ;; If you do not specify the size of the channel it defaults to 1024 messages
 
 (def manual-channel (chan))
+
 
 ;; use the take! function to listen to the channel.
 ;; the arguments include the channel name
@@ -24,6 +27,7 @@
 
 (put! manual-channel 42)
 
+
 ;; => Got a value: 42
 
 ;; Putting additional values on to the channel will queue up values on that channel
@@ -31,6 +35,7 @@
 (put! manual-channel 42 #(println "Putting number on the channel:" %))
 
 (put! manual-channel 43 #(println "Putting number on the channel:" %))
+
 
 ;; The put! operations return true as a signal that the put operation could be performed, even though the value hasn’t yet been taken.
 
@@ -45,14 +50,18 @@
 ;; Channels can be closed, which will cause the put operations to not succeed
 
 (close! manual-channel)
+
+
 ;; => nil
 
 (put! manual-channel 42)
+
+
 ;; => false
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Using Transducers with channels
 
 ;; Create a channel with a simple transducer.
@@ -79,16 +88,19 @@
 
 (def channel-odd? (chan 4 (map odd?)))
 
+
 (do
   (put! channel-odd? 1)
   (put! channel-odd? 2)
   (put! channel-odd? 3)
   (put! channel-odd? 4))
 
+
 (take! channel-odd? #(println % "taken from the channel"))
 
 
 (def channel-filtered-values (chan 4 (filter odd?)))
+
 
 (do
   (put! channel-filtered-values 1)
@@ -96,17 +108,20 @@
   (put! channel-filtered-values 3)
   (put! channel-filtered-values 4))
 
+
 (take! channel-filtered-values #(println % "filtered results from channel"))
+
 
 ;; if we could see whats in the channel we would know when the transducer works...
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Processes and Go blocks
 
 ;; Create a channel as before
 
 (def channel-for-processes (chan))
+
 
 ;; asynchronous puts and takes from the channel are done in within a go expression
 
@@ -127,6 +142,7 @@
   (println [:process-a] "Trying to take from the channel")
   (println [:process-a] "Taken value:" (<! channel-for-processes)))
 
+
 ;; using Thread/sleep to stop println output getting mixed up
 
 (go
@@ -144,41 +160,42 @@
 ;; [:process-b] Put on channel value 42
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Adding a timeout to the channel
 
 ;; First define a function to get the current time
 (defn current-time
   []
   (.format
-   (java.text.SimpleDateFormat. "yyyy-MM-dd'T'hh:mm:ss")
-   (new java.util.Date)))
+    (java.text.SimpleDateFormat. "yyyy-MM-dd'T'hh:mm:ss")
+    (new java.util.Date)))
 
 
 ;; Could use Java 8 java.time if I could get the formatting working
 #_(java.time.LocalDateTime/now)
+
+
 ;; => #object[java.time.LocalDateTime 0x79c6028e "2018-04-02T18:04:42.398"]
 #_(java.time.format.DateTimeFormatter "ISO_INSTANT" (java.time.LocalDateTime/now))
+
 
 ;; Print the current time
 ;; take from a channel the call to core.async/timeout
 ;; wrap it all in a time expression to see how long it all took
 (time
- (go
-   (println [:process-a] "In the go block at:" (current-time))
-   (<! (timeout 1000))
-   (println [:process-a] "I slept one second, bye!" (current-time))))
+  (go
+    (println [:process-a] "In the go block at:" (current-time))
+    (<! (timeout 1000))
+    (println [:process-a] "I slept one second, bye!" (current-time))))
 
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Pushing multiple messages on to a process
 
 ;; First you need to define a channel that will be used to manage the messages between processes (threads).
 
 (def channel-stream (chan))
+
 
 ;; We can create a simple message generator with dotimes that prints out 6 numbers
 ;; We will use this later to push messages on to the core.async channel
@@ -201,14 +218,16 @@
     (>! channel-stream message)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Blocking channel in listening mode
 
 (def channel-buffered (chan 1))
 
+
 (go
   (dotimes [message 24]
     (>!! channel-buffered message)))
+
 
 (go
   (while true
@@ -216,10 +235,7 @@
     (println (str (<!! channel-buffered) " Mississippi"))))
 
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Go blocks are lightweight processes, not bound to threads
 
 ;; Create 1000 go blocks, each with a channel

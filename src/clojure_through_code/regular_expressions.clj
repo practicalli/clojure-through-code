@@ -1,5 +1,6 @@
 (ns clojure-through-code.regular-expressions)
 
+
 ;;  Reference: https://gist.github.com/clojens/7932406
 
 (def ptrn
@@ -49,16 +50,19 @@
                  "ABBA was a mid 70's band"       ; nil
                  "Berenbotje kon niet varen"]}      ; nil
 
-;;
+   ;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   ;;
    :X {:pattern #""
        :purpose ""
        :samples [""      ; ?
                  ""      ; ?
                  ""]}})      ; ?
 
-(defn step [k] (map #(re-matches (get-in ptrn [k :pattern]) %) (get-in ptrn [k :samples])))
+(defn step
+  [k]
+  (map #(re-matches (get-in ptrn [k :pattern]) %) (get-in ptrn [k :samples])))
+
 
 ;; Java built-in regex support in string objects
 
@@ -68,8 +72,9 @@
 
 (step :h)
 
+
 ;; Filtering strings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; Starting with the  following
 
@@ -77,9 +82,11 @@
 
 (def vowels #{\a \e \i \o \u \A \E \I \O \U})
 
+
 (defn disemvowel
   [string]
   (apply str (filter (complement vowels) (seq string))))
+
 
 ;; Refactor
 
@@ -87,12 +94,15 @@
   (let [vowels "aeiou"]
     (into (set vowels) (clojure.string/upper-case vowels))))
 
+
 (defn disemvowel
   [string]
   (clojure.string/join (remove vowels string)))
 
+
 (disemvowel "Hello, World!")
 "Hll, Wrld!"
+
 
 ;; Regular expressions and case insensitivity
 ;; Use the regex case-insensitivity flag with clojure.string/replace function

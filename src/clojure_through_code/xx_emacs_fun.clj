@@ -1,5 +1,7 @@
 (ns clojure-through-code.xx-emacs-fun
-  (:require [clojure.string :as clj-string]))
+  (:require
+    [clojure.string :as clj-string]))
+
 
 ;; yasnippets
 
@@ -29,4 +31,4 @@
   ;; Reload the current namespace and print loaded namespaces in REPL buffer
   (require '[clojure-through-code.xx-emacs-fun] :reload :verbose)
 
-  #_()) ;; End of rich comment
+  #_()) ; End of rich comment

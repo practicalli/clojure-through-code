@@ -11,10 +11,12 @@
 
 (def book (slurp "./hhgttg.txt"))
 
+
 (def common-english-words
   (-> (slurp "common-english-words.txt")
       (clojure.string/split #",")
       set))
+
 
 ;; The same as above but in normal lisp style
 ;; (set
@@ -31,6 +33,16 @@
      frequencies
      (sort-by val)
      reverse)
+
+
+(def popularity
+  (->> book
+       (re-seq #"[\w |'-]+" ,,,)
+       (map #(clojure.string/lower-case %))
+       (remove common-english-words)
+       frequencies
+       (sort-by val)
+       reverse))
 
 
 ;; The same as above but in normal lisp style
@@ -60,7 +72,7 @@
 ;; TODO: Create a transducers version of the above code
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; On-line sources of book and common English words
 
 ;; (def book (slurp "http://clearwhitelight.org/hitch/hhgttg.txt"))
@@ -72,14 +84,20 @@
 
 
 (re-seq #"\w+" "Morning-room in Algernon's flat in Half-Moon Street.")
+
+
 ;; => ("Morning" "room" "in" "Algernon" "s" "flat" "in" "Half" "Moon" "Street")
 
 
 (re-seq #"[a-zA-Z0-9]+" "Morning-room in Algernon's flat in Half-Moon Street.")
+
+
 ;; => ("Morning" "room" "in" "Algernon" "s" "flat" "in" "Half" "Moon" "Street")
 
-(re-seq #"[a-zA-Z0-9|'-]+" "Morning-room in Algernon's flat in Half-Moon Street.");; => ("Morning-room" "in" "Algernon's" "flat" "in" "Half-Moon" "Street")
+(re-seq #"[a-zA-Z0-9|'-]+" "Morning-room in Algernon's flat in Half-Moon Street."); => ("Morning-room" "in" "Algernon's" "flat" "in" "Half-Moon" "Street")
 
 
 (re-seq #"[\w |'-]+" "Morning-room in Algernon's flat in Half-Moon Street.")
+
+
 ;; => ("Morning-room in Algernon's flat in Half-Moon Street")

@@ -1,14 +1,19 @@
 (ns clojure-through-code.09-calling-java
-  (:import java.util.Date))
-;;;;;;;;;;;;;;;;;;;;;;;
+  (:import
+    java.util.Date))
+
+
+;;
 ;; From java.lang
 
 (.toUpperCase "fred")
 
 (.getName String)
 
+
 ;; (java.util.Date)
 (Date.)
+
 
 ;; From java.lang.System getProperty() as documented at:
 ;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
@@ -35,14 +40,17 @@ Math/PI
 (let [d (java.util.Date.)]
   (. d getTime))
 
+
 ;; or more commonly use object instance
 
 (let [d (java.util.Date.)]
   (.getTime d))
 
+
 ;; Mixing Clojure and Java together in code
 
 (map (memfn toUpperCase) ["a" "short" "message"])
+
 
 ;; The map function applies the function/method toUpperCase to each element in ["a" "short" "message"]
 
@@ -68,4 +76,3 @@ Math/PI
 ;; however if you wrap the call to Math/sqrt in a function, in this case an anonymous function, then it will become a first calss function that can be mapped over a collection.
 
 (map #(Math/sqrt %) (range 1 10))
-

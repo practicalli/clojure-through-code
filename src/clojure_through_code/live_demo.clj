@@ -1,13 +1,13 @@
 ;; Get Functional with Clojure
 
-;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; What is Clojure
 
 ;; A general purpose programming language
 ;; - a modern LISP
 ;; - hosted on the Java Virtual Machine (JVM), Microsoft CLR, JavaScript Engines (V8, Node)
 
-;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Why Clojure
 
 ;; Functional
@@ -40,13 +40,14 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Namespaces
 
 ;; Define the scope of your functions and data structures, similar in concept to java packages
 ;; Namespaces encourage a modular / component approach to Clojure
 
 (ns clojure-through-code.live-demo)
+
 
 ;; This namespace matches the directory structure of the project
 
@@ -56,7 +57,7 @@
 ;;     - live_demo.clj
 
 
-;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Clojure Syntax
 
 ;; Clojure uses a prefix notation and () [] : {} # @ ! special characters
@@ -67,18 +68,23 @@
 
 my-data
 
+
 ;; See the types used in the hosted language 
 (type [1 2 3])
 
 (def conference-name "CodeMotion: Tel Aviv")
 (type conference-name)
 
+
 ;; bind a name to a function (behaviour)
-(defn do-stuff [data]
+(defn do-stuff
+  [data]
   (str data))
 
- 
-;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;
 ;; Evaluating Clojure
 
 ;; Values evaluate to themselves
@@ -88,21 +94,26 @@ my-data
 [1 2 3 4 "Vector"]
 {:key "value"}
 
+
 ;; Names can be bound to data or functions and when you evaluate the name it returns a value
 
 ;; Names built into the Clojure language
 ;; The full clojure version, major, minor & point version of Clojure
 *clojure-version*
 
+
 ;; Calling simple functions
 
 (+ 1 2 3 4 5)
 
+
 ;; precidence is explicit - no uncertanty
 (+ 1 2 (- 4 -2) (* (/ 36 3) 4) 5)
 
+
 ;; calling a function we defined previously
 (do-stuff my-data)
+
 
 ;; The first element of a list is evaluated as a function call.
 
@@ -110,7 +121,7 @@ my-data
 ;; Effectively you are writing your Clojure coe as an Abstract Syntax Tree (AST), so your code represents the structure.
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Using Java Interoperability
 
 ;; java.lang is part of the Clojure runtime environment, so when ever you run a Clojure REPL you can call any Java methods
@@ -118,6 +129,7 @@ my-data
 
 ;; Using java.lang.String methods
 (.toUpperCase "fred")
+
 
 ;; From java.lang.System getProperty() as documented at:
 ;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
@@ -127,13 +139,16 @@ my-data
 
 (System/getProperty "java.vm.name")
 
+
 ;; Make the result prettier using the Clojure str function
 (str "Current Java version: " (System/getProperty "java.version"))
+
 
 ;; Functions can be used as arguments to function calls
 (slurp "project.clj")
 (read-string (slurp "project.clj"))
 (nth (read-string (slurp "project.clj")) 2)
+
 
 ;; The above code is classic Lisp, you read it from the inside out, so in this case you
 ;; start with (slurp ...) and what it returns is used as the argument to read-string...
@@ -144,19 +159,21 @@ my-data
 
 ;; You can format the code differently, but in this case its not much easier to read
 (nth
- (read-string
-  (slurp "project.clj"))
- 2)
+  (read-string
+    (slurp "project.clj"))
+  2)
+
 
 ;; Macros
 ;; the same behaviour as above can be written using the threading macro
 ;; which can make code easier to read by reading sequentially down the list of functions.
 
 (->
- "./project.clj"
- slurp
- read-string
- (nth 2))
+  "./project.clj"
+  slurp
+  read-string
+  (nth 2))
+
 
 ;; using the macroexpand function you can see what code is actually created
 
@@ -165,10 +182,11 @@ my-data
 ;; to the next function
 
 (->
- "./project.clj"
- slurp ,,,
- read-string ,,,
- (nth ,,, 2))
+  "./project.clj"
+  slurp ,,,
+  read-string ,,,
+  (nth ,,, 2))
+
 
 ;; Remember, commas in clojure are ignored
 
@@ -177,18 +195,20 @@ my-data
 ;; joins its own strings together, then passes them as a single string as the first argument to the next function
 
 (->
- (str "This" " " "is" " ")
- (str "the" " " "treading" " " "macro")
- (str " in" " " "action."))
+  (str "This" " " "is" " ")
+  (str "the" " " "treading" " " "macro")
+  (str " in" " " "action."))
+
 
 ;; Using the ->> threading macro, the result of a function is passed as the last parameter
 ;; of the next function call.  So in another simple series of str function calls,
 ;; our text comes out backwards.
 
 (->>
- (str " This")
- (str " is")
- (str " backwards"))
+  (str " This")
+  (str " is")
+  (str " backwards"))
+
 
 ;; add all project information to a map
 (->> "project.clj"
@@ -199,18 +219,21 @@ my-data
      (apply hash-map)
      (def project))
 
+
 ;; project
-;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Working with strings & side-effects
 
 ;; You could use the Java-like function `println` to output strings.
 
 (str "Hello, whats different with me?  What value do I return")
 
+
 ;; However, something different happens when you evaluate this expression.  This is refered to as a side-effect because when you call this function it returns nil.  The actual text is output to the REPL or console.
 
 ;; In Clojure, you are more likely to use the `str` function when working with strings.
 (str "Hello, I am returned as a value of this expression")
+
 
 ;; join strings together with the function str
 (str "Hello" ", " "HackTheTower UK")
@@ -218,16 +241,16 @@ my-data
 
 ;; using println shows the results in console window, as its a side affect
 ;; using srt you see the results of the evaluation inline with the code,
-;  as the result of a definition or an expression.
+;;  as the result of a definition or an expression.
 
 ;; Avoid code that creates side-effects where possible to keep your software less complex.
 ;; using the fast feedback of the REPL usually works beter than println statements in debuging
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Simple math to show you the basic structure of Clojure
 
-; Math is straightforward
+;; Math is straightforward
 (+ 1 1 2489 459 2.)
 (- 2 1)
 (* 1 2)
@@ -237,6 +260,7 @@ my-data
 (/ 5 20)
 (/ 38 4)
 (/ (* 22/7 3) 3)
+
 
 ;; Ratios delay the need to drop into decimal numbers.  Once you create a decimal number then everything it touches had a greater potential to becoming a decimal.
 
@@ -253,6 +277,7 @@ my-data
 (+ 1 2 3)
 (< 1 2 3)
 (< 1 3 8 4)
+
 
 ;; Clojure functions typically support a variable number of arguments (Variadic functions).
 
@@ -273,15 +298,16 @@ my-data
 
 (repeat 4 9)
 
+
 ;; Data oriented
 ;; Clojure & FP typically have many functions to manipulate data
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Equality & Identity
 ;; Clojure values make these things relatively trivial
 
-; Equality is =
+;; Equality is =
 
 (= 1 1)
 (= 2 1)
@@ -294,6 +320,7 @@ my-data
 (identical? :foo :bar)
 (identical? :foo :foo)
 
+
 ;; Equality is very useful when your data structures are immutable
 
 ;; Keywords exist as identifiers and for very fast comparisons
@@ -301,26 +328,29 @@ my-data
 (def my-map {:foo "a"})
 
 my-map
-(def my-map [ 1 2 3 4 ])
+(def my-map [1 2 3 4])
 (= "a" (:foo my-map))
 
 
-; Use the not function for logic
+;; Use the not function for logic
 
 (not true)
+
 
 (if nil
   (str "Return if true")
   (str "Return if false"))
 
-(defn is-small? [number]
+
+(defn is-small?
+  [number]
   (if (< number 100) "yes" "no"))
+
 
 (is-small? 50)
 
 
-
-;;;;;;;;;;;;;;;;;
+;;
 ;; Persistent Data Structures
 
 ;; Lists
@@ -330,12 +360,13 @@ my-map
 (list "cat" "dog" "rabit" "fish" 12 22/7)
 (list :cat :dog :rabit :fish)
 
+
 ;; you can mix types because Clojure is dynamic and it will work it out later,
 ;; you can even have functions as elements, because functions always return a value
 (list :cat 1 "fish" 22/7 (str "fish" "n" "chips"))
 
 
-;;;(1 2 3 4)
+;; (1 2 3 4)
 
 ;; This list causes an error when evaluated
 
@@ -370,23 +401,28 @@ my-map
 
 (:live-the-universe-and-everything 42)
 
+
 (def starwars-characters
-   {:luke   {:fullname "Luke Skywarker" :skill "Targeting Swamp Rats"}
-    :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
-    :jarjar {:fullname "JarJar Binks"   :skill "Upsetting a generation of fans"}})
+  {:luke   {:fullname "Luke Skywarker" :skill "Targeting Swamp Rats"}
+   :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
+   :jarjar {:fullname "JarJar Binks"   :skill "Upsetting a generation of fans"}})
+
 
 ;; Now we can refer to the characters using keywords
 
 ;; Using the get function we return all the informatoin about Luke
 (get starwars-characters :luke)
 
+
 ;; By wrapping the get function around our first, we can get a specific
 ;; piece of information about Luke
 (get (get starwars-characters :luke) :fullname)
 
+
 ;; There is also the get-in function that makes the syntax a little easier to read
 (get-in starwars-characters [:luke :fullname])
 (get-in starwars-characters [:vader :fullname])
+
 
 ;; Or you can get really Clojurey by just talking to the map directly
 (starwars-characters :luke)
@@ -403,15 +439,15 @@ my-map
 (-> starwars-characters
     :luke)
 
+
 (-> starwars-characters
     :luke
     :fullname)
 
+
 (-> starwars-characters
     :luke
     :skill)
-
-
 
 
 ;; Combination of data structures
@@ -432,29 +468,24 @@ my-map
                      "Im just making these up now"]}}}
 
 
-
-
 ;; Sets
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Types in Clojure
 
 ;; There are types underneath Clojure, however Clojure manages them for your
 ;; You can take a peek at them if you want...
 
 
-; Vectors and Lists are java classes too!
+;; Vectors and Lists are java classes too!
 (class [1 2 3])
 (class '(1 2 3))
 (class "Guess what type I am")
 
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Using Functions
 
 
@@ -468,29 +499,35 @@ my-map
 (fn [x] (* x x))
 
 
-; We can also give a name to a function using def
+;; We can also give a name to a function using def
 
 (def i-have-a-name (fn [] "I am not a number, I am a named function - actually we call the name a symbol and it can be used as a reference to the function."))
 
 (i-have-a-name)
 
-; You can shorten this process by using defn
-(defn i-have-a-name [] "Oh, I am a new function definition, but have the same name (symbol).")
+
+;; You can shorten this process by using defn
+(defn i-have-a-name
+  []
+  "Oh, I am a new function definition, but have the same name (symbol).")
+
 
 (i-have-a-name)
 
-; The [] is the list of arguments for the function.
 
-(defn hello [name]
+;; The [] is the list of arguments for the function.
+
+(defn hello
+  [name]
   (str "Hello there " name))
+
 
 (hello "Steve") ; => "Hello Steve"
 
-; You can also use the annonymous function shorthand, # (), to create functions, (not that useful in this simple example).  The %1 placeholder takes the first argument to the function.  You can use %1, %2 and %3
+;; You can also use the annonymous function shorthand, # (), to create functions, (not that useful in this simple example).  The %1 placeholder takes the first argument to the function.  You can use %1, %2 and %3
 
 (def hello2 #(str "Hello " %1 ", are you awake yet?"))
 (hello2 "Mike")
-
 
 
 ;; A function definition that calls different behaviour based on the number of
@@ -500,11 +537,14 @@ my-map
   ([] (greet "you"))
   ([name] (print "Hello" name)))
 
+
 (greet)
+
 
 ;; When greet is called with no arguments, then the first line of the functions behaviour is called.  If you look closely, you see this is not adding duplicate code to our function as
 
 (greet "World")
+
 
 ;; Refactor greet function
 
@@ -516,20 +556,22 @@ my-map
 
 ;; Variadic functions
 
-(defn greet [name & rest]
+(defn greet
+  [name & rest]
   (str "Hello " name " " rest))
 
+
 (greet "John" "Paul" "George" "Ringo")
+
+
 ;; => Hello John (Paul George Ring)
 
 
 ;; unpack the additional arguments from the list
 
-(defn greet [name & rest]
+(defn greet
+  [name & rest]
   (apply print "Hello" name rest))
-
-
-
 
 
 ;; Using functions as parameters
@@ -545,13 +587,14 @@ my-map
 
 (require '[clojure.core.match :refer [match]])
 
+
 (defn fizzbuzz
   [number]
   (match [(mod number 3) (mod number 5)]
-         [0 0] :fizzbuzz
-         [0 _] :fizz
-         [_ 0] :buzz
-         :else number))
+    [0 0] :fizzbuzz
+    [0 _] :fizz
+    [_ 0] :buzz
+    :else number))
 
 
 ;; This is an example of a simple pattern matching problem.
@@ -580,6 +623,7 @@ my-map
 (fizzbuzz 4)
 (fizzbuzz 15)
 
+
 ;; If we want to convert a sequence of numbers, then we can call fizzbuzz over a collection (eg, a vector) of numbers
 ;; using the map function
 
@@ -589,28 +633,30 @@ my-map
 ;; We can make a function called play-fizzbuzz to make it easy to use
 ;; The function takes the highest number in the range and generates all the numbers from 0 to that number.
 ;; Finally, we convert the results into strings
-(defn play-fizbuzz [max-number]
+(defn play-fizbuzz
+  [max-number]
   (->> (range max-number)
        (map fizzbuzz)
        (map str)))
+
 
 ;; Now, lets call our play-fizzbuzz function with the highest number in the range of numbers we want to play fizzbuzz on.
 (play-fizbuzz 30)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Java Interoperability
 
 (def hello-message
   (str "Hello " conference-name))
+
 
 ;; Create a simple Swing dialog box
 
 (javax.swing.JOptionPane/showMessageDialog nil hello-message)
 
 
-;;;;;;;;;;;;;
+;;
 ;; Working with mutable state
 
 
@@ -621,9 +667,11 @@ my-map
 
 (def players (atom []))
 
+
 ;; Or we may want to limit the number of players
 
 (def players (atom [] :validator #(<= (count %) 4)))
+
 
 ;; the second definition of players point the var name to something new
 ;; we havent changed what players was, it just points to something diferent
@@ -631,6 +679,7 @@ my-map
 
 ;; Add players
 (swap! players conj "Player One")
+
 
 ;; View players
 (deref players)
@@ -642,19 +691,23 @@ my-map
 
 (reset! players [])
 
+
 ;; Add players by name
-(defn joining-game [name]
+(defn joining-game
+  [name]
   (swap! players conj name))
+
 
 (joining-game "Rachel")
 (joining-game "Harriet")
 (joining-game "Idan")
 (joining-game "Joe")
+
+
 ;; (joining-game "Terry")         ;; cant add a third name due to the :validator condition on the atom
 ;; (joining-game "Sally" "Sam") ;; too many parameters
 
 @players
-
 
 
 (def game-account (ref 1000))
@@ -665,46 +718,52 @@ my-map
 
 @betty-account
 
-(defn credit-table [player-account]
-  (dosync
-   (alter player-account - 100)
-   (alter game-account + 100)))
 
-(defn add-to-table [name]
+(defn credit-table
+  [player-account]
+  (dosync
+    (alter player-account - 100)
+    (alter game-account + 100)))
+
+
+(defn add-to-table
+  [name]
   (swap! players conj name))
 
-(defn join-game [name account]
+
+(defn join-game
+  [name account]
   ;;  (if (< account 100 )
   ;;    (println "You're broke")
   (credit-table account)
   (add-to-table name))
 
+
 (join-game "Betty" betty-account)
-
-
-
-
 
 
 ;; Using a ref
 
 (def all-the-cats (ref 3))
 
-(defn updated-cat-count [fn-key reference old-value new-value]
+
+(defn updated-cat-count
+  [fn-key reference old-value new-value]
   ;; Takes a function key, reference, old value and new value
   (println (str "Number of cats was " old-value))
   (println (str "Number of cats is now " new-value)))
 
+
 ;; Watch for changes in the all-the-cats ref
 (add-watch all-the-cats :cat-count-watcher updated-cat-count)
+
 
 ;; evaluate the following code to increment the cats
 ;; view the results in the repl output (to see the println output)
 (dosync (alter all-the-cats inc))
 
 
-
-;;;;;;;;;;;;;
+;;
 ;; Resources
 
 ;; clojure.org
@@ -719,10 +778,14 @@ my-map
 ;; map will return a result as a list
 ;; mapv will return a result as a vector
 
-(defn degrees->radians [point]
+(defn degrees->radians
+  [point]
   (map #(Math/toRadians %) point))
 
-(defn degrees->radians [point]
+
+(defn degrees->radians
+  [point]
   (mapv #(Math/toRadians %) point))
+
 
 (degrees->radians [1 10])

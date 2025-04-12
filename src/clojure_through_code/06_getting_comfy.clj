@@ -1,6 +1,7 @@
 (ns clojure-through-code.06-getting-comfy)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
 ;; Getting more comfortable with Clojure
 
 ;; 4Clojure

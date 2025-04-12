@@ -9,9 +9,14 @@
   (merge {:replace false :report true :paths ["."]}
          arguments))
 
+
 (parse-cli-tool-options {:paths ["src" "test"] :report false})
+
+
 ;; => {:replace false, :report false, :paths ["src" "test"]}
 
 
 (parse-cli-tool-options {})
+
+
 ;; => {:replace false, :report true, :paths ["."]}

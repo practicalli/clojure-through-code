@@ -1,22 +1,23 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Debug clojure
 ;;
 ;; Functions and tools to help debug Clojure and understand errors
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 
 ;; Simple debug and breakpoint directives
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 
 (dotimes [index  10]
   #dbg ^{:break/when (= index  7)}
-   (prn index))
+  (prn index))
 
 
 (dotimes [i 10]
   #break (= i 7)
   (prn i))
+
 
 (dotimes [index 10]
   #break (prn index)
@@ -32,16 +33,13 @@
 ;; evaluate until the condition is met and then break
 (dotimes [index 10]
   #dbg ^{:break/when (= index  7)}
-   index)
+  index)
 
 
 ;; the break condition is met multiple times
 (dotimes [index 10]
   #dbg ^{:break/when (odd? index)}
-   index)
-
-
-
+  index)
 
 
 ;; Clojure 1.10 error messages
@@ -131,18 +129,21 @@
 
 
 
-
 ;; Can the value be printed along with the exception in some cases like below
 
 ;; Current error on 1.10
 
 (map identity (map 123 (range 10)))
+
+
 ;; Error printing return value (ClassCastException) at clojure.core/map$fn (core.clj:2753).
 ;; java.lang.Long cannot be cast to clojure.lang.IFn
 
 ;; Adding the value that cannot be cast might give better context
 
 (map identity (map 123 (range 10)))
+
+
 ;; Error printing return value (ClassCastException) at clojure.core/map$fn (core.clj:2753).
 ;; java.lang.Long (123) cannot be cast to clojure.lang.IFn
 

@@ -1,11 +1,12 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Removing evaluated vars from a running REPL
 ;;
 ;; Keep the REPL clean of stale vars due to code changes
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 
 (ns clojure-through-code.undefine)
+
 
 (comment
 
@@ -133,6 +134,7 @@
  ;;  [java.lang.Thread run "Thread.java" 833]]}
 
   #_())
+
 
 ;; ;; You are having a problem loading a redefined namespace:
 ;; user=> (load "src/clj/com/tizra/layout_expander.clj")

@@ -1,7 +1,7 @@
 (ns clojure-through-code.05-core-functions)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Clojure Core
 
 ;; There is a core set of functions included by default in any Clojure program
@@ -15,13 +15,12 @@
 
 *clojure-version*
 
+
 ;; when I checked on 7th April 2015 there were 599 functions defined in Clojure Core for version 1.6.  Checking on the 19th April 2016, there were 621 functions in Clojure Core version 1.8.
 
 
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Java
 
 ;; java.lang is included in the namespace by default
@@ -31,7 +30,7 @@
 ;; TODO java.lang commonly used functions
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Data structures behave a little like functions
 
 ;; we have already seen this
@@ -39,7 +38,7 @@
 ;; TODO examples of using data structures as functions
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Working with data structures
 
 ;; This section will become far too long, so need to refine the topic
@@ -69,10 +68,10 @@
 (map + [1 2 3])
 
 
-
 (take 8 (cycle ["foo" "bar"]))
-;; => ("foo" "bar" "foo" "bar" "foo" "bar" "foo" "bar")
 
+
+;; => ("foo" "bar" "foo" "bar" "foo" "bar" "foo" "bar")
 
 
 
@@ -86,7 +85,9 @@
 (first '())
 (first (list))
 
-(vector(map * (range 10) fibonacci-sequence))
+(vector (map * (range 10) fibonacci-sequence))
+
+
 ;; return a vector for this
 
 (lazy-seq)

@@ -1,15 +1,18 @@
 (ns clojure-through-code.composing-functions)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
 ;; map over collections with partial
 
 ;; We can map over a collection of words and increment them by writing an anonymous function.
 
 (map (fn [animal] (str animal "s")) ["pig" "cow" "goat" "cat" "dog" "rabbit"])
 
+
 ;; or using the syntactic sugar form of an anonymous function we get
 
 (map #(str % "s") ["pig" "cow" "goat" "cat" "dog" "rabbit"])
+
 
 ;; by default map returns a list/sequence. We can specify a vector be returned instead using `mapv'
 
@@ -24,6 +27,7 @@
   "Pluralise a given string value"
   [animal]
   (str animal "s"))
+
 
 ;; and give a name to our collection of animals
 
@@ -40,13 +44,16 @@
     string
     (str string "s")))
 
+
 (map pluralise animals)
+
 
 ;; but there are quite a lot of animals that do not have a plural form
 
 ;; define a collection of animals that are not plural
 
-(def non-plural-words ["deer" "sheep" "shrimp" ])
+(def non-plural-words ["deer" "sheep" "shrimp"])
+
 
 (defn pluralise
   "Pluralise a given string value"
@@ -55,9 +62,11 @@
     string
     (str string "s")))
 
+
 (def animals ["pig" "cow" "goat" "cat" "dog" "rabbit" "sheep" "shrimp" "deer"])
 
 (map pluralise animals)
+
 
 ;; to keep the function pure, we should really pass the non-plural-words as an argument
 
@@ -67,6 +76,7 @@
   (if (some #{string} non-plural-words)
     string
     (str string "s")))
+
 
 ;; using an anonymous function we can send the two arguments required to the pluralise function, as map will replace the % character with an element from the animals collection for each element in the collection.
 (map #(pluralise % non-plural-words) animals)
@@ -83,10 +93,12 @@
     string
     (str string "s")))
 
+
 ;; Now we can call pluralise by wrapping it as a partical function.  The argument that is the non-plural-words is constant, its the individual elements of animals I want to get out via map.  So when map runs it gets an element from the animals collection and adds it to the call to pluralise, along with non-plural-words
 (map (partial pluralise non-plural-words) animals)
 
-;;; Its like calling (pluralise non-plural-words ,,,) but each time including an element from animals where the ,,, is. 
+
+;; Its like calling (pluralise non-plural-words ,,,) but each time including an element from animals where the ,,, is.
 
 ;; at first I was getting incorrect output, ["deer" "sheep" "shrimp"], then I realised that it was returning the non-plural-words as string, so the arguements from the partial function were being sent in the wrong order.  So I simply changed the order in the pluralise function and it worked.
 
@@ -103,6 +115,7 @@
       (println (str string " its false"))
       (str string "s"))))
 
+
 ;; comp
 
 ;; Takes a set of functions and returns a fn that is the composition
@@ -115,14 +128,27 @@
 (filter (comp not zero?) [0 1 0 2 0 3 0 4])
 
 
+(defn f1
+  "append 1 to string x"
+  [x]
+  (str x "1"))
 
-(defn f1 "append 1 to string x" [x] (str x "1"))
-(defn f2 "append 2 to string x" [x] (str x "2"))
-(defn f3 "append 3 to string x" [x] (str x "3"))
+
+(defn f2
+  "append 2 to string x"
+  [x]
+  (str x "2"))
+
+
+(defn f3
+  "append 3 to string x"
+  [x]
+  (str x "3"))
+
 
 (f1 "a") ; "a1"
 
-(def g (comp f3 f2 f1 ))
+(def g (comp f3 f2 f1))
 
 (g "x") ; "x123"
 
@@ -131,7 +157,6 @@
 ;;    Wrong number of args (2) passed to: user/f1
 
 ;; because f1 only takes 1 arg
-
 
 
 
@@ -151,7 +176,7 @@
 (str "a" "b") ; "ab"
 
 ;; can be just 1 arg
-(str "a" ) ; "a"
+(str "a") ; "a"
 
 ;; if arg is not a string, it's converted to string
 (str "a"  ["a" "b"]) ; "a[\"a\" \"b\"]"
@@ -164,16 +189,20 @@
 
 (def my-square [10 8 20 12 4])
 
-(defn draw-square [x y width height corner]
+
+(defn draw-square
+  [x y width height corner]
   (str "X: " x " Y: " y " Width: " width " Height: " height " Corner: " corner))
 
+
 (apply draw-square my-square)
+
+
 ;; => "X: 10 Y: 8 Width: 20 Height: 12 Corner: 4"
 
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Misc
 
 ;; clojure.core/trampoline
@@ -194,10 +223,8 @@
 
 
 
-;;; Processing maps problem  ???
+;; Processing maps problem  ???
 
 ;; you have several maps which have name and id keys.  The value of the id becomes the new key and the name becomes the new value.
 
 [{:name "mike" :id 0} {:name "mike" :id 0} {:name "mike" :id 0}]
-
-

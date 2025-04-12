@@ -1,5 +1,5 @@
 ;; ClojureBridge London challenges - solved and explained
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; All the exercises from https://clojurebridgelondon.github.io/workshop
 ;; Solutions and discussions on how the exercises were solved
 ;;
@@ -8,8 +8,9 @@
 
 (ns clojure-through-code.clojurebridge-exercises)
 
+
 ;; 01 Calculate the total number of years from all the following languages
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Clojure (10 years)
 ;; Haskell (27 years)
 ;; Python (26 years)
@@ -25,11 +26,14 @@
 ;; calculate the total by adding the age of each language together
 
 (+ 10 27 26 21 22 22 34 45 59 60)
+
+
 ;; => 326
 
 ;; There are two values the same, so we could calculate the total as follows
 
 (+ 10 27 26 21 (* 22 2) 34 45 59 60)
+
 
 ;; Find the average age of languages by adding the ages of all the language ages, then divide that total age with the number of languages
 
@@ -42,9 +46,8 @@
    (count '(10 27 26  21 22 22 45 34 59 60)))
 
 
-
 ;; 02 Convert between time and numbers
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; Assuming its been 2 hours and 20 minutes since you woke up, lets calculate the time in minutes:
 
@@ -69,10 +72,10 @@
 
 
 ;; 03 Strings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; Using a function you can create a string and join values to create a string
-(str "My favorite colours are" " 23 " "green" " " "and" " ""purple")
+(str "My favorite colours are" " 23 " "green" " " "and" " " "purple")
 
 
 ;; Use a function to see if a string contains a colour.
@@ -117,10 +120,8 @@
 (= "radar" (clojure.string/reverse "radar"))
 
 
-
-
 ;; 04 Assignment (binding symbols to values)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; The = function is used to compare values
 
@@ -129,6 +130,7 @@
 (def jenny-loves "Jenny loves rubarb crumble and vanilla custard")
 
 jenny-loves
+
 
 ;; We can also use def to give a name to something we dont know yet, eg. a calculation.
 
@@ -142,17 +144,20 @@ average-fruit-amount
 ;; NOTE: Its common to use a map to define multiple values in a namespace,
 ;; rather than multiple individual def functions
 
-(def fruit-stock {:mangos   4
-                  :oranges 12})
+(def fruit-stock
+  {:mangos   4
+   :oranges 12})
+
 
 (get fruit-stock :mangos)
 
 
 ;; 05 Collections - Vectors
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; A vector of the temperatures for the next week
 [9 2 -3 4 5 9 4]
+
 
 ;; assuming the first temperature is for Monday, then to get Thursday we can write
 ;; The index of a vector starts at zero
@@ -167,6 +172,7 @@ average-fruit-amount
 (last   [9 2 -3 4 5 9 4])
 (rest   [9 2 -3 4 5 9 4])
 
+
 ;; how to we get the third value from the vector ["Birthdays are" "full of" "presents" "that you" "always dreamd" "of having"]
 
 ;; We can call one function and use its return value as an argument to another function.
@@ -174,8 +180,8 @@ average-fruit-amount
 ;; The `rest` function returns a new collection with all values but the first one.
 ;; Using the `second` function new collection, we ca second value can then be returned from the new collection
 (second
- (rest
-  ["Birthdays are" "full of" "presents" "that you" "always dreamd" "of having"]))
+  (rest
+    ["Birthdays are" "full of" "presents" "that you" "always dreamd" "of having"]))
 
 
 ;; Using Local Assignment
@@ -189,15 +195,15 @@ average-fruit-amount
   (second rest-of-strings))
 
 
-
-
 ;; Find the age of the youngest programming language
 ;; The ages are not in order, so you cant just get the first value.
 
 (first (sort [10 27 26 21 22 22 45 34 59 60]))
 
+
 ;; The min function will simplify our expression
 (min [10 27 26 21 22 22 45 34 59 60])
+
 
 ;; NOTE there are over 600 functions in clojure.core so there is often a function you are looking for to simplify you code
 
@@ -206,18 +212,20 @@ average-fruit-amount
 ;; Clojure compares values rather than types (in general)
 
 (= [1 2 3] [1 2 3])
+
+
 ;; => true
 (= [1 2 3] [4 5 6])
 (= [1 2 3] [3 2 1])
+
+
 ;; => false
 (= ["Hello" "World"] ["Hello" "World" "Wide" "Web"])
 (= '(1 2 3) [1 2 3])
 
 
-
-
 ;; 06 Collections - Maps
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; Maps are key-value pairs
 ;; Maps can be self describing if you use meaningful names for the keys
@@ -233,6 +241,7 @@ average-fruit-amount
 (dissoc {:first "Sally" :last "Brown"} :last)
 
 (get sally :lastname)
+
 
 ;; merge - join two maps together
 ;; assoc - add a key-value to a map
@@ -254,7 +263,6 @@ average-fruit-amount
 (assoc hello :words "Hello Clojure World")
 
 
-
 ;; The update function applies a function to the existing value to create a new value for a specific key
 
 (def hello-update {:count 1 :words "hello"})
@@ -271,8 +279,8 @@ average-fruit-amount
   {:pet
    {:age 5 :name "Khan"}})
 
-(update-in startrek-cat [:pet :age] + 1)
 
+(update-in startrek-cat [:pet :age] + 1)
 
 
 ;; Map extraction with get
@@ -285,6 +293,7 @@ average-fruit-amount
 
 (get {:firstname "Sally"} :lastname)
 
+
 ;; A default value can be included with the get function, so if a key is not found in the map, that default value is returned.
 
 (get {:firstname "Sally"} :lastname "Unknown")
@@ -294,6 +303,7 @@ average-fruit-amount
 ;; When a key is a keyword then that keyword can be used as a function to lookup values in a map.
 
 (:firstname {:firstname "Sally" :lastname "Brown"})
+
 
 ;; A map can also act like a function when given a keyword as an argument
 
@@ -305,10 +315,12 @@ average-fruit-amount
 
 sally
 
+
 ;; 07 - Filtering Collections and anonymous functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 (filter odd? [1 2 3 4])
+
 
 ;; Write a function to use with filter that will remove the word "we" from the collection: ["are" "we" "there" "yet"]
 
@@ -328,19 +340,18 @@ sally
 (remove #(= "we" %) ["are" "we" "there" "yet"])
 
 
-
 ;; 08 - First Class Functions (map and reduce)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; map is a function that takes another function as an argument, along with a collection.
 ;; map calls the function provided to it on each member of the collection, then returns a new collection with the results of those function calls.
 
 (map even? [0 1 2 3 4])
 
+
 ;; Count the number of characters in each word for a collection of strings eg. ["a" "abc" "abcdefg"]
 
 (map count ["a" "abc" "abcdefg"])
-
 
 
 ;; reduce is another function that takes a function and collection as arguments.
@@ -350,14 +361,12 @@ sally
 
 (reduce + [30 60 90])
 
+
 ;; Think of a function that joins strings together and use it with reduce to join the words in a collection eg ["h" "e" "l" "l" "o" " " "Clojure"]
 
 (reduce str ["h" "e" "l" "l" "o"])
 
 (reduce str ["h" "e" "l" "l" "o" " " "Clojure"])
-
-
-
 
 
 ;; Write map and reduce functions to create the map reduce sandwich
@@ -369,16 +378,21 @@ sally
 
 ;; Create a function to "slice" the raw ingredients so to prepare to be made into a sandwich.
 
-(defn prepare [all-ingredients]
+(defn prepare
+  [all-ingredients]
   (map (fn [ingredient] (str "sliced " ingredient)) all-ingredients))
 
+
 (prepare raw-ingredients)
+
+
 ;; => ("sliced bread" "sliced cucumber" "sliced pepper" "sliced tomato" "sliced lettuce" "sliced onion")
 
 
 ;; Reduce our ingredients to a sandwich
 
-(defn make-sandwich [prepared-ingredience]
+(defn make-sandwich
+  [prepared-ingredience]
   (reduce str (interpose ", " prepared-ingredience)))
 
 
@@ -393,7 +407,6 @@ sally
      (str "I have a tasty sandwich made with " ,,,))
 
 
-
 ;; Name Smash
 ;; Take two names and smash them together to create a new name
 
@@ -404,15 +417,17 @@ sally
 ;; Map split as an anonymous function over the student collection
 
 (map #(clojure.string/split % #" ") students)
+
+
 ;; => (["John" "Stevenson"] ["Mani" "Sarkar"])
 
 
 ;; We can also flatten the result to make it look nicer
 
 (flatten (map #(clojure.string/split % #" ") students))
+
+
 ;; => ("John" "Stevenson" "Mani" "Sarkar")
-
-
 
 
 
@@ -427,21 +442,21 @@ sally
 ;;  Jumble the names
 ;; For example, take the first name from the first person and join it with the last name from the second person
 
-(defn jumble-names [names]
+(defn jumble-names
+  [names]
   (let [first-person (first names)
         second-person (second names)
         first-person-first-name (first (name-split first-person))
         second-person-second-name (second (name-split second-person))]
     (str "Hello " first-person-first-name second-person-second-name)))
 
+
 ;; Call our function with an argument of the student collection.
 (jumble-names students)
 
 
-
-
 ;; 09 Conditionals
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; In English we say someone came 1st, rather than someone came 1.
 ;; Write a function called position with an argument called number
@@ -454,10 +469,12 @@ sally
   false)
 
 
-(defn position [number]
+(defn position
+  [number]
   (if (= number 1)
     (str number "st")
     (str "Sorry, the number " number " is not supported")))
+
 
 (position 2)
 
@@ -477,17 +494,20 @@ sally
 ;; To create the position function with cond
 
 
-(defn positions [number]
+(defn positions
+  [number]
   (cond
     (= number 1) "1st"
     (= number 2) "2nd"
     (= number 3) "3rd"
     :else   (str number "th")))
 
+
 (positions 3)
+
+
 ;; => "3rd"
 (positions 4)
-
 
 
 ;; Temperature conversion with cond
@@ -504,14 +524,18 @@ sally
 ;; Fahrenheit to Celcius: (* (- Fahrenheit 32) 5/9) = Celcius
 ;; Kelvin to Celcius: (+ Kelvin 273.15) = Celcius
 
-(defn temperature-in-celcius [temperature scale]
+(defn temperature-in-celcius
+  [temperature scale]
   (cond
     (= scale :celcius)    temperature
     (= scale :fahrenheit) (* (- temperature 32) 5/9)
     (= scale :kelvin)     (- temperature 273.15)
     :else                 (str "Unknown scale: " scale)))
 
+
 (temperature-in-celcius 32.0 :fahrenheit)
+
+
 ;; => 0.0
 (temperature-in-celcius 300  :kelvin)
 (temperature-in-celcius 22.5 :celcius)
@@ -519,7 +543,7 @@ sally
 
 
 ;; 10 iterate with for (list comprehension)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 ;; Create a combination lock
 
@@ -533,7 +557,7 @@ sally
 (for [tumbler-1 (range 10)
       tumbler-2 (range 10)
       tumbler-3 (range 10)]
- [tumbler-1 tumbler-2 tumbler-3])
+  [tumbler-1 tumbler-2 tumbler-3])
 
 
 ;; Calculate the total number of combinations
@@ -542,8 +566,7 @@ sally
   (for [tumbler-1 (range 10)
         tumbler-2 (range 10)
         tumbler-3 (range 10)]
-   [tumbler-1 tumbler-2 tumbler-3]))
-
+    [tumbler-1 tumbler-2 tumbler-3]))
 
 
 ;; Make the combinations harder to guess
@@ -573,15 +596,19 @@ sally
   [tumbler-1 tumbler-2 tumbler-3])
 
 
-
 ;; Polymorphic function via number of arguments
 (defn hello-poly
   ([] (hello-poly "Jane Doe"))
   ([name] (str "Hello my friend " name)))
 
+
 ;; Calling without arguments returns a default result
 (hello-poly)
+
+
 ;; => "Hello my friend Jane Doe"
 
-(hello-poly "Mani" )
+(hello-poly "Mani")
+
+
 ;; => "Hello my friend Mani"

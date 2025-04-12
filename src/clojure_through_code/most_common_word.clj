@@ -1,7 +1,17 @@
 (ns clojure-through-code.most-common-word
-  (:require [clojure.string]))
+  (:require
+    [clojure.string]))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Algorithm
+;; * Use regular expression to create a collection of individual words
+;; * Convert all the words to lower case (so they match with common words source)
+;; * Remove the common English words used in the book, leaving more context specific words
+;; * Calculate the requencies of the remaining words, returning a map of word & word count pairs
+;; * Sort the map by word count values
+;; * Reverse the collection so the most commonly used word is the first element in the map
+
+;;
 ;; Most Common Words - Lisp Style
 
 ;; Book: The importance of being Earnest, Oscar Wilde
@@ -18,25 +28,28 @@
 (def importance-of-being-earnest
   (slurp "resources/importance-of-being-earnest.txt"))
 
+
 ;; Create an identity for the common words, transforming into a collection of strings
 
 (def common-english-words
   (set
-   (clojure.string/split
-    (slurp "resources/common-english-words.csv")
-    #",")))
+    (clojure.string/split
+      (slurp "resources/common-english-words.csv")
+      #",")))
 
 
 ;; Process the book for the most common word
 
-(defn most-common-words [book]
+(defn most-common-words
+  [book]
   (reverse
-   (sort-by val
-    (frequencies
-     (remove common-english-words
-      (map
-        #(clojure.string/lower-case %)
-        (re-seq #"[a-zA-Z0-9|']+" book)))))))
+    (sort-by val
+             (frequencies
+               (remove common-english-words
+                       (map
+                         #(clojure.string/lower-case %)
+                         (re-seq #"[a-zA-Z0-9|']+" book)))))))
+
 
 (most-common-words importance-of-being-earnest)
 
@@ -50,7 +63,7 @@
 )
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Most Common Words - Threading Macro Style
 
 
@@ -60,7 +73,8 @@
       set))
 
 
-(defn most-common-words [book]
+(defn most-common-words
+  [book]
   (->> book
        #_(re-seq #"[a-zA-Z0-9|']+")
        (re-seq #"[\w|'-]+")
@@ -70,17 +84,18 @@
        (sort-by val)
        reverse))
 
+
 ;; Use importance-of-being-earnest book defined above
 (most-common-words importance-of-being-earnest)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Deconstructing the code in the repl
 
 ;; To understand what each of the functions do in the most-common-words function you can comment out one or more expressions by placing the comment reader macro #_ in front of the expression
 
-(defn most-common-words [book]
+(defn most-common-words
+  [book]
   (->> book
        #_(re-seq #"[a-zA-Z0-9|']+")
        #_(map #(clojure.string/lower-case %))
@@ -89,8 +104,8 @@
        #_(sort-by val)
        #_reverse))
 
-;; Now the most-common-words function will only return the result of evaluating book (the full text of the book). To see what each of the other lines do, simply remove the #_ character from the front of an expression and re-evaluate the most-common-words function in the repl
 
+;; Now the most-common-words function will only return the result of evaluating book (the full text of the book). To see what each of the other lines do, simply remove the #_ character from the front of an expression and re-evaluate the most-common-words function in the repl
 
 
 
@@ -98,26 +113,25 @@
 ;; using Java Interop to ensure a clean connection that closes when finished
 
 (with-open [in (java.util.zip.GZIPInputStream.
-                (clojure.java.io/input-stream
-                 "https://www.gutenberg.org/cache/epub/844/pg844.txt"))]
+                 (clojure.java.io/input-stream
+                   "https://www.gutenberg.org/cache/epub/844/pg844.txt"))]
   (slurp in))
-
-
-
 
 
 (defn decode
   [book-gzip]
   (with-open
-   [uncompress-text (java.util.zip.GZIPInputStream.
-                     (clojure.java.io/input-stream book-gzip))]
+    [uncompress-text (java.util.zip.GZIPInputStream.
+                       (clojure.java.io/input-stream book-gzip))]
     (slurp uncompress-text)))
+
 
 (defn common-words
   [csv]
   (-> (slurp csv)
       (clojure.string/split #",")
       set))
+
 
 (defn most-common-word
   [book-gzip common-words]
@@ -128,9 +142,11 @@
        frequencies
        (sort-by val >)))
 
+
 (defn -main
   [book-gzip common-word-csv]
   (most-common-word book-gzip (common-words common-word-csv)))
+
 
 (comment
 
@@ -141,7 +157,6 @@
 
 (def fish)
 
-(defn blah
-  (println "I am a bad function definition")
-)
 
+(defn blah
+  (println "I am a bad function definition"))

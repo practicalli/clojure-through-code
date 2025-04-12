@@ -1,6 +1,8 @@
 (ns clojure-through-code.core-test
-  (:require [clojure.test :refer :all]
-            [clojure-through-code.core :refer :all]))
+  (:require
+    [clojure-through-code.core :refer :all]
+    [clojure.test :refer :all]))
+
 
 (deftest adder-test
   (testing "Using a range of numbers to test the adder"
