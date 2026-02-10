@@ -1,10 +1,10 @@
-; Sponsored by @beanpuppy ❤
+; Sponsored by @davidmh ❤
 ; --------------------------------------------------------------------------------
-; localhost:33083 (connected): /home/practicalli/projects/practicalli/clojure-through-code/.nrepl-port
+; localhost:45087 (connected): /home/practicalli/projects/practicalli/clojure-through-code/.nrepl-port
 ; debug: send
-{:id "a7e52643-06fd-448f-bc4f-c45e59c00427" :op "describe"}
+{:id "f7509fb2-f868-41d5-a5a5-20cf873cc8e8" :op "describe"}
 ; debug: send
-{:id "6aac061b-cd28-4265-9532-410c538d0d37" :op "ls-sessions"}
+{:id "e9cff974-f80e-4835-8920-978a02372898" :op "ls-sessions"}
 ; debug: /home/practicalli/.local/share/nvim-astro5/lazy/conjure/res/client/clojure/preamble.cljc resource not cached - reading
 nil
 ; debug: send
@@ -75,21 +75,21 @@ nil
 (in-ns initial-ns)
 "
  :id
- "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+ "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :op
  "eval"}
 ; debug: receive
-{:id "6aac061b-cd28-4265-9532-410c538d0d37"
- :session "bf0a1c72-a84a-4ba3-af77-8d22927742ea"
- :sessions ["48aefc32-bffe-45bf-8825-0298877091aa"]
+{:id "e9cff974-f80e-4835-8920-978a02372898"
+ :session "a8c762ce-6623-4e74-8284-c8de61ab1236"
+ :sessions ["39898320-bb8e-4dd5-99d3-d1f32a865b5d"]
  :status ["done"]}
 ; debug: with-sessions id for enrichment
-"48aefc32-bffe-45bf-8825-0298877091aa"
+"39898320-bb8e-4dd5-99d3-d1f32a865b5d"
 ; debug: send
 {:code "#?(:clj 'clj :cljs 'cljs :cljr 'cljr :default 'unknown)"
- :id "3b07eca3-40de-4a91-ab6a-402eb8976958"
+ :id "53d0b972-6365-453a-a839-cebdc45845dc"
  :op "eval"
- :session "48aefc32-bffe-45bf-8825-0298877091aa"}
+ :session "39898320-bb8e-4dd5-99d3-d1f32a865b5d"}
 ; debug: receive
 {:aux
  {:cider-version
@@ -97,7 +97,7 @@ nil
   :current-ns
   "user"}
  :id
- "a7e52643-06fd-448f-bc4f-c45e59c00427"
+ "f7509fb2-f868-41d5-a5a5-20cf873cc8e8"
  :ops
  {:add-middleware {}
   :analyze-last-stacktrace {}
@@ -207,7 +207,7 @@ nil
   :undef {}
   :undef-all {}}
  :session
- "bf461428-49e3-4292-80b9-9afcfb558acd"
+ "da7ccfc5-926b-41be-becc-70d69161e637"
  :status
  ["done"]
  :versions
@@ -215,25 +215,25 @@ nil
   :java {:major 21 :version-string "21.0.9"}
   :nrepl {:incremental 0 :major 1 :minor 5 :version-string "1.5.0"}}}
 ; --------------------------------------------------------------------------------
-; Assumed session: Russian White (Unknown https://github.com/Olical/conjure/wiki/Frequently-asked-questions#what-does-unknown-mean-in-the-log-when-connecting-to-a-clojure-nrepl)
+; Assumed session: Australian Kelpie (Unknown https://github.com/Olical/conjure/wiki/Frequently-asked-questions#what-does-unknown-mean-in-the-log-when-connecting-to-a-clojure-nrepl)
 ; debug: receive
-{:id "3b07eca3-40de-4a91-ab6a-402eb8976958"
+{:id "53d0b972-6365-453a-a839-cebdc45845dc"
  :ns "user"
- :session "48aefc32-bffe-45bf-8825-0298877091aa"
+ :session "39898320-bb8e-4dd5-99d3-d1f32a865b5d"
  :value "clj"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "user"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#namespace[conjure.internal]"}
 ; debug: receive
-{:id "3b07eca3-40de-4a91-ab6a-402eb8976958"
- :session "48aefc32-bffe-45bf-8825-0298877091aa"
+{:id "53d0b972-6365-453a-a839-cebdc45845dc"
+ :session "39898320-bb8e-4dd5-99d3-d1f32a865b5d"
  :status ["done"]}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "user"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#'conjure.internal/initial-ns"}
 ; debug: receive
 {:changed-namespaces
@@ -1041,66 +1041,66 @@ nil
   :user
   {:aliases {} :interns {}}}
  :id
- "3b07eca3-40de-4a91-ab6a-402eb8976958"
+ "53d0b972-6365-453a-a839-cebdc45845dc"
  :repl-type
  "clj"
  :session
- "48aefc32-bffe-45bf-8825-0298877091aa"
+ "39898320-bb8e-4dd5-99d3-d1f32a865b5d"
  :status
  ["state"]}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "nil"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "nil"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#'conjure.internal/bounded-conj"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#'conjure.internal/tap-queue-size"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#'conjure.internal/tap-queue!"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#'conjure.internal/enqueue-tap!"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "nil"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#'conjure.internal/dump-tap-queue!"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "conjure.internal"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
- :value "#multifn[report 0x3b1728f6]"}
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
+ :value "#multifn[report 0x4e4fe496]"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :ns "user"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :value "#namespace[user]"}
 ; debug: receive
-{:id "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
- :session "440da85b-f947-4c92-879a-1872d86bd0d4"
+{:id "88deb132-05bb-492f-a3b9-5830bf5bda26"
+ :session "2e989dde-9c94-4735-9b89-f7813054faa0"
  :status ["done"]}
 ; debug: receive
 {:changed-namespaces
@@ -2173,10 +2173,10 @@ nil
   :user
   {:aliases {} :interns {}}}
  :id
- "1cdd4caf-32ce-4eb1-ae3e-c32f840dd67a"
+ "88deb132-05bb-492f-a3b9-5830bf5bda26"
  :repl-type
  "clj"
  :session
- "440da85b-f947-4c92-879a-1872d86bd0d4"
+ "2e989dde-9c94-4735-9b89-f7813054faa0"
  :status
  ["state"]}
