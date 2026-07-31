@@ -77,7 +77,7 @@ jobs:
         # You can override MegaLinter flavor used to have faster performances
         # More info at https://megalinter.io/latest/flavors/
         # uses: oxsecurity/megalinter@v9
-        uses: practicalli/megalinter-custom-flavor-clojure@main
+        uses: practicalli/megalinter-custom-flavor-clojure@v9.6.0
 
         id: ml
 
