@@ -82,8 +82,6 @@ my-data
   (str data))
 
 
-
-
 ;;
 ;; Evaluating Clojure
 

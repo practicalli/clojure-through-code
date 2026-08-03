@@ -40,21 +40,27 @@
 
 
 ;; The `require` function includes the code from another namespace into the current namespace
+;; Basic `require` form: (:require 'clojure.string)
+
+(require 'clojure.string)
+
+
+;; The `:require` key word can be added to a namespace definition to include another namespace,
+;; providing a convenient code short-cut
 
 (ns clojure-through-code.01-basics
   "Communicate the purpose of a namespace via a doc-string.
    Include descriptions of data models defined in the namespace.
    `:require` key defines additional namespaces to include into the current namespace."
   (:require
-    [clojure.string :refer [join split trim]]
-    [practicalli.clojure-through-code.spec :as spec]))
+    [clojure.string :as string]))
+
+
+(string/join "Hello" "Clojure")
 
 
 ;; `require` is also a function
 ;; e.g. optionally including a namespace within a `comment` form
-
-;; Basic `require` form:
-;; (:require 'clojure.string)
 
 ;; Include specific parts of another namespace
 ;; (require

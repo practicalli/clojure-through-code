@@ -88,7 +88,8 @@ colonial-dist ; -> (572 572 572 571 571 571 571)
 
 
 ;; We can summarize this in the following function:
-(defn colonial-troop-allocation [troops fronts]
+(defn colonial-troop-allocation
+  [troops fronts]
   (let [min-colonial (quot troops fronts)
         excess (- troops (* min-colonial fronts))
         excess-dist (concat (repeat excess 1) (repeat 0))
@@ -117,7 +118,6 @@ colonial-dist ; -> (572 572 572 571 571 571 571)
   [colonial-allocation]
   (let [majority (inc (quot (count colonial-allocation) 2))]
     (map inc (take majority (sort colonial-allocation)))))
-
 
 
 (defn rebels-needed-for-rebellion
