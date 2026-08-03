@@ -1,6 +1,5 @@
 (ns clojure-through-code.03a-changing-data-structures)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Changing data in data structures
 
@@ -14,11 +13,11 @@
 ;; data elements.
 
 ;; We will see some of the most common functions that work with data
-;; structures in this secion.  In actuality, everything can be
-;; considered a function that works on a data structure though,
-;; as that is the language design of clojure.
+;; structures in this section.
+;; Every function can be considered one that works on a data structure,
+;; as the language design of Clojure is data centric.
 
-;; First we will use the conj function, think of this as the english phrase conjoin
+;; First we will use the conj function, think of this as the English phrase conjoin
 ;; conj will join a data structure and a value together to form a new data structure.
 
 ;; conj works on all Clojure persistent data structures (list, vector, map, set)
@@ -27,18 +26,20 @@
 ;; I think of cons as "constructs" a new data structure from the
 ;; existing data structure
 
-(conj '(1 2 3 4) 5)
+;; conjoining to a list adds the value at the beginning
+(conj '(1 2 3) 4)
+;;=> (4 1 2 3)
 
-;; As a Clojure list is represented a linked list, then its is more efficient to add new elements to the start of a list.
+;; In Clojure a list is a linked list, its more efficient to add new elements to the start of a list.
 
 ;; conj does not change the existing list, it create a new list
-;; that contains the number 5 and a link to all the elements of the
-;; existing list.
+;; that contains the number 5 and a link to all the elements of the original list.
 
 ;; You can also use conj on other data structures and data types
 
-;; vectors
-(conj [1 2 3 4] 5)
+;; conjoining to a vector adds the value at the end
+(conj [1 2 3] 4)
+;;=> [1 2 3 4]
 
 ;; list of strings
 (conj '("and" "chips") "fish")
@@ -46,16 +47,6 @@
 (conj #{1 2 3} 4)
 
 ;; If you use cons (think construct) this returns a list, regardless of the original data structure type.
-
-
-
-;; notice that conjoining to a vector is done at the end
-(conj [1 2 3] 4)
-;;=> [1 2 3 4]
-
-;; notice conjoining to a list is done at the beginning
-(conj '(1 2 3) 4)
-;;=> (4 1 2 3)
 
 (conj ["a" "b" "c"] "d")
 ;;=> ["a" "b" "c" "d"]
@@ -81,17 +72,13 @@
 (conj #{1 3 4} 2)
 ;;=> #{1 2 3 4}
 
-
-
 ;; from Clojure.org
 
 ;; conjoin shows similar behaviour to cons
 ;; The main difference being that conj works on collections
 ;; but cons works with seqs.
-(conj ["a" "b" "c"] ["a" "b" "c"] )
+(conj ["a" "b" "c"] ["a" "b" "c"])
 ;;=> ["a" "b" "c" ["a" "b" "c"]]
-
-link
 
 ;; conjoin nil with x or xs
 (conj nil 3)
@@ -100,8 +87,6 @@ link
 (conj nil 3 4)
 ;;=> (4 3)
 
-link
-
 ;; maps and sets are treated differently
 (conj {1 2} {3 4})
 ;;=> {3 4, 1 2}   ; the contents of {3 4} are added to {1 2}
@@ -109,10 +94,10 @@ link
 (conj #{1 2} #{3})
 ;;=> #{1 2 #{3}}  ; the whole set #{3} is added to #{1 2}
 
-(clojure.set/union #{1 2} #{3})
-;;=> #{1 2 3}  ; must use (clojure.set/union) to merge sets, not conj
+(require 'clojure.set)
 
-link
+(clojure.set/union #{1 2} #{3})
+;;=> #{1 2 3}  ; use (clojure.set/union) to merge sets, not conj
 
 ;; When conjoining into a map, vector pairs may be provided:
 (conj {:a 1} [:b 2] [:c 3])
@@ -130,16 +115,10 @@ link
 (conj {:a 1} '(:b 2))
 ;;=> ClassCastException ...Keyword cannot be cast to ...Map$Entry...
 
-
 ;; Returns a new seq where x is the first element and seq is the rest.
 
-
-
-
-
-
-#######################################
-### In practice
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; In practice
 
 ;; Lets define a simple list and give it a name
 (def list-one '(1 2 3))
@@ -154,10 +133,10 @@ list-one
 ;; If we want to keep the result of adding to the list, we can assign it a different name
 (def list-two (cons 4 list-one))
 ;; and we get the result we want
-listtwo
+(list-two)
 
-;; we can also assing the original name we used for the list to the new list
-(def list-one (cons 4 list-one))
+;; we can also assign the original name we used for the list to the new list
+;; (def list-one (cons 4 list-one))
 
 ;; If we re-evaluate the definition above, then each time we will get an extra
 ;; number 4 added to the list.
@@ -169,15 +148,11 @@ list-one
 ;; Any other function working with this data structure before reassigning the name
 ;; will not be affected by the re-assignment and will use the unchanged list.
 
-
-
-
 ;;;; Changing Maps
 
 (def alphabet-soup {:a 1 :b 2 :c 3})
 
 (assoc alphabet-soup :d 4)
-
 
 ;;;; Creating default maps from a known set of keys
 
@@ -197,9 +172,7 @@ list-one
 
 (into [] (take 10 (range)))
 
-
 (def player-data [{:name "Oliver", :score 100} {:name "Revilo", :score 50}])
-
 
 (require '[hiccup.page :refer [html5]])
 
