@@ -1,38 +1,50 @@
+;; ---------------------------------------------------------
+;; Using the Java Language from Clojure
+;;
+;; Clojure is hosted on the Java Virtual Machine and can run any JVM language
+;; `java.lang` classes and methods are always available from Clojure
+;; Additional Java & JVM Language libraries can be imported into a Clojure namespace
+;; ---------------------------------------------------------
+
 (ns clojure-through-code.09-calling-java
   (:import
     java.util.Date))
 
 
-;;
 ;; From java.lang
 
+;; String manipulation
 (.toUpperCase "fred")
 
-(.getName String)
 
+;; Imported library from the Java Language (java.util.Date)
+;; Using java.util.Date import (include in the namespace definition above)
+;; (import java.util.Date)
 
-;; (java.util.Date)
 (Date.)
+
+
+;; names with ** 'earmuffs' are dynamic, meant to be rebound to different values
+(def ^{:dynamic true} *now* (Date.))
+
+(str *now*)
 
 
 ;; From java.lang.System getProperty() as documented at:
 ;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
 (System/getProperty "java.vm.version")
 
-Math/PI
 
+;; Mathematics
 (def pi Math/PI)
 
 
-;; Using java.util.Date import (usually include as part of the namespace definition)
+(defn circumference
+  [diameter]
+  (* pi diameter))
 
-;; (import java.util.Date)
 
-(Date.)
-
-(def *now* (Date.))
-
-(str *now*)
+(circumference 42)
 
 
 ;; calling static methods in java
@@ -63,7 +75,6 @@ Math/PI
 
 ;; (:firstName (bean (new Person "Alexandre" "Martins")))
 ;; -> Alexandre
-
 
 ;; Miscellaneous
 
