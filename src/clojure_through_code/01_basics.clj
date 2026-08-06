@@ -118,10 +118,14 @@
 *3
 
 
-;;
+;; ---------------------------------------------------------
 ;; Using Java Interoperability
-
+;;
 ;; java.lang is part of the Clojure runtime environment, so when ever you run a REPL you can call any methods without having to import them or include any dependencies
+
+;; (new yourObjectName)  ; Create a new Java object
+;; (. youObjectName)     ; Call a Java object
+
 
 ;; From java.lang.System getProperty() as documented at:
 ;; http://docs.oracle.com/javase/8/docs/api/java/lang/System.html
@@ -142,69 +146,9 @@
 ;; We can also get the version of the project
 (System/getProperty "clojure-through-code.version")
 
+;; ---------------------------------------------------------
 
-;; Chaining a few Clojure functions together, to read from
-;; the Leiningen project file
-
-;; Getting the version number of the project
-
-;; Information can be read from the Clojure project configuration file using the slurp function
-(slurp "deps.edn")
-
-
-;; The value returned by slurp is a bit messy, so we can tidy it up with read-string
-
-(read-string (slurp "project.clj"))
-
-
-;; => (defproject clojure-through-code "20.1.5-SNAPSHOT" :description "Learning Clojure by evaluating code on the fly" :url "http://jr0cket.co.uk" :license {:name "Eclipse Public License", :url "http://www.eclipse.org/legal/epl-v10.html"} :dependencies [[org.clojure/clojure "1.6.0"]])
-
-;; rather than have all the information from the file, we just want to get the project version
-;; Using the nth function we can select which element we actually want
-
-(nth (read-string (slurp "project.clj")) 2)
-
-
-;; => "20.1.5-SNAPSHOT"
-
-;; The above code is classic Lisp, you read it from the inside out, so in this case you
-;; start with (slurp ...) and what it returns is used as the argument to read-string...
-
-;; Get the contents of the project.clj file using `slurp`
-;; Read the text of that file using read-string
-;; Select just the third string using nth 2 (using an index starting at 0)
-
-;; You can format the code differently, but in this case its not much easier to read
-(nth
-  (read-string
-    (slurp "project.clj"))
-  2)
-
-
-;; the same behaviour as above can be written using the threading macro
-;; which can make code easier to read by reading sequentially down the list of functions.
-
-(->
-  "./project.clj"
-  slurp
-  read-string
-  (nth 2))
-
-
-;; Using the threading macro, the result of every function is passed onto the next function
-;; in the list.  This can be seen very clearly usng ,,, to denote where the value is passed
-;; to the next function
-
-(->
-  "./project.clj"
-  slurp ,,,
-  read-string ,,,
-  (nth ,,, 2))
-
-
-;; Remember, commas in clojure are ignored
-
-;; To make this really simple lets create a contrived example of the threading macro.
+;; Threading Macro
 ;; Here we use the str function to join strings together.  Each individual string call
 ;; joins its own strings together, then passes them as a single string as the first argument to the next function
 
@@ -251,9 +195,8 @@
     (str " " "in a bottle")
     println
     (str ", The Police"))
-
-
 ;; => ", The Police"
+
 
 ;; The initial part of the message before the println funciton is called has been dropped because println returned nil.  Therefore nil was the value passed as the first argument to tne next function, rather than "message in a bottle".
 
@@ -292,15 +235,18 @@ literal-value-five
 
 ;; Defining functions
 ;; defn is a macro for defining functions
-(defn my-function
+(defn custom-function
   []
-  (str "I wish I was free"))
+  (str "I wish " "I was free"))
 
+;; Call the function by creating a list and adding the name in the first position:
+(custom-function)
 
-;; defining a function with def
-(def my-function-expanded
+;; Without the defn macro, `def` binds a shared name for to an anonymous function
+(def custom-function-long-form
   (fn [args] (str "behaviour" (clojure.string/join args))))
 
+(custom-function-long-form " works on arguments")
 
 ;; anonymous function
 (fn [args] (str "behaviour" (clojure.string/join args)))
@@ -327,7 +273,7 @@ literal-value-five
 ;; However, something different happens when you evaluate this expression.  This is refered to as a side-effect because when you call this function it returns nil.  The actual text is output to the REPL or console.
 
 ;; In Clojure, you are more likely to use the `str` function when working with strings.
-(str "Hello, I am returned as a value of this expression")
+(str "Hello. " "I am returned as a value of this expression")
 
 
 ;; join strings together with the function str
@@ -467,8 +413,8 @@ literal-value-five
 
 (if false
   "hello"
-  (do (+ 3 4)
-      (str  "goodbye")))
+  (do (println (+ 3 4))  ;; side effect
+      (str  "Hello" " and " "goodbye")))
 
 
 (if false "one" "two")
@@ -518,13 +464,13 @@ literal-value-five
 ;; Integer literals are java.lang.Long by default
 (class 1.1)    ; Float literals are java.lang.Double
 
-(class "")
+(class "What class represents a string?")
 
 
 ;; Strings always double-quoted, and are java.lang.String
 
 (class false)  ; Booleans are java.lang.Boolean
-(class nil)    ; The "null" value is called nil
+(class nil)    ; The 'null' value is called nil
 
 (class (list 1 2 3 4))
 
@@ -599,6 +545,10 @@ literal-value-five
 
 ;; Lets try and break clojure with Math
 
+;; Lets have some maths fun and see how Clojure deals with this
+;; Uncomment these expressions to see how much they break things
+
+;; (Math/sqrt -1)
 ;; (/ 22 0)
 
 ;; ArithmeticException Divide by zero  clojure.lang.Numbers.divide (Numbers.java:156)
@@ -610,36 +560,12 @@ literal-value-five
 
 (Math/sqrt 13)
 
-(Math/PI)
-
 (.toUpperCase "bla")
 
 
-;; (new yourObjectName)
-;; (. youObjectName)
+;; Clojure via the underlying Java Java Math class methods, deals with interesting mathematical concepts like the square-root of minus one.
 
-;; Lets have some maths fun and see how Clojure deals with this
-
-(Math/sqrt -1)
-
-
-;; So Clojure, well Java really as its the Java Math class methods, deals with interesting
-;; mathematical concepts like the square-root of minus one.
-
-;; So what does NaN mean.  Well by consulting Stack Overflow, a NaN is produced if a floating point operation would produce an undefinable result.  Other examples include dividing 0.0 by 0.0 is arithmetically undefined.
-
-;;
-;; Clojure projects
-
-;; Install Leiningen build tool from leingingen.org
-;; Create a new project with lein new project-name
-;; Run the repl using lein repl
-
-;; Look at the project configuration file project.clj
-;; The project is defined as Clojure code using defproject macro, keywords, maps & vectors
-
-;; In the source code src/project-name/core.clj is some sample code in a specific namespace
-;; Namespaces are similar to packages in Java
+;; A Not A Number (NaN) error is produced if a floating point function call produces an undefinable result.  Another example: dividing 0.0 by 0.0 is arithmetically undefined.
 
 ;; A namespace is a way to organise your clojure code (data structure and function definitions)
 ;; The namespace represents the underlying directory and filename which contain specific data structure and function definitions
@@ -660,25 +586,6 @@ literal-value-five
 
 (map? [1 2 3 4])
 
-
-;;
-;; LightTable Settings
-
-;; The configuration in LightTable uses a Clojure syntax
-;; which is easy enough to understand even if you dont know
-;; clojure. Essentially the configurations are a
-;; datastructure, a map with Clojure keywords to make it
-;; simple to pull out the relevant settings
-
-;; Set up keyboard shortcuts or look at the default shortcuts
-;; Settings: User keymap
-;; Settings: Default keymap
-
-;; General configuration settings for LightTable - eg, Fonts, themes, editor settings
-;; Settings: User behaviors
-
-;; (doto)  ;; Chain functions together
-;; ->
 
 ;; cool stuff
 
@@ -706,14 +613,13 @@ literal-value-five
 ;; user> (true? nil)
 ;; false
 
-;; Paredit
-;; Alt-up - get rid of parent
-
-(def a "I have a name")
+(def name-prompt "I have a name")
 
 
 ;; (def :a "What about keywords")
 ;; => keywords cannot be used as names, as keywords point to themselves
+
+(str name-prompt ", " "its Johnny.")
 
 (class :a)
 (get {"a" "ay"} "a")
@@ -761,13 +667,13 @@ literal-value-five
 (second my-details)
 (rest my-details)
 
-(nth ["John" "Stevenson" "37" "Clojure" "London" "North Yorkshire" 12] 2)
+(nth ["Johnny" "Stevenson" "37" "Clojure" "London" "North Yorkshire" 12] 2)
 
 (nth my-details 0)
 
 (first my-details)
 (first "John")
-(str (nth "John" 0))
+(str (nth "Johnny" 0))
 
 ["string" ["fish" "rabit"]]
 
@@ -799,8 +705,3 @@ literal-value-five
 {:meal
  {:ingredience []
   :recipe []}}
-
-
-(map
-  inc
-  [1 2 3 4 5])
