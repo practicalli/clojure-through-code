@@ -14,7 +14,7 @@
 
 (+ 1 1) ; => 2
 (- 24 4 10) ; => 10
-(* 1 2 (+ 1 2) (* 2 2)) ; => 24
+(* 1 2 (+ 1 2 (* 2 2))) ; => 24
 
 ;; A ratio is a value in Clojure, helping to maintain precision
 (/ 22 7) ; => 22/7
@@ -105,19 +105,14 @@
 
 ;; Use the name in other Clojure code
 (str "Clojure developers could earn up to " clojure-developer-salary)
-
-
 ;; => "Clojure developers could earn up to 100000"
 
 ;; Define a name for function so you can call it elsewhere in your code
-(def hello-world (fn [] "Hello World"))
-(hello-world) ; => "Hello World"
-
-;; You can shorten this syntax using the defn function (macro)
 (defn hello-world
   []
   "Hello World")
 
+(hello-world)
 
 ;; The [] is the list of arguments for the function.
 ;; There can be zero or more arguments
@@ -172,7 +167,7 @@
        ", I see you live at " address
        (if (nil? anything-else)
          ".  That is all."
-         (str "and you also do " (clojure.string/join ", " anything-else)))))
+         (str "and you also do " anything-else))))
 
 
 ;; => #'clojure-through-code.fifteen-minutes/hello-advanced
@@ -205,7 +200,7 @@ string-keys-map  ; => {"a" 1, "b" 2, "c" 3}
 keyword-keys-map ; => {:a 1, :c 3, :b 2} (order is not guaranteed)
 
 ;; Getting values from maps using keys
-(get keymap :c)
+(get keyword-keys-map :c)
 
 
 ;; Maps can be called just like a function, with a key as the argument
@@ -226,7 +221,7 @@ keyword-keys-map ; => {:a 1, :c 3, :b 2} (order is not guaranteed)
 keyword-keys-map ; => {:a 1, :b 2, :c 3}
 
 ;; Use dissoc to remove keys
-(dissoc keymap :a :b) ; => {:c 3}
+(dissoc keyword-keys-map :a :b) ; => {:c 3}
 
 ;; Sets
 ;;
@@ -252,7 +247,9 @@ keyword-keys-map ; => {:a 1, :b 2, :c 3}
 ;; Logic constructs in clojure are just macros, and look like
 ;; everything else
 (if false "a" "b") ; => "b"
-(if false "a") ; => nil
+
+;; With only a true path, use the `when` function rather than `if`
+;; (if false "a") ; => nil
 
 ;; Use let to create temporary bindings
 (let [a 1 b 2]
@@ -280,36 +277,25 @@ keyword-keys-map ; => {:a 1, :b 2, :c 3}
 ;; Libraries
 ;;
 
-;; Use "use" to get all functions from the module
-(use 'clojure.set)
+;; Add the `clojure.set` namespace to access its functions
+(require '[clojure.set :as set])
 
 
 ;; Now we can use set operations
-(intersection #{1 2 3} #{2 3 4}) ; => #{2 3}
-(difference #{1 2 3} #{2 3 4}) ; => #{1}
-
-;; You can choose a subset of functions to import, too
-(use '[clojure.set :only [intersection]])
+(set/intersection #{1 2 3} #{2 3 4}) ; => #{2 3}
+(set/difference #{1 2 3} #{2 3 4}) ; => #{1}
 
 
-;; Use require to import a module
-(require 'clojure.string)
-
-
-;; Use / to call functions from a module
-(clojure.string/blank? "") ; => true
-
-;; You can give a module a shorter name on import
-(require '[clojure.string :as str])
-(str/replace "This is a test." #"[a-o]" str/upper-case) ; => "THIs Is A tEst."
+(require '[clojure.string :as string])
+(string/replace "This is a test." #"[a-o]" string/upper-case) ; => "THIs Is A tEst."
 ;; (#"" denotes a regular expression literal)
 
 ;; You can use require (and use, but don't) from a namespace using :require.
 ;; You don't need to quote your modules if you do it this way.
-(ns test
-  (:require
-    [clojure.set :as set]
-    [clojure.string :as str]))
+;; (ns test
+;;   (:require
+;;     [clojure.set :as set]
+;;     [clojure.string :as str]))
 
 
 ;; Types underlying Clojure
@@ -349,11 +335,11 @@ keyword-keys-map ; => {:a 1, :b 2, :c 3}
 
 
 ;; You can import from an ns too.
-(ns test
-  (:import
-    (java.util
-      Calendar
-      Date)))
+;; (ns test
+;;   (:import
+;;     (java.util
+;;       Calendar
+;;       Date)))
 
 
 ;; Use the class name with a "." at the end to make a new instance

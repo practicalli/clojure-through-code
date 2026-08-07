@@ -146,6 +146,7 @@
 ;; We can also get the version of the project
 (System/getProperty "clojure-through-code.version")
 
+
 ;; ---------------------------------------------------------
 
 ;; Threading Macro
@@ -195,6 +196,8 @@
     (str " " "in a bottle")
     println
     (str ", The Police"))
+
+
 ;; => ", The Police"
 
 
@@ -239,14 +242,18 @@ literal-value-five
   []
   (str "I wish " "I was free"))
 
+
 ;; Call the function by creating a list and adding the name in the first position:
 (custom-function)
+
 
 ;; Without the defn macro, `def` binds a shared name for to an anonymous function
 (def custom-function-long-form
   (fn [args] (str "behaviour" (clojure.string/join args))))
 
+
 (custom-function-long-form " works on arguments")
+
 
 ;; anonymous function
 (fn [args] (str "behaviour" (clojure.string/join args)))
@@ -413,7 +420,7 @@ literal-value-five
 
 (if false
   "hello"
-  (do (println (+ 3 4))  ;; side effect
+  (do (println (+ 3 4))  ; side effect
       (str  "Hello" " and " "goodbye")))
 
 

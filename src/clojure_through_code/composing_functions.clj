@@ -23,7 +23,7 @@
 
 ;; first lets abstact out the annonymous function
 
-(defn pluralise
+(defn pluralise-all
   "Pluralise a given string value"
   [animal]
   (str animal "s"))
@@ -33,11 +33,11 @@
 
 (def animals ["pig" "cow" "goat" "cat" "dog" "rabbit"])
 
-(map pluralise animals)
+(map pluralise-all animals)
 
 
 ;; using an if statement as a filter
-(defn pluralise
+(defn pluralise-except-sheep
   "Pluralise a given string value"
   [string]
   (if (= string "sheep")
@@ -45,7 +45,7 @@
     (str string "s")))
 
 
-(map pluralise animals)
+(map pluralise-except-sheep animals)
 
 
 ;; but there are quite a lot of animals that do not have a plural form
@@ -55,38 +55,29 @@
 (def non-plural-words ["deer" "sheep" "shrimp"])
 
 
-(defn pluralise
-  "Pluralise a given string value"
-  [string]
-  (if (some #{string} non-plural-words)
-    string
-    (str string "s")))
-
-
-(def animals ["pig" "cow" "goat" "cat" "dog" "rabbit" "sheep" "shrimp" "deer"])
-
-(map pluralise animals)
-
-
 ;; to keep the function pure, we should really pass the non-plural-words as an argument
-
-(defn pluralise
+(defn pluralise-selective
   "Pluralise a given string value"
-  [string non-plural-words]
-  (if (some #{string} non-plural-words)
+  [string exceptions]
+  (if (some #{string} exceptions)
     string
     (str string "s")))
+
+
+(def animal-collection ["pig" "cow" "goat" "cat" "dog" "rabbit" "sheep" "shrimp" "deer"])
+
+(map pluralise-selective animal-collection non-plural-words)
 
 
 ;; using an anonymous function we can send the two arguments required to the pluralise function, as map will replace the % character with an element from the animals collection for each element in the collection.
-(map #(pluralise % non-plural-words) animals)
+(map #(pluralise-selective % non-plural-words) animals)
 
-(map (fn [animal] (pluralise animal non-plural-words)) animals)
+(map (fn [animal] (pluralise-selective animal non-plural-words)) animals)
 
 
 ;; we could also use a partial function, saving on having to create an anonymous
 
-(defn pluralise
+(defn pluralise-partial
   "Pluralise a given string value"
   [non-plural-words string]
   (if (some #{string} non-plural-words)
@@ -95,25 +86,27 @@
 
 
 ;; Now we can call pluralise by wrapping it as a partical function.  The argument that is the non-plural-words is constant, its the individual elements of animals I want to get out via map.  So when map runs it gets an element from the animals collection and adds it to the call to pluralise, along with non-plural-words
-(map (partial pluralise non-plural-words) animals)
+(map (partial pluralise-partial non-plural-words) animals)
 
 
 ;; Its like calling (pluralise non-plural-words ,,,) but each time including an element from animals where the ,,, is.
 
-;; at first I was getting incorrect output, ["deer" "sheep" "shrimp"], then I realised that it was returning the non-plural-words as string, so the arguements from the partial function were being sent in the wrong order.  So I simply changed the order in the pluralise function and it worked.
+;; at first I was getting incorrect output, ["deer" "sheep" "shrimp"], then I realised that it was returning the non-plural-words as string, so the arguments from the partial function were being sent in the wrong order.  So I simply changed the order in the pluralise function and it worked.
 
 ;; I checked this by adding some old-fashioned print statement.  There are probably better ways to do that in Clojure though.
 
-(defn pluralise
+(defn pluralise-set-check
   "Pluralise a given string value"
-  [non-plural-words string]
-  (if (some #{string} non-plural-words)
+  [exceptions string]
+  (if (some #{string} exceptions)
     (do
       (println (str string " its true"))
       string)
     (do
       (println (str string " its false"))
       (str string "s"))))
+
+(pluralise-set-check non-plural-words animal-collection)
 
 
 ;; comp
@@ -175,9 +168,6 @@
 ;; str takes 1 or more args of string, and return a joined string
 (str "a" "b") ; "ab"
 
-;; can be just 1 arg
-(str "a") ; "a"
-
 ;; if arg is not a string, it's converted to string
 (str "a"  ["a" "b"]) ; "a[\"a\" \"b\"]"
 
@@ -207,19 +197,19 @@
 
 ;; clojure.core/trampoline
 ;; (trampoline f args)
-;; call f with args. If it returns a function, call it again (with no args). Repeat until it returns a value that is not a function, return that value. 
+;; call f with args. If it returns a function, call it again (with no args). Repeat until it returns a value that is not a function, return that value.
 
 ;; clojure.core/constantly
 ;; (constantly x)
-;; Returns a function that takes any number of arguments and returns x. 
+;; Returns a function that takes any number of arguments and returns x.
 
 ;; clojure.core/complement
 ;; (complement f)
-;; Takes a fn f and returns a fn that takes the same arguments as f, has the same effects, if any, and returns the opposite truth value. 
+;; Takes a fn f and returns a fn that takes the same arguments as f, has the same effects, if any, and returns the opposite truth value.
 
 ;; clojure.core/memoize
 ;; (memoize f)
-;; Returns a memoized version of a referentially transparent function. The memoized version of the function keeps a cache of the mapping from arguments to results and, when calls with the same arguments are repeated often, has higher performance at the expense of higher memory use. 
+;; Returns a memoized version of a referentially transparent function. The memoized version of the function keeps a cache of the mapping from arguments to results and, when calls with the same arguments are repeated often, has higher performance at the expense of higher memory use.
 
 
 

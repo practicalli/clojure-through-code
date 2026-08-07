@@ -14,10 +14,8 @@
 
 ;; You can also consider strings as collections to and use them in similar ways to the other built in collections.
 
-
 ;;
 ;; Strings
-
 
 ;; Strings act as a collection of characters, so you can use the functions typically used for other collections - first, second, rest. last.
 
@@ -55,13 +53,11 @@
 
 ;; => \j
 
-
 ;; Note:  Clojure also has built in regular expressions which is useful for finding strings, sub-strings and filtering text.
 ;; See the section on regular expressions (TODO)
 
 ;;
 ;; Clojure persistent data structures
-
 
 ;; list ()
 ;; a general set of elements with a sequential lookup time
@@ -126,7 +122,6 @@
 ;; Another example is when you are including functions from other namespaces
 ;; (ns my-namespace.core
 ;;  use 'my-namespace.library)
-
 
 ;; Duplicate elements in a list ?
 
@@ -194,7 +189,6 @@
 {:key 42}
 {"key" "value"}
 
-
 {:a 1 :b 2 :c 3}
 
 
@@ -206,6 +200,12 @@
    "cheese"    2})
 
 
+(get shopping-list "cheese")
+
+
+;; ---------------------------------------------------------
+
+;; ---------------------------------------------------------
 ;; ASCII code generator
 ;;
 ;; Defining ascii codes in a collection
@@ -221,18 +221,19 @@
 
 ;; => "a"
 
-
 ;; We want to convert an alphabet, which could be defined as follows
 (def english-alphabet
   ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"])
 
 
-;; Or if we are give an alphabet in a single string, then we can create a more suitable colllection
+(require 'clojure.string)
+
+
+;; Or if we are give an alphabet in a single string, then we can create a more suitable collection
 (clojure.string/split "a b c d e f g h i j k l m n o p q r s t u v w x y z" #" ")
 
 
 ;; => ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"]
-
 
 ;; Lets generate a hash-map of ascii codes for a given alphabet.
 ;; Lower case a is ascii code 65, so that will be our starting code value.
@@ -272,8 +273,6 @@
 
 ;; => {:starwars {:characters {:jedi ["Luke Skywalker" "Obiwan Kenobi"], :sith ["Darth Vader" "Darth Sideous"], :droids ["C3P0" "R2D2" "BB-8"]}, :ships {:rebel-alliance ["Millenium Falcon" "X-wing figher"], :imperial-empire ["Intergalactic Cruser" "Destroyer" "Im just making these up now"]}}}
 
-
-
 ;; Individual starwars characters can be defined using a map of maps
 {:luke   {:fullname "Luke Skywarker" :skill "Targeting Swamp Rats"}
  :vader  {:fullname "Darth Vader"    :skill "Crank phone calls"}
@@ -295,13 +294,11 @@
 (:skill (:luke starwars-characters))
 
 
-;; updating maps with assoc-in
+;; Adding values to a map with assoc-in
 (assoc-in starwars-characters [:vader :skill] "The Dark Side of the Force")
 
 
 ;; => {:luke {:fullname "Luke Skywarker", :skill "Targeting Swamp Rats"}, :vader {:fullname "Darth Vader", :skill "The Dark Side of the Force"}, :jarjar {:fullname "JarJar Binks", :skill "Upsetting a generation of fans"}}
-
-(update)
 
 (def alphabet-soup {:a 1 :b 2 :c 3})
 
@@ -315,10 +312,9 @@
 
 ;; => {:a 2, :b 2, :c 3}
 
-
 ;; Now we can refer to the characters using keywords
 
-;; Using the get function we return all the informatoin about Luke
+;; Using the get function we return all the information about Luke
 (get starwars-characters :luke)
 
 
@@ -361,7 +357,6 @@
 ;; More on Destructuring
 ;; https://gist.github.com/john2x/e1dca953548bfdfb9844
 
-
 ;; Duplicate keys in a map are not allowed, so the following maps...
 
 ;; {"fish" "battered" "chips" "fried" "fish" "battered and fried"}
@@ -393,8 +388,6 @@
 (seq? '(1 2 3)) ; => true
 (seq? [1 2 3]) ; => false
 
-
-
 ;;
 ;; Generating Data
 
@@ -407,13 +400,6 @@
 
 (cons {:a 1} (map inc '(1 2)))
 
-(conj {:a 1} (map inc '(1 2)))
-
-
-(conj)
-
-
-;; => []
 
 ;; why do we get a class cast error when we try to conj a list into a map,
 ;; however we can conj a map and a vector

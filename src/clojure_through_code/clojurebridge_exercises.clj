@@ -81,6 +81,8 @@
 ;; Use a function to see if a string contains a colour.
 ;; Does the string "Rachel of York gave brown bread in vans" contain the colour brown?
 
+(require 'clojure.string)
+
 ;; The clojure.string library defines many functions that specifically work with String types.
 (clojure.string/includes? "Rachel of York gave brown bread in vans" "brown")
 
@@ -202,7 +204,8 @@ average-fruit-amount
 
 
 ;; The min function will simplify our expression
-(min [10 27 26 21 22 22 45 34 59 60])
+(reduce min [10 27 26 21 22 22 45 34 59 60])
+;; => 10
 
 
 ;; NOTE there are over 600 functions in clojure.core so there is often a function you are looking for to simplify you code
@@ -311,16 +314,12 @@ average-fruit-amount
 
 ({"firstname" "sally"} "firstname")
 
-(def sally {(count [1 2]) "aa"})
-
-sally
 
 
+;; ---------------------------------------------------------
 ;; 07 - Filtering Collections and anonymous functions
-;;
 
 (filter odd? [1 2 3 4])
-
 
 ;; Write a function to use with filter that will remove the word "we" from the collection: ["are" "we" "there" "yet"]
 
@@ -339,7 +338,10 @@ sally
 
 (remove #(= "we" %) ["are" "we" "there" "yet"])
 
+;; ---------------------------------------------------------
 
+
+;; ---------------------------------------------------------
 ;; 08 - First Class Functions (map and reduce)
 ;;
 
@@ -465,8 +467,8 @@ sally
 ;; Using if function for a single condition
 
 #_(if (condition)
-  true
-  false)
+   true
+   false)
 
 
 (defn position

@@ -54,30 +54,32 @@
 
 ;; However, if you bind a name using def, that def can be redefined elsewhere.  A redefinition typically only takes place during development time, but could also happen at runtime.
 
-(def singleton-as-value 42)
+;; (def singleton-as-value 42)
 
-
-;; when redefining we afect all functions that use this value via the symbol name.
-(def singleton-as-value 47)
-
+;; ---------------------------------------------------------
+;; Scope
+;;
+;; Local verses shared names
 
 ;; local bindings over-ride global def values
+;; (def favourite-number 42)
 
-(def favourite-number 42)
+;; (defn whats-my-favourte-number
+;;   [number]
+;;   (println "You said your favourite number was" favourite-number)
+;;   (let [favourite-number (/ number 2)]
+;;     (str "Your real favourite number is " favourite-number)))
+;;
+;; ;; Passing a value means the local name
+;; (whats-my-favourte-number 24)
+;;
+;; (whats-my-favourte-number favourite-number)
 
-
-(defn whats-my-favourte-number
-  [number]
-  (println "You said your favourite number was" favourite-number)
-  (let [favourite-number (/ number 2)]
-    (str "Your real favourite number is " favourite-number)))
-
-
-(whats-my-favourte-number favourite-number)
+;; ---------------------------------------------------------
 
 
 ;; defonce allows us to create a name for a value, assuming its not already been bound.
-(defonce singleton-as-value 24)
+;; (defonce singleton-as-value 24)
 
 
 ;; Using the constantly function
@@ -87,7 +89,7 @@
 (the-answer "What is 6 times 9")
 
 
-;; it does not matter what arguments we give to 
+;; it does not matter what arguments we give to
 ;;
 ;; Command pattern
 
@@ -102,27 +104,17 @@
 (execute database/logout "fey")
 
 
-;; Or using a shortcut form
-(defn execute
-  [command]
-  (command))
-
-
-(execute #(database/login  "rey" "force@wakens"))
-(execute #(database/logout "rey"))
-
-
 ;; Where it could be useful in Clojure
 ;; - persistent storage - passing actions, connection & access details to minimise the code that needs specific database libraries
 
 
 
-;;
+;; ---------------------------------------------------------
 ;; Strategy pattern
 
 ;; enables an algorithm's behavior to be selected at runtime. The strategy pattern defines a family of algorithms, encapsulates each algorithm, and makes the algorithms interchangeable within that family.
 
-;; Strategy lets the algorithm vary independently from clients that use it. 
+;; Strategy lets the algorithm vary independently from clients that use it.
 
 ;; In this example we want to pass in the sorting strategy when we want to get a sorted list of users with subscribers at the top
 
@@ -160,37 +152,38 @@
 
 ;; too high level nonsense....
 
+;; ---------------------------------------------------------
 
 
-;;
+;; ---------------------------------------------------------
 ;; State pattern
 
 ;; hmm... state pattern... its a bit like the stragegy pattern with slightly different encapsulation
 
 
 
-;;
+;; ---------------------------------------------------------
 ;;
 ;; Patterns I am weary of
 ;;
-;;
+;; ---------------------------------------------------------
 
 
-;;
+;; ---------------------------------------------------------
 ;; Visitor pattern
 
 ;; if a language support multiple dispatch, you don't need Visitor pattern
 
-(defmulti export
-  (fn [item format] [(:type item) format]))
-
-
-;; Message
-{:type :message :content "Say what again!"}
-
-
-;; Activity
-{:type :activity :content "Quoting Ezekiel 25:17"}
+;; (defmulti export
+;;   (fn [item format] [(:type item) format]))
+;;
+;;
+;; ;; Message
+;; {:type :message :content "Say what again!"}
+;;
+;;
+;; ;; Activity
+;; {:type :activity :content "Quoting Ezekiel 25:17"}
 
 
 ;; Formats
@@ -225,33 +218,38 @@
 
 ;; (derive ::csv ::format)
 
+;; ---------------------------------------------------------
 
 
-;;
+;; ---------------------------------------------------------
 ;; Template pattern
+;; ---------------------------------------------------------
 
 
 
+;; ---------------------------------------------------------
 ;; Strategy
 
-(defn cooley-tukey
-  [signal])
+;; (defn cooley-tukey
+;;   [signal])
+;;
+;;
+;; (defn prime-factor
+;;   [signal])
+;;
+;;
+;; (defn choose-fft
+;;   []
+;;   (if relatively-prime? prime-factor cooley-tukey))
+;;
+;;
+;; (defn main
+;;   []
+;;   (let [signal (get-signal)] ((choose-fft) signal)))
 
+;; ---------------------------------------------------------
 
-(defn prime-factor
-  [signal])
-
-
-(defn choose-fft
-  []
-  (if relatively-prime? prime-factor cooley-tukey))
-
-
-(defn main
-  []
-  (let [signal (get-signal)] ((choose-fft) signal)))
-
-
+;; ---------------------------------------------------------
 ;; Adapter
 
 (defprotocol BarkingDog
@@ -270,17 +268,20 @@
 
 (bark a-vector) [1 2 3 4 "bark!"]
 
+;; ---------------------------------------------------------
 
+;; ---------------------------------------------------------
 ;;  Template Method
 
-(defn update-account-status
-  [account-id get-fn status save-fn]
-  (let [account (get-fn account-id)]
-    (when (not= status (:status account))
-      (log/info "Updating status for account:" account-id)
-      (save-fn (assoc account :status status)))))
+;; (defn update-account-status
+;;   [account-id get-fn status save-fn]
+;;   (let [account (get-fn account-id)]
+;;     (when (not= status (:status account))
+;;       (log/info "Updating status for account:" account-id)
+;;       (save-fn (assoc account :status status)))))
 
 
 ;; (defn get-account-from-mysql ,,,)
 ;; (defn get-account-from-datomic ,,,…)
 ;; (defn get-account-from-http ,,,)
+;; ---------------------------------------------------------

@@ -9,7 +9,7 @@
 ;; The filter function takes two arguments: a predicate function (f) and a sequence (s). Filter returns a new sequence consisting of all the items of s for which (f item) returns true.
 
 ;; Tests
-(=  (filter #(> % 5) '(3 4 5 6 7)))
+(= [6 7] (filter #(> % 5) '(3 4 5 6 7)))
 
 
 ;; Analysis of the problem
@@ -67,7 +67,8 @@
 
 (quote (6 7))  ; is simply the long form of the above answer.
 
-;; NOTE: In Clojure it is idiomatic to use Vectors rather than lists for data representation
+;; NOTE: In Clojure code, it is idiomatic to use Vectors rather than lists for data representation
+;; unless a hash-map or linked list is specifically required
 
 
 
@@ -262,9 +263,9 @@
 ;; Write a function which takes a vector of keys and a vector of values and constructs a map from them.
 
 ;; Tests
-(= (__ [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3})
-(= (__ [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"})
-(= (__ [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"})
+;; (= (__ [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3})
+;; (= (__ [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"})
+;; (= (__ [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"})
 
 
 ;; If we could use zipmap then the answer would be simple
@@ -438,12 +439,12 @@
 ;; we can call the function using the local name winner,
 ;; passing a board and a player character to see if they have won.
 ;; We just use a single winning pattern here for simplicity.
-(let [winner (fn [[[a b c]
-                   [d e f]
-                   [g h i]]
-                  player]
-               (= player a b c))]
-  (winner board-x-first-row :x))
+;; (let [winner (fn [[[a b c]
+;;                    [d e f]
+;;                    [g h i]]
+;;                   player]
+;;                (= player a b c))]
+;;   (winner board-x-first-row :x))
 
 
 ;; => true
@@ -455,16 +456,16 @@
 ;; in this case the board patter we are destructuring and the player character.
 ;; For example:
 
-(letfn [(winner
-          [[[a b c]
-            [d e f]
-            [g h i]]
-           player])])
+;; (letfn [(winner
+;;           [[[a b c]
+;;             [d e f]
+;;             [g h i]]
+;;            player])])
 
 
 ;; Using macro-expansion we can see the letfn creates a function called winner
 ;; with two arguments: a board pattern and player
-(letfn* [winner (fn winner [[[a b c] [d e f] [g h i]] player])])
+;; (letfn* [winner (fn winner [[[a b c] [d e f] [g h i]] player])])
 
 
 ;; We can call the local winner function whilst inside the letfn expression,
@@ -475,14 +476,14 @@
 ;; attempt at defining the function behaviour.
 ;; If the first row matches the player character then we should get true.
 
-(letfn [(winner
-          [[[a b c]
-            [d e f]
-            [g h i]]
-           player]
-          (println (str "first row: " [a b c])) ; debugging
-          (= player a b c))]
-  (winner board-x-first-row :x))
+;; (letfn [(winner
+;;           [[[a b c]
+;;             [d e f]
+;;             [g h i]]
+;;            player]
+;;           (println (str "first row: " [a b c])) ; debugging
+;;           (= player a b c))]
+;;   (winner board-x-first-row :x))
 
 
 ;; => true

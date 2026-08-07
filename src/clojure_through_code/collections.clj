@@ -16,6 +16,7 @@
 
 (def albums ["Smells like Teen Spirit", "Trash", "Vision Thing" "Tubular Bells"])
 
+(count albums)
 
 ;; If you have a small collection, this could be okay.  However, it doesnt capture the names of the artists.  You may want to listen to something by Mike Oldfield but forget which albums they created
 
@@ -107,10 +108,10 @@
 
 ;; first try at is-by-artist? function - problem: trying to parse the whole collection here, rather than just a function to parse each album map in the calling expression.
 #_(defn is-by-artist?
-  "Checks album to see if it is by a particular artist"
-  [artist collection]
-  (if-some [result (= (map #(get % :artist) collection) artist)]
-    result))
+   "Checks album to see if it is by a particular artist"
+   [artist collection]
+   (if-some [result (= (map #(get % :artist) collection) artist)]
+     result))
 
 
 ;; Lets define a function that takes the name of an artist and an album map and checks if that album is by the said artist.  This function will only take one album map, not the collection of album maps.

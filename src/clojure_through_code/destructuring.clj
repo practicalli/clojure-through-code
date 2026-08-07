@@ -26,16 +26,15 @@
 
 ;; Its quite common to take the first element as a specific name and use another name for the rest of the elements
 
-(def shopping-list ["oranges" "apples" "spinach" "carrots" "potatoes" "beetroot"])
+;; (def shopping-list ["oranges" "apples" "spinach" "carrots" "potatoes" "beetroot"])
 
 
-(defn get-item
-  [items]
-  (let [[next-item & other-items] items]
-    (str "The next item to get is: " next-item)))
-
-
-(get-item shopping-list)
+;; (defn get-item
+;;   [items]
+;;   (let [[next-item & other-items] items]
+;;     (str "The next item to get is: " next-item)))
+;;
+;; (get-item shopping-list)
 
 
 ;; => "The next item to get is: oranges"

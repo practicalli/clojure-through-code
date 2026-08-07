@@ -15,28 +15,27 @@
 ;; However, the value or collection itself is immutable, so does not change. Its the atom that shows you a different value.
 
 
-;;
 ;; Using fictional characters to show atoms in action
 ;; (work in progress)
 
-(def human-characters [])
-
+(def human-characters (atom []))
 (def mutant-characters (atom []))
 
+(defn add-human
+  [name]
+  (swap! human-characters conj name))
 
 (defn add-mutant
   [mutant]
   (swap! mutant-characters conj mutant))
 
-
-(add-mutant "Black Widow")
+(add-human "Black Widow")
 (add-mutant "Hulk")
 (add-mutant "Ariel")
 
 
-;;
-;; Gambling Game example of state
 
+;; Gambling Game example of state
 
 ;; The examples in this section relate to an online gambling game in which players compete against each other and against the tame itself.
 ;; The hands that the players are dealt and the money which they have in their account are mutable in these examples
@@ -55,8 +54,7 @@
 ;; As we are going to change state, we want to do it in a safe way,
 ;; so we define that vector with an atom
 
-(def players (atom []))
-
+;; (def players (atom []))
 
 ;; We also add a :validator as a condition to ensure we dont put more than
 ;; 2 players into the game
@@ -64,8 +62,6 @@
 (def players (atom [] :validator #(<= (count %) 2)))
 
 
-;; the second definition of players point the var name to something new
-;; we havent changed what players was, it just points to something diferent
 
 ;; Add players
 (swap! players conj "Player One")
@@ -80,8 +76,8 @@
 
 ;; Add players by name
 (defn join-game
-  [name]
-  (swap! players conj name))
+ [name]
+ (swap! players conj name))
 
 
 (join-game "Rachel")
@@ -89,42 +85,78 @@
 (join-game "Terry")         ; cant add a third name due to the :validator condition on the atom
 ;; (join-game "Sally" "Sam") ;; too many parameters
 
-@players
+(str "Current players: " @players)
 
+(defn reset-game
+  []
+  (reset! players []))
 
-;; (defn reset-game
-;; (reset! players [nil]))
-;; reset! should be a vector
-
-(reset! players [])
+(reset-game)
 
 
 ;; Atom and assoc with multiple keyword updates
 ;;
 
-
-(def accounts
+(def game-accounts
   {:betty  280
    :jenny  460
    :sammy  100
    :dealer 100000})
 
 
-(update accounts
-        :betty (dec 50)
-        :jenny (dec 75)
-        :dealer (dec 100))
+;; (update game-accounts
+;;         :betty (dec 50)
+;;         :jenny (dec 75)
+;;         :dealer (dec 100))
+;;
+;; update only accepts one key and one function per call — there's no built-in variadic version like assoc has.
+;;
+;; (dec 50) evaluates immediately to 49, not a function you can apply later. update needs a function (or a function + extra args), not a precomputed value.
+
+(defn account-transaction
+  "Helper function to update multiple keys within one call"
+  [m & kvs]
+  (reduce (fn [acc [k f]] (update acc k f))
+          m
+          (partition 2 kvs)))
+
+(account-transaction
+  game-accounts
+   :betty  #(- % 50)
+   :jenny  #(- % 75)
+   :dealer #(- % 100))
+;; => {:betty 230, :jenny 385, :sammy 100, :dealer 99900}
+
+
+
+;; A simpler approach for updating accounts
+;;
+;; update is "subtract this amount from each account," this is the idiomatic one-liner:
+
+(merge-with - game-accounts {:betty 50 :jenny 75 :dealer 100})
+;; => {:betty 230, :jenny 385, :sammy 100, :dealer 99900}
+
+;; `merge-with -` combines each key using -, so it computes 280 - 50, 460 - 75, 100000 - 100, and leaves :sammy alone since it's not in the second map.
+
+;; Which to pick
+
+;; If it's specifically "subtract an amount from several accounts" (like a betting round) → merge-with - is the cleanest, most idiomatic Clojure and needs no helper.
+
+;; If you want a general-purpose tool that works with any function per key (not just subtraction), and want assoc-like syntax → the updates helper is more flexible.)
+
+;; Given a domain such as a poker/betting simulator then `merge-with -` with a deltas map is the simplest approach.
+
 
 
 ;; Clojure ref types
 ;;
 
+(def jennys-account (ref 500))
+(def bettys-account (ref 500))
+(def game-account (ref 5000000))
 
-(def dick-account (ref 500))
-(def toms-account (ref 500))
-(def betty-account (ref 500))
-
-@betty-account
+@jennys-account
+@bettys-account
 
 
 (defn credit-table
@@ -139,7 +171,7 @@
   (swap! players conj name))
 
 
-(defn join-game
+(defn add-person-to-account
   [name account]
   ;;  (if (< account 100 )
   ;;    (println "You're broke")
@@ -147,7 +179,7 @@
   (add-to-table name))
 
 
-(join-game "Betty" betty-account)
+(add-person-to-account "Betty" bettys-account)
 
 
 ;; NOTE: If a map is used in the atom that has all the relevant information that needs changing you may not need to use the following ref example
@@ -156,27 +188,16 @@
 
 ;;
 ;; Using ref to manage multiple state changes
-
-
-@player-ref
-@toms-account
-
-@betty-account
-
-
 (def game-world
   (atom {:players [{:id 0 :name "harriet" :account 100}]
          :game-account 0}))
 
 
-#_(swap! update-in game-world
-       :game-account add-player
-
-       )
+(swap! game-world update-in
+     :game-account add-person-to-account)
 
 
 (def players-ref (ref [] :validator #(<= (count %) 2)))
-(def game-account (ref 1000))
 (def harriet-account (ref 0))
 
 
@@ -199,7 +220,7 @@
 
 ;; (alter game-account 1000)
 
-(join-game-safely "Tom" toms-account game-account)
+(join-game-safely "Jenny" jennys-account game-account)
 
 
 ;; Refs are for Coordinated Synchronous access to "Many Identities".

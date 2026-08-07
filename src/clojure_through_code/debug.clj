@@ -133,7 +133,7 @@
 
 ;; Current error on 1.10
 
-(map identity (map 123 (range 10)))
+;; (map identity (map 123 (range 10)))
 
 
 ;; Error printing return value (ClassCastException) at clojure.core/map$fn (core.clj:2753).
@@ -141,7 +141,7 @@
 
 ;; Adding the value that cannot be cast might give better context
 
-(map identity (map 123 (range 10)))
+;; (map identity (map 123 (range 10)))
 
 
 ;; Error printing return value (ClassCastException) at clojure.core/map$fn (core.clj:2753).

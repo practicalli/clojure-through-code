@@ -4,7 +4,7 @@
   (:require
     [clojure.core.async
      :refer
-     [<! <!! >! >!! alts!! chan go put! take! timeout]]))
+     [<! <!! >! >!! alts!! chan close! go put! take! timeout]]))
 
 
 ;;
@@ -201,7 +201,7 @@
 ;; We will use this later to push messages on to the core.async channel
 
 #_(dotimes [message 6]
-  (println message))
+   (println message))
 
 
 ;; Listen to a channel for ever using a non-blocking channel
@@ -247,9 +247,9 @@
   (doseq [channel channel-sequence]
     (go (>! channel "Hello")))
 
-  (dotimes [i number-of-channels]
+  (dotimes [channel number-of-channels]
     (let [[value channel] (alts!! channel-sequence)]
-      (assert (= "Hello" value))))
+      (assert (= "Hello from channel" value))))
 
   (println "Read" number-of-channels "messages in"
            (- (System/currentTimeMillis) begin) "ms"))

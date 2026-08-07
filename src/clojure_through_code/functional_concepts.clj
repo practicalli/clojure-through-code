@@ -54,6 +54,7 @@
 
 (defn impure-increment-numbers
   [number-collection]
+  (println number-collection)
   (map inc shared-value))
 
 
@@ -352,13 +353,14 @@ capital-letters
 ;; reverse will return a sequence of characters as a result
 ;; so we need to compare that with a seq of the string
 
-((﻿fn [string-to-test]
-      (= (seq string-to-test)
-         (reverse string-to-test)))
- "racecar")
+;; ((fn [string-to-test
+;;       (= (seq string-to-test)
+;;          (reverse string-to-test))])
+;;  "racecar")
 
 
 ;; Using the clojure.string library we can simply compare strings as they are
+(require 'clojure.string)
 
 ((fn [string-to-test]
    (= string-to-test
@@ -540,15 +542,15 @@ name-of-new-string
 
 (take 10 (range))
 
-(def sybol-name "value")
+;; (def sybol-name "value")
 
 
 (defn function-name
   []
-  (str "I am a function"))
+  "I am a function")
 
 
-(def function-name (fn [] (str "iaomdfiodjfod")))
+;; (def function-name (fn [] (str "iaomdfiodjfod")))
 
 (function-name)
 
@@ -561,9 +563,9 @@ name-of-new-string
 
 ;; This is how you define a function (the easy eay)
 
-(defn my-function-name
-  [parameter-list]
-  (str "This is the algorithum of my method, which could be many functions workin"))
+;; (defn my-function-name
+;;   [parameter-list]
+;;   (str "This is the algorithum of my method, which could be many functions workin"))
 
 
 ;; Pure Functions Are Referentially Transparent
@@ -580,7 +582,7 @@ name-of-new-string
 
 (range 1 11)
 
-(+ (range 1 11))
+;; (+ (range 1 11))   ; `+` function does not accept a collection of numbers
 
 (apply + (range 1 40))
 
@@ -593,31 +595,19 @@ name-of-new-string
 ;; TODO: these different types need some explaination.
 
 (type (range))
-
-
 ;; => clojure.lang.Iterate
 
 (type (take 4 (range)))
-
-
 ;; => clojure.lang.LazySeq
 
 (class (take 4 (range)))
-
-
 ;; => clojure.lang.LazySeq
 
 (take 4 (range))
-
-
 ;; => (0 1 2 3)
 
 (type (range 1 10))
-
-
 ;; => clojure.lang.LongRange
-
-(reduce + (1 2 3 4 5 6 7 8 9))
 
 
 ;; Both the reply and reduce functions take 2 arguments, the first is the function to apply to a data structure, the second is the data structure.  In this example, rather than type out the Integer numbers from 1 to 40, we use the range function to generate them for us.
@@ -647,16 +637,16 @@ name-of-new-string
 (last '(1 2 3 4 5))
 
 
-(defn nth
+(defn nth-clone
   [items n]
   (if (= n 0)
     (first items)
     (recur (rest items) (- n 1))))
 
 
-(define squares '(0 1 4 9 16 25))
+(def squares '(0 1 4 9 16 25))
 
-(nth squares 3)
+(nth-clone squares 3)
 
 
 ;;
@@ -680,11 +670,6 @@ name-of-new-string
 
 ;;
 ;; Polymorphism
-
-(defn name
-  [args]
-  ())
-
 
 (defn i-am-polly
   ([] (i-am-polly "My name is polly"))
@@ -716,19 +701,8 @@ name-of-new-string
 ;; - accumulating / accumulative
 ;; - keep
 
-;;
-;; Polymorphism
-
-(defn i-am-polly
-  ([] (i-am-polly "My name is polly"))
-  ([message] (str message)))
 
 
-(i-am-polly)
-(i-am-polly "I call different behaviour depending on arguments sent")
-
-
-;;
 ;; Recursion with polymorphism
 
 (defn sum
@@ -754,7 +728,7 @@ name-of-new-string
 ;; Using tail call optomisation allows us to reuse a memory location when we call a function recursively.
 ;; Recur allows the processing of a very large data set without blowing the heap space.
 
-(defn sum
+(defn summing
   ([vals] (sum vals 0))
   ([vals accumulating-total]
    (if (empty? vals)
@@ -762,7 +736,7 @@ name-of-new-string
      (recur (rest vals) (+ (first vals) accumulating-total)))))
 
 
-(sum (vec (range 0 9999999)))
+(summing (vec (range 0 9999999)))
 
 
 ;;
@@ -774,7 +748,7 @@ name-of-new-string
 ;; As we are going to change state, we want to do it in a safe way,
 ;; so we define that vector with an atom
 
-(def players (atom []))
+;; (def players (atom []))
 
 
 ;; We also add a :validator as a condition to ensure we dont put more than
@@ -920,10 +894,6 @@ deref players
 (def ^{:private true} some-var :value)
 
 
-;; or
-(def ^:private some-var :value)
-
-
 ;; private functions could help with encapsulation and document in the code which functions form the `API' for a namespace.
 
 (defn- my-private-function
@@ -941,9 +911,9 @@ deref players
 ;; clojure.core/->
 ;; -> is the thread first macro. It transforms code from a linear notation into nested notation. This is also known as “function chaining”. Clojure calls this “threading”.
 
-(-> x f1) is equivalent to (f1 x)
-(-> x f1 f2) is equivalent to (f2 (f1 x))
-(-> x f1 f2 f3) is equivalent to (f3 (f2 (f1 x)))
+;; (-> x f1) is equivalent to (f1 x)
+;; (-> x f1 f2) is equivalent to (f2 (f1 x))
+;; (-> x f1 f2 f3) is equivalent to (f3 (f2 (f1 x)))
 
 
 ;; examples of using thread first macro: ->

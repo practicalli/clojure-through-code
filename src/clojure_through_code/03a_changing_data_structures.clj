@@ -1,7 +1,5 @@
 (ns clojure-through-code.03a-changing-data-structures)
 
-
-;;
 ;; Changing data in data structures
 
 ;; Wait, I thought you said that data structures were immutable!
@@ -29,8 +27,6 @@
 
 ;; conjoining to a list adds the value at the beginning
 (conj '(1 2 3) 4)
-
-
 ;; => (4 1 2 3)
 
 ;; In Clojure a list is a linked list, its more efficient to add new elements to the start of a list.
@@ -42,9 +38,8 @@
 
 ;; conjoining to a vector adds the value at the end
 (conj [1 2 3] 4)
-
-
 ;; => [1 2 3 4]
+
 
 ;; list of strings
 (conj '("and" "chips") "fish")
@@ -55,41 +50,27 @@
 ;; If you use cons (think construct) this returns a list, regardless of the original data structure type.
 
 (conj ["a" "b" "c"] "d")
-
-
 ;; => ["a" "b" "c" "d"]
 
 ;; conjoining multiple items is done in order
 (conj [1 2] 3 4)
-
-
 ;; => [1 2 3 4]
 
 (conj '(1 2) 3 4)
-
-
 ;; => (4 3 1 2)
 
 (conj [[1 2] [3 4]] [5 6])
-
-
 ;; => [[1 2] [3 4] [5 6]]
 
 ;; conjoining to maps only take items as vectors of length exactly 2
 (conj {1 2, 3 4} [5 6])
-
-
 ;; => {5 6, 1 2, 3 4}
 
 (conj {:firstname "John" :lastname "Doe"} {:age 25 :nationality "Chinese"})
-
-
 ;; => {:nationality "Chinese", :age 25, :firstname "John", :lastname "Doe"}
 
 ;; conj on a set
 (conj #{1 3 4} 2)
-
-
 ;; => #{1 2 3 4}
 
 ;; from Clojure.org
@@ -98,68 +79,48 @@
 ;; The main difference being that conj works on collections
 ;; but cons works with seqs.
 (conj ["a" "b" "c"] ["a" "b" "c"])
-
-
 ;; => ["a" "b" "c" ["a" "b" "c"]]
 
 ;; conjoin nil with x or xs
 (conj nil 3)
-
-
 ;; => (3)
 
 (conj nil 3 4)
-
-
 ;; => (4 3)
 
 ;; maps and sets are treated differently
 (conj {1 2} {3 4})
-
-
 ;; => {3 4, 1 2}   ; the contents of {3 4} are added to {1 2}
 
 (conj #{1 2} #{3})
-
-
 ;; => #{1 2 #{3}}  ; the whole set #{3} is added to #{1 2}
+
 
 (require 'clojure.set)
 
 (clojure.set/union #{1 2} #{3})
-
-
 ;; => #{1 2 3}  ; use (clojure.set/union) to merge sets, not conj
 
 ;; When conjoining into a map, vector pairs may be provided:
 (conj {:a 1} [:b 2] [:c 3])
-
-
 ;; => {:c 3, :b 2, :a 1}
 
 ;; Or maps may be provided, with multiple pairings:
 (conj {:a 1} {:b 2 :c 3} {:d 4 :e 5 :f 6})
-
-
 ;; => {:f 6, :d 4, :e 5, :b 2, :c 3, :a 1}
 
 ;; But multiple pairings cannot appear in vectors:
 (conj {:a 1} [:b 2 :c 3])
-
-
 ;; => IllegalArgumentException Vector arg to map conj must be a pair...
 
 ;; And pairs may not be provided in lists:
 (conj {:a 1} '(:b 2))
-
-
 ;; => ClassCastException ...Keyword cannot be cast to ...Map$Entry...
+
 
 ;; Returns a new seq where x is the first element and seq is the rest.
 
-;;
 ;; In practice
-
 ;; Lets define a simple list and give it a name
 (def list-one '(1 2 3))
 
@@ -205,20 +166,14 @@ list-one
 ;; Creating default maps from a known set of keys
 
 (zipmap [:foo :bar :baz] (repeat nil))
-
-
 ;; => {:foo nil, :bar nil, :baz nil}
 
 ;; alternatively
 (into {} (for [k [:foo :bar :baz]] [k nil]))
-
-
 ;; => {:foo nil, :bar nil, :baz nil}
 
 ;; creating a map with random integer values (use rand for decimal)
 (zipmap [:foo :bar :baz] (repeatedly #(rand-int 11)))
-
-
 ;; => {:foo 9, :bar 2, :baz 9}
 
 ;;
@@ -234,8 +189,6 @@ list-one
 ;; Whilst you could use map to iterate over the hiccup data structure
 (html5 (for [row player-data]
          [:tr (map (fn [x] [:td (val x)]) row)]))
-
-
 ;; => "<!DOCTYPE html>\n<html><tr><td>Oliver</td><td>100</td></tr><tr><td>Revilo</td><td>50</td></tr></html>"
 
 ;; Its more idiomatic to use a let form to define local names that are then used in the hiccup data structure
@@ -243,6 +196,4 @@ list-one
              :let [player (:name row)
                    score (:score row)]]
          [:tr [:td player] [:td score]]))
-
-
 ;; => "<!DOCTYPE html>\n<html><tr><td>Oliver</td><td>100</td></tr><tr><td>Revilo</td><td>50</td></tr></html>"
