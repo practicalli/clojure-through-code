@@ -69,6 +69,10 @@ rebel:  ## Run Clojure REPL with rich terminal UI (Rebel Readline)
 	$(info -- Run Rebel REPL ------------------------)
 	clojure -M:dev/env:test/env:repl/rebel
 
+repl-basic:  ## Run Clojure REPL with rich terminal UI (Rebel Readline)
+	$(info -- Run Rebel REPL ------------------------)
+	clj -M:repl/basic
+
 reloaded:  ## Run Clojure REPL with rich terminal UI (Rebel Readline)
 	$(info -- Run Rebel REPL ------------------------)
 	clojure -M:repl/reloaded
