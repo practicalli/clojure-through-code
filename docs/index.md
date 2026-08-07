@@ -4,7 +4,7 @@ icon: lucide/rocket
 
 # Get started
 
-Practicalli recommends opening files from this project in a [Clojure aware editor]() with a connected REPL session.
+Practicalli recommends opening files from this project in a [Clojure aware editor](https://practical.li/clojure/clojure-editors/) with a connected REPL session.
 
 This project assumes Clojure CLI aliases from [Practicalli Clojure CLI Config](https://practical.li/clojure/clojure-cli/practicalli-config/){target=_blank} are available.
 
