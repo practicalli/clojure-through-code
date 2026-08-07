@@ -60,10 +60,6 @@ service-integrant:  ## New project with practicalli/service template & Integrant
 landing-page:  ## New project with practicalli/landing-page template local
 	$(info -- Run Rebel REPL ------------------------)
 	clojure -T:project/create :template practicalli/landing-page :name practicalli/landing-page
-
-outdated: ## Check deps.edn & GitHub actions for new versions
-	$(info -- Search for outdated libraries ---------)
-	- clojure -T:search/outdated > $(OUTDATED_FILE)
 # -------------------------------------- #
 
 # -- Clojure Workflow ------------------ #
@@ -91,10 +87,6 @@ clean:  ## Clean Clojure tooling temporary files
 run:  ## Run Service using clojure.main
 	$(info -- Download test and service libraries ---)
 	clojure -M:run/service
-
-outdated: ## Check deps.edn & GitHub actions for new versions
-	$(info -- Search for outdated libraries ---------)
-	- clojure -T:search/outdated > $(OUTDATED_FILE)
 # -------------------------------------- #
 
 # -- Testing --------------------------- #
