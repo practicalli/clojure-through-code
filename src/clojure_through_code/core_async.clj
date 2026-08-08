@@ -4,7 +4,7 @@
   (:require
     [clojure.core.async
      :refer
-     [<! <!! >! >!! alts!! chan close! go put! take! timeout]]))
+     [<! <!! >! >!! chan close! go put! take! timeout]]))
 
 
 ;;
@@ -240,16 +240,16 @@
 
 ;; Create 1000 go blocks, each with a channel
 
-(let [number-of-channels 1000
-      channel-sequence (repeatedly number-of-channels chan)
-      begin (System/currentTimeMillis)]
-
-  (doseq [channel channel-sequence]
-    (go (>! channel "Hello")))
-
-  (dotimes [channel number-of-channels]
-    (let [[value channel] (alts!! channel-sequence)]
-      (assert (= "Hello from channel" value))))
-
-  (println "Read" number-of-channels "messages in"
-           (- (System/currentTimeMillis) begin) "ms"))
+;; (let [number-of-channels 1000
+;;       channel-sequence (repeatedly number-of-channels chan)
+;;       begin (System/currentTimeMillis)]
+;;
+;;   (doseq [channel channel-sequence]
+;;     (go (>! channel "Hello")))
+;;
+;;   (dotimes [channel number-of-channels]
+;;     (let [[value channel] (alts!! channel-sequence)]
+;;       (assert (= "Hello from channel" value))))
+;;
+;;   (println "Read" number-of-channels "messages in"
+;;            (- (System/currentTimeMillis) begin) "ms"))

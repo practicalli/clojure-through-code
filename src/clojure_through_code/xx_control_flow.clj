@@ -68,7 +68,7 @@
 
 
 ;;
-;; 
+;;
 ;; If you have multiple things to do, you can still use if with a little help from do or the threading macro
 
 (defn lower-public-spending
@@ -112,7 +112,7 @@
 
 ;; Tip: if you find the threading macro hard to read,
 ;; you can place ,,, where the result of the evaluation would be in the following function
-;; as commas are treated as whitespace
+;; as commas are treated as blank space
 
 (->
   7

@@ -23,7 +23,7 @@
 
 
 ;; Arguments that include the same key will use the value associated with the last key in the argument list
-(hash-map :movie "The Last Jedi" :movie "The Empire Strikes Back")
+;; (hash-map :movie "The Last Jedi" :movie "The Empire Strikes Back")
 
 
 ;; => {:movie "The Empire Strikes Back"}
@@ -89,12 +89,14 @@
 
 ;; access nested maps:
 (get-in best-movie [:actors "Leia"])
-
-
 ;; => "Carrie Fisher"
 
-(-> best-movie :actors "leia")
+;; Threading macro only works with Clojure keywords as they act as fuctions
+;; A string as a key cannot be used directly
+;; (-> best-movie :actors "leia")
 
+;; Use the get function with a string
+(-> best-movie :actors (get "leia"))
 
 (def planets
   {:mercury [3.303e+23, 2.4397e6]
@@ -106,28 +108,26 @@
   [planet]
   (first (planet planets)))
 
-
 (defn radius
   [planet]
   (second (planet planets)))
 
 
 (name :mercury)
-
-
 ;; => "mercury"
 
 (keyword "mercury")
-
-
 ;; => :mercury
 
 
 (keys planets)
-
-
 ;; => (:mercury :venus)
 
+
+(comment
+  (mass (planets :mercury))
+
+  (radius (planets :venus)))
 
 
 ;; Combining data structures into maps
@@ -161,7 +161,7 @@
 ;; Lets get the projects that have capex hours
 
 (for [project project-management
-      :when (= true (get-in [project "capex"] project-management))]
+      :when (= true (get-in project-management [project "capex"]))]
   (get-in [project "hours"] project))
 
 
@@ -190,29 +190,29 @@
 
 ;; => true
 
-(for [project project-management
-      :when (= true (get-in [project "capex"] project-management))]
-  (get (second project) "hours"))
-
-
-(for [project project-management
-      :when (= true (get-in [project "capex"] project-management))]
-  (get-in [project "hours"] project-management))
-
-
-;; project is the full map and not just the project key name
-(for [project project-management
-      :let [capex (get-in [project "capex"] project-management)]
-      :when (= capex true)]
-  (get-in [project "hours"] project-management))
-
-
-;; create a second let to capture the project name
-(for [project project-management
-      :let [project-name (keys project)  ; intermediate data structure created by for is a vector, so project name not relevant
-            capex (get-in [project "capex"] project-management)]
-      :when (= capex true)]
-  (get-in [project-name "hours"] project-management))
+;; (for [project project-management
+;;       :when (= true (get-in [project "capex"] project-management))]
+;;   (get (second project) "hours"))
+;;
+;;
+;; (for [project project-management
+;;       :when (= true (get-in [project "capex"] project-management))]
+;;   (get-in [project "hours"] project-management))
+;;
+;;
+;; ;; project is the full map and not just the project key name
+;; (for [project project-management
+;;       :let [capex (get-in [project "capex"] project-management)]
+;;       :when (= capex true)]
+;;   (get-in [project "hours"] project-management))
+;;
+;;
+;; ;; create a second let to capture the project name
+;; (for [project project-management
+;;       :let [project-name (keys project)  ; intermediate data structure created by for is a vector, so project name not relevant
+;;             capex (get-in [project "capex"] project-management)]
+;;       :when (= capex true)]
+;;   (get-in [project-name "hours"] project-management))
 
 
 (for [project project-management
@@ -236,13 +236,13 @@
 
 
 #_(while project-management
-  (into []
-        (hash-map (first project-management))))
+   (into []
+         (hash-map (first project-management))))
 
 
 #_(while project-management
-  (into []
-        (hash-map (keys project-management) (vals project-management))))
+   (into []
+         (hash-map (keys project-management) (vals project-management))))
 
 
 ;; (filter #(get-in ))
@@ -378,8 +378,8 @@ project-capex-hours; => (7 6)
 
 
 (comment
-  music-collection
-  )
+  music-collection)
+
 
 
 ;; if we want albums by artist
@@ -395,8 +395,8 @@ project-capex-hours; => (7 6)
           {} music-collection)
 
 
-#_(into {} (map (fn [album]
-                  )))
+#_(into {} (map (fn [album])))
+
 
 
 (loop [albums    music-collection
@@ -419,37 +419,37 @@ project-capex-hours; => (7 6)
 ;; => {"Mike Oldfield" [{:album-name "Tubular Bells", :artist "Mike Oldfield"}], "Nirvana" [{:album-name "Smells like teen spirit", :artist "Nirvana"}], "Sisters of Mercy" [{:album-name "Vision Thing", :artist "Sisters of Mercy"}], "New Model Army" [{:album-name "Here comes the war", :artist "New Model Army"} {:album-name "Thunder & Consolation", :artist "New Model Army"}]}
 
 
-(group-by (fn [album] {:artist [:album-name]})
-          music-collection)
+;; (group-by (fn [album] {:artist [:album-name]})
+;;           music-collection)
 
 
-(reduce-kv
-  (fn [albums artist title]
-    (if (empty? title)
-      (assoc albums (:artist) [:title])
-      (update albums artist conj title)))
-  {}
-  music-collection)
+;; (reduce-kv
+;;   (fn [albums artist title]
+;;     (if (empty? title)
+;;       (assoc albums (:artist) [:title])
+;;       (update albums artist conj title)))
+;;   {}
+;;   music-collection)
 
 
-(defn albums-by-artist
-  [album f]
-  (reduce-kv
-    (fn [m k v]
-      (assoc m (:artist album) (f (:album-name album)))) {} album))
+;; (defn albums-by-artist
+;;   [album f]
+;;   (reduce-kv
+;;     (fn [m k v]
+;;       (assoc m (:artist album) (f (:album-name album)))) {} album))
 
 
-(map #(albums-by-artist % conj) music-collection)
+;; (map #(albums-by-artist % conj) music-collection)
 
 
-(defn albums-by-artist
-  [album f]
-  (reduce
-    (fn [m k v]
-      (assoc m (:artist album) (f (:album-name album)))) {} album))
-
-
-(group-by :artist music-collection)
+;; (defn albums-by-artist
+;;   [album f]
+;;   (reduce
+;;     (fn [m k v]
+;;       (assoc m (:artist album) (f (:album-name album)))) {} album))
+;;
+;;
+;; (group-by :artist music-collection)
 
 
 ;; => {"Mike Oldfield" [{:album-name "Tubular Bells", :artist "Mike Oldfield"}], "Nirvana" [{:album-name "Smells like teen spirit", :artist "Nirvana"}], "Sisters of Mercy" [{:album-name "Vision Thing", :artist "Sisters of Mercy"}], "New Model Army" [{:album-name "Here comes the war", :artist "New Model Army"} {:album-name "Thunder & Consolation", :artist "New Model Army"}]}
@@ -458,7 +458,7 @@ project-capex-hours; => (7 6)
 
 #_(into {}
         (map (fn [album]
-               (:artist album) )))
+               (:artist album))))
 
 
 ;; Renaming keys from a JSON rest call
@@ -504,16 +504,17 @@ project-capex-hours; => (7 6)
   (into {} (map #(update-in % [0] f) m)))
 
 
-(def clj->rest
-  {:username :userName
-   :password :password
-   :email    :emailId})
+;; (def clj->rest
+;;   {:username :userName
+;;    :password :password
+;;    :email    :emailId})
 
 
 (kmap clj->rest args)
 
 
 ;; using clojure.set/rename-keys is even nicer
+(require 'clojure.set)
 
 (clojure.set/rename-keys args clj->rest)
 

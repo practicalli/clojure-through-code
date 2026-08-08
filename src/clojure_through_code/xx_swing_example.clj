@@ -1,12 +1,11 @@
 (ns xx-swing-example
   (:import
-    (java.awt.event
-      WindowListener)
-    (javax.swing
-      JButton
-      JFrame
-      JLabel)))
-
+   (java.awt.event
+    WindowListener)
+   (javax.swing
+    #_JButton
+    JFrame
+    JLabel)))
 
 (defn swing
   []
@@ -16,13 +15,13 @@
       (.add label)
       (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
       (.addWindowListener
-        (proxy [WindowListener] []
-          (windowClosing
-            [evt]
-            (println "Whoop"))))
+       (proxy [WindowListener] []
+         (windowClosing
+           [evt]
+           (println "Whoop"))))
       (.setVisible true))))
-
 
 (defn -main
   [& args]
+  (println args)
   (swing))

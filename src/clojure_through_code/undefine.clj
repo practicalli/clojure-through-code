@@ -7,7 +7,6 @@
 
 (ns clojure-through-code.undefine)
 
-
 (comment
 
 ;; Are any aliases currently defined
@@ -15,7 +14,7 @@
 ;; => {}
 
 ;; Require a neamespace
-  (require '[practicalli.service :as service])
+  ;; (require '[practicalli.service :as service])
 
 ;; The service alias should now be in the current nammespace
   (ns-aliases *ns*)
@@ -134,7 +133,6 @@
  ;;  [java.lang.Thread run "Thread.java" 833]]}
 
   #_())
-
 
 ;; ;; You are having a problem loading a redefined namespace:
 ;; user=> (load "src/clj/com/tizra/layout_expander.clj")

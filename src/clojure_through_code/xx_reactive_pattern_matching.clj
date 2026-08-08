@@ -10,6 +10,9 @@
    :phoneNumbers [{:type "home" :number "212 555-1234"}
                   {:type "fax" :number "646 555-4567"}]})
 
+(comment
+  data)
+
 
 ;; Utility Functions
 (defn pretty_str
@@ -51,6 +54,6 @@
 
 (defmethod pretty_json String [e] (pretty_str e))
 
-(defmethod pretty_json nil [n] "null")
+;; (defmethod pretty_json nil [n] "null")
 
 (defmethod pretty_json :default [s] (str s))

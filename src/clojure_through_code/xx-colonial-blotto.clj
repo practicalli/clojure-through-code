@@ -49,8 +49,8 @@
 (def colonial-troops 4000)
 
 
-;; And the rebels have 1500 
-(def rebel-troops 1500)
+;; And the rebels have 1500
+;; (def rebel-troops 1500)
 
 
 ;; How many fronts should the rebels choose to fight on?
@@ -67,9 +67,9 @@
 
 
 ;; Which leaves them with a reserve of three
-(- colonial-troops (* fronts min-colonial)) ; -> 3
+;; (- colonial-troops (* fronts min-colonial)) ; -> 3
 
-;; Which we might choose to represent as: 
+;; Which we might choose to represent as:
 (set! *print-length* 25)
 (concat (repeat 3 1) (repeat 0))
 
@@ -132,10 +132,10 @@ colonial-dist ; -> (572 572 572 571 571 571 571)
 
 ;; -> (4001 4002 2668 3003 2403 2670 2288 2505 2225 2406 2186 2338 2159 2292 2139 2259 2124 2230 2111 2211 2101 2192 2098 2176 2093 ...)
 
-;; To win on one front, they need 4001 brave comrades. 
-;; To win on two, they need 4002 (one win and one draw doesn't quite cut it).  
+;; To win on one front, they need 4001 brave comrades.
+;; To win on two, they need 4002 (one win and one draw doesn't quite cut it).
 ;; To win on three, they only need 2668.
-;; As the number of fronts goes up, the number appears to be settling down 
+;; As the number of fronts goes up, the number appears to be settling down
 ;; to around 2000, which is a nice result.
 
 ;; "A perfectly informed flexible force fighting an enemy with a

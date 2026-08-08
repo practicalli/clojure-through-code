@@ -221,19 +221,19 @@
 ;; => "Message in a bottle - The Police"
 
 ;; defining namespace scoped names
-(def literal-value-string "I am free")
-(def literal-value-five 5)
-(def literal-value-six 6)
-(def collection-of-values [1 2 3 4 5 6 7 8])
-
-
+;; (def literal-value-string "I am free")
+;; (def literal-value-five 5)
+;; (def literal-value-six 6)
+;; (def collection-of-values [1 2 3 4 5 6 7 8])
+;;
+;;
 ;; names evaluate to the values they are bound to
-literal-value-five
+;; literal-value-five
+;;
 
-(reduce + collection-of-values)
+
+;; (reduce + collection-of-values)
 (reduce + [1 2 3 4 5 6 7 8])
-
-
 ;; => 36
 
 ;; Defining functions
@@ -710,5 +710,5 @@ literal-value-five
 
 
 {:meal
- {:ingredience []
-  :recipe []}}
+ {:ingredience [
+                :recipe []]}}

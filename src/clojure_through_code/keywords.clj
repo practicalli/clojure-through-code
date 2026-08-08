@@ -1,6 +1,7 @@
 ;; keywords
 
-(ns clojure-through-code.keywords)
+(ns clojure-through-code.keywords
+  (:require clojure.string))
 
 
 ;; keywords and strings
@@ -13,37 +14,26 @@
 
 (keyword "keyword-ify-me")
 
-
-;; => :keyword-ify-me
-
 ;; What if the string has spaces
 
 (keyword "i should be a single keyword")
-
-
 ;; => :i should be a single keyword
 
 ;; first replace the spaces with a dash and then convert
 
 (clojure.string/replace "i should be a single keyword" " " "-")
-
-
 ;; => "i-should-be-a-single-keyword"
 
-;; and then convet to a keyword
+;; and then convert to a keyword
 
 (keyword
   (clojure.string/replace "i should be a single keyword" " " "-"))
-
-
 ;; => :i-should-be-a-single-keyword
 
 
 ;; What if keyword is inside a string
 
 (keyword ":trapped-in-a-string")
-
-
 ;; => ::trapped-in-a-string
 
 ;; This could be okay if an auto-resolved keyword were suitable,

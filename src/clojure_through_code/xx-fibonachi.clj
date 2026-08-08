@@ -6,7 +6,7 @@
 
 
 ;; could define a data structure, large enough for any series length you want
-(def fibonachi-data #{1 2 3 5 8 13 21 34 55 89 144 223})
+;; (def fibonachi-explicit-set #{1 2 3 5 8 13 21 34 55 89 144 223})
 
 
 ;; The evaluation of the set is not ordered, so use a function to create a sorted output

@@ -139,7 +139,7 @@
 
 
 ;; only returns unique set from the collection
-(sorted-set 1 4 0 2 9 3 5 3 0 2 7 6 5 5 3 8)
+;; (sorted-set 1 4 0 2 9 3 5 3 0 2 7 6 5 5 3 8)
 
 
 ;; Vector []

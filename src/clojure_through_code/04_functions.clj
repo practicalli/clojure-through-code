@@ -522,17 +522,17 @@ x
 
 ;; defs are globally accessible slots to bind symbols to values
 ;; - the are like memory locations
-(def pi 3.1415926)
+;; (def pi 3.1415926)
 
-(def pythagorus
-  (fn [x y]
-    (Math/sqrt (+ (* x x) (* y y)))))
+;; (def pythagorus
+;;   (fn [x y]
+;;     (Math/sqrt (+ (* x x) (* y y)))))
 
 ;; a simpler way to bind behaviour to a symbol
 ;; a list program is usually a collection of defs
-(defn pythagorass
-  [x y]
-  (Math/sqrt (+ (* x x) (* y y))))
+;; (defn pythagorass
+;;   [x y]
+;;   (Math/sqrt (+ (* x x) (* y y))))
 
 ;; Dynamic Vars
 ;; (def ^:dynamic *out*)
@@ -705,8 +705,8 @@ x
 (defn process-contact-vector-destructured
   [contact-vector]
   (let
-   [[name address email] contact-vector]
-   (str name ", " address ", " email)))
+   [[name address email] contact-vector
+    (str name ", " address ", " email)]))
 
 (process-contact-vector-destructured ["johnny" "Clojureville" "johnny@clj.com"])
 

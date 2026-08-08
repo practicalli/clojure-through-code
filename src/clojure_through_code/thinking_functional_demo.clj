@@ -18,9 +18,13 @@
 
 (def global-value '(5 4 3 2 1))
 
+(comment
+  global-value)
+
 
 (defn impure-increment-numbers
   [number-collection]
+  (println number-collection)
   (map inc global-value))
 
 
@@ -67,7 +71,7 @@
 (conj persistent-vector 6)
 
 
-;; Chain two function calls using the threading macro 
+;; Chain two function calls using the threading macro
 (-> persistent-vector
     (conj 5)
     (conj 6))
@@ -76,7 +80,7 @@
 ;;
 ;; Higher Order functions
 
-;; functions can be used as an arugument to other functions,
+;; functions can be used as an argument to other functions,
 ;; because a function always evaluates to a value
 
 (map inc [1 2 3 4 5])
@@ -139,10 +143,10 @@
 
 ;; (vec (range 0 9999999999))  ;; say goodbye to your heap space
 
-;; Using tail call optomisation allows us to reuse a memory location when we call a function recursively.
+;; Using tail call optimisation allows us to reuse a memory location when we call a function recursively.
 ;; Recur allows the processing of a very large data set without blowing the heap space.
 
-(defn sum
+(defn sum-refactor
   ([vals] (sum vals 0))
   ([vals accumulating-total]
    (if (empty? vals)
@@ -150,7 +154,7 @@
      (recur (rest vals) (+ (first vals) accumulating-total)))))
 
 
-(sum (vec (range 0 9999999)))
+(sum-refactor (vec (range 0 9999999)))
 
 
 ;;
@@ -166,7 +170,7 @@
 22/7
 
 
-;; The lazyness can be overridden by specifying a precision, eg coersing the result into a specific type
+;; The laziness can be overridden by specifying a precision, e.g. coercing the result into a specific type
 
 (/  22 7.0)
 (double (/ 22 7))
@@ -199,7 +203,7 @@
 ;; As we are going to change state, we want to do it in a safe way,
 ;; so we define that vector with an atom
 
-(def players (atom []))
+;; (def players (atom []))
 
 
 ;; We also add a :validator as a condition to ensure we dont put more than

@@ -1,6 +1,5 @@
 (ns clojure-through-code.regular-expressions)
 
-
 ;;  Reference: https://gist.github.com/clojens/7932406
 
 (def ptrn
@@ -63,7 +62,6 @@
   [k]
   (map #(re-matches (get-in ptrn [k :pattern]) %) (get-in ptrn [k :samples])))
 
-
 ;; Java built-in regex support in string objects
 
 ;; A little threading macro to show how string instances have native
@@ -72,37 +70,38 @@
 
 (step :h)
 
-
 ;; Filtering strings
 ;;
 
 ;; Starting with the  following
 
-(ns disemvowel-trolls)
+;; (ns disemvowel-trolls)
 
-(def vowels #{\a \e \i \o \u \A \E \I \O \U})
+(def vowels-set #{\a \e \i \o \u \A \E \I \O \U})
 
+(comment
+  vowels-set)
 
-(defn disemvowel
+(defn disemvowel-filter
   [string]
-  (apply str (filter (complement vowels) (seq string))))
+  (apply str (filter (complement vowels-set) (seq string))))
 
+(comment
+  (disemvowel-filter "Hello World"))
 
 ;; Refactor
 
+(require 'clojure.string)
 (def vowels
   (let [vowels "aeiou"]
     (into (set vowels) (clojure.string/upper-case vowels))))
-
 
 (defn disemvowel
   [string]
   (clojure.string/join (remove vowels string)))
 
-
 (disemvowel "Hello, World!")
 "Hll, Wrld!"
-
 
 ;; Regular expressions and case insensitivity
 ;; Use the regex case-insensitivity flag with clojure.string/replace function
@@ -111,3 +110,6 @@
 (defn disemvowel-replace-case-insensitive
   [string]
   (clojure.string/replace string #"(?i)[aeiou]" ""))
+
+(comment
+  (disemvowel-replace-case-insensitive "Hello world"))

@@ -21,9 +21,9 @@
 ;; Immutable
 ;; - everything is immutable by default
 ;; - easier to reason and build concurrent systems
-;; - easier to scale via paralelism
+;; - easier to scale via parallelise
 
-;; Extensibility & Interop
+;; Extensibility & Interoperability
 ;; - Macros allows the community to extend the language
 ;; - use other libraries on the hosted runtime (JVM, CLR, JS)
 
@@ -60,8 +60,8 @@
 ;;
 ;; Clojure Syntax
 
-;; Clojure uses a prefix notation and () [] : {} # @ ! special characters
-;; no need for lots of ; , and other unneccessary things.
+;; Clojure uses a prefix notation and () [] : {} # @ ! Special characters
+;; no need for lots of ; , and other unnecessary things.
 
 ;; bind a name to data
 (def my-data [1 2 3 "frog"])
@@ -69,7 +69,7 @@
 my-data
 
 
-;; See the types used in the hosted language 
+;; See the types used in the hosted language
 (type [1 2 3])
 
 (def conference-name "CodeMotion: Tel Aviv")
@@ -105,7 +105,7 @@ my-data
 (+ 1 2 3 4 5)
 
 
-;; precidence is explicit - no uncertanty
+;; precedence is explicit - no uncertainty
 (+ 1 2 (- 4 -2) (* (/ 36 3) 4) 5)
 
 
@@ -176,7 +176,7 @@ my-data
 ;; using the macroexpand function you can see what code is actually created
 
 ;; Using the threading macro, the result of every function is passed onto the next function
-;; in the list.  This can be seen very clearly usng ,,, to denote where the value is passed
+;; in the list.  This can be seen very clearly using ,,, to denote where the value is passed
 ;; to the next function
 
 (->
@@ -203,38 +203,22 @@ my-data
 ;; our text comes out backwards.
 
 (->>
-  (str " This")
-  (str " is")
-  (str " backwards"))
+  (str " This" " is")
+  (str " backwards "))
 
 
-;; add all project information to a map
-(->> "project.clj"
-     slurp
-     read-string
-     (drop 2)
-     (cons :version)
-     (apply hash-map)
-     (def project))
 
-
-;; project
-;;
 ;; Working with strings & side-effects
-
-;; You could use the Java-like function `println` to output strings.
-
-(str "Hello, whats different with me?  What value do I return")
-
-
-;; However, something different happens when you evaluate this expression.  This is refered to as a side-effect because when you call this function it returns nil.  The actual text is output to the REPL or console.
-
-;; In Clojure, you are more likely to use the `str` function when working with strings.
-(str "Hello, I am returned as a value of this expression")
-
 
 ;; join strings together with the function str
 (str "Hello" ", " "HackTheTower UK")
+
+;; You could use the Java-like function `println` to output strings.
+
+(str "Hello, whats different with me? " " What value do I return")
+
+
+;; However, something different happens when you evaluate this expression.  This is refered to as a side-effect because when you call this function it returns nil.  The actual text is output to the REPL or console.
 
 
 ;; using println shows the results in console window, as its a side affect
@@ -262,7 +246,7 @@ my-data
 
 ;; Ratios delay the need to drop into decimal numbers.  Once you create a decimal number then everything it touches had a greater potential to becoming a decimal.
 
-;; Prefix motation means we can define a value of 22/7 as a value without it being interprested as an operation or function to evaluate.
+;; Prefix notation means we can define a value of 22/7 as a value without it being interpreted as an operation or function to evaluate.
 
 ;; Clojure uses Prefix notation, so math operations on many arguments is easy.
 (+ 1 2 3 4 5)
@@ -326,8 +310,6 @@ my-data
 (def my-map {:foo "a"})
 
 my-map
-(def my-map [1 2 3 4])
-(= "a" (:foo my-map))
 
 
 ;; Use the not function for logic
@@ -336,8 +318,8 @@ my-map
 
 
 (if nil
-  (str "Return if true")
-  (str "Return if false"))
+  "Return if true"
+  "Return if false")
 
 
 (defn is-small?
@@ -497,14 +479,7 @@ my-map
 (fn [x] (* x x))
 
 
-;; We can also give a name to a function using def
-
-(def i-have-a-name (fn [] "I am not a number, I am a named function - actually we call the name a symbol and it can be used as a reference to the function."))
-
-(i-have-a-name)
-
-
-;; You can shorten this process by using defn
+;; We can also give a name to a function using defn
 (defn i-have-a-name
   []
   "Oh, I am a new function definition, but have the same name (symbol).")
@@ -536,9 +511,6 @@ my-map
   ([name] (print "Hello" name)))
 
 
-(greet)
-
-
 ;; When greet is called with no arguments, then the first line of the functions behaviour is called.  If you look closely, you see this is not adding duplicate code to our function as
 
 (greet "World")
@@ -546,36 +518,36 @@ my-map
 
 ;; Refactor greet function
 
-(defn greet
-  ([] (greet "you"))
-  ([name] (greet name 21 "London"))
-  ([name age address] (print "Hello" name, "I see you are" age "and live at" address)))
+;; (defn greet-multi-polly
+;;   ([] (greet "you"))
+;;   ([name] (greet name 21 "London"))
+;;   ([name age address] (print "Hello" name, "I see you are" age "and live at" address)))
+
 
 
 ;; Variadic functions
 
-(defn greet
+(defn greet-rest
   [name & rest]
   (str "Hello " name " " rest))
 
 
-(greet "John" "Paul" "George" "Ringo")
-
-
+(greet-rest "John" "Paul" "George" "Ringo")
 ;; => Hello John (Paul George Ring)
 
 
 ;; unpack the additional arguments from the list
 
-(defn greet
+(defn greet-apply
   [name & rest]
   (apply print "Hello" name rest))
 
+(greet-apply "John" "Paul" "George" "Ringo")
 
 ;; Using functions as parameters
 
 
-;; Pattern mantching example
+;; Pattern matching example
 
 ;; The classic fizzbuzz game were you substitute any number cleanly divisible by 3 with fix and any number cleanly divisible by 5 with buzz.
 ;; If the number is cleanly divisible by 3 & 5 then substitute fizzbuzz.
@@ -614,7 +586,7 @@ my-map
 ;; If you would like to try this out in the REPL, dont forget to include this namespace if you are not currently in it
 ;; (require '[clojure-through-code.live-demo :refer :all])
 
-;; Now we can call fizbuzz for a specfic number
+;; Now we can call fizbuzz for a specific number
 
 (fizzbuzz 1)
 (fizzbuzz 3)
@@ -663,16 +635,15 @@ my-map
 ;; We want to manage players for an online card-game
 ;; Use a vector wraped by an atom for safe mutable state
 
-(def players (atom []))
+;; (def players (atom []))
 
 
 ;; Or we may want to limit the number of players
-
 (def players (atom [] :validator #(<= (count %) 4)))
 
 
 ;; the second definition of players point the var name to something new
-;; we havent changed what players was, it just points to something diferent
+;; we havent changed what players was, it just points to something different
 
 
 ;; Add players
@@ -709,9 +680,6 @@ my-map
 
 
 (def game-account (ref 1000))
-(def toms-account (ref 500))
-(def dick-account (ref 500))
-(def harry-account (ref 500))
 (def betty-account (ref 500))
 
 @betty-account
@@ -742,23 +710,22 @@ my-map
 
 ;; Using a ref
 
-(def all-the-cats (ref 3))
+;; (def all-the-cats (ref 3))
 
-
-(defn updated-cat-count
-  [fn-key reference old-value new-value]
-  ;; Takes a function key, reference, old value and new value
-  (println (str "Number of cats was " old-value))
-  (println (str "Number of cats is now " new-value)))
+;; (defn updated-cat-count
+;;   [fn-key reference old-value new-value]
+;;   ;; Takes a function key, reference, old value and new value
+;;   (println (str "Number of cats was " old-value))
+;;   (println (str "Number of cats is now " new-value)))
 
 
 ;; Watch for changes in the all-the-cats ref
-(add-watch all-the-cats :cat-count-watcher updated-cat-count)
-
-
-;; evaluate the following code to increment the cats
-;; view the results in the repl output (to see the println output)
-(dosync (alter all-the-cats inc))
+;; (add-watch all-the-cats :cat-count-watcher updated-cat-count)
+;;
+;;
+;; ;; evaluate the following code to increment the cats
+;; ;; view the results in the repl output (to see the println output)
+;; (dosync (alter all-the-cats inc))
 
 
 ;;
@@ -779,11 +746,5 @@ my-map
 (defn degrees->radians
   [point]
   (map #(Math/toRadians %) point))
-
-
-(defn degrees->radians
-  [point]
-  (mapv #(Math/toRadians %) point))
-
 
 (degrees->radians [1 10])

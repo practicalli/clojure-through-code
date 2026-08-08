@@ -1,12 +1,10 @@
 (ns clojure-through-code.benchmark
-  (:require
-    [criterium.core :refer [quick-bench]]))
-
+  #_(:require
+     [criterium.core :refer [quick-bench]]))
 
 ;; cond
-(let [number 5]
-  (quick-bench (cond = 5 1 1 2 2 3 3 4 4 5 5)))
-
+;; (let [number 5]
+;;   (quick-bench (cond = 5 1 1 2 2 3 3 4 4 5 5)))
 
 ;; Evaluation count : 50788488 in 6 samples of 8464748 calls.
 ;; Execution time mean : 2.535916 ns
@@ -19,10 +17,8 @@
 ;; low-severe  1 (16.6667 %)
 ;; Variance from outliers : 13.8889 % Variance is moderately inflated by outliers
 
-
-(let [number 5]
-  (quick-bench (condp = 5 1 1 2 2 3 3 4 4 5 5)))
-
+;; (let [number 5]
+;;   (quick-bench (condp = 5 1 1 2 2 3 3 4 4 5 5)))
 
 ;; Evaluation count : 3625284 in 6 samples of 604214 calls.
 ;; Execution time mean : 156.813816 ns
@@ -35,11 +31,8 @@
 ;; low-severe  1 (16.6667 %)
 ;; Variance from outliers : 13.8889 % Variance is moderately inflated by outliers
 
-
-
-(let [number 5]
-  (quick-bench (case 5 1 1 2 2 3 3 4 4 5 5)))
-
+;; (let [number 5]
+;;   (quick-bench (case 5 1 1 2 2 3 3 4 4 5 5)))
 
 ;; Evaluation count : 56533626 in 6 samples of 9422271 calls.
 ;; Execution time mean : 1.158650 ns

@@ -7,7 +7,6 @@
     (str "this is my behaviour"))
 
 
-;;
 ;; Pure Functions
 ;;
 ;; A pure function is deterministic, given the same arguments the same value is returned
@@ -152,7 +151,7 @@ shared-value
 
 ;; the % is a placeholder for the argument and the argument is the value directly after the anonymous function.
 
-;; Specific arguments can be refered to by using %1, %2, etc
+;; Specific arguments can be referred to by using %1, %2, etc
 ;; sometimes position can be important as the following two versions of code demonstrate
 
 (#(/ %1 %2) 24 6)
@@ -202,19 +201,15 @@ message
 ;; five
 ;; => Unable to resolve symbol: five in this context
 
-(let [number 5]
-  (inc number)
-  (str "The number is still " number))
-
-
+;; (let [number 5]
+;;   (inc number)
+;;   (str "The number is still " number))
 ;; => "The number is still 5"
 
 ;; just as with a def, a let binding can be redefined.  Any new definition over-rides the previous one.
-(let [number 5
-      number 6]
-  number)
-
-
+;; (let [number 5
+;;       number 6]
+;;   number)
 ;; => 6
 
 (def persistent-vector [0 1 2 3 4])
@@ -238,7 +233,7 @@ persistent-vector
 
 ;; persistent data structures share memory, so even for large data structures the use of lists, maps, vectors & sets are efficient.
 
-;; persistent data structures also use a relatively flat tre structure (typically 1-2 levels, up to 6 levels for very large data).  This flat structue minimises the time required to parse the tre
+;; persistent data structures also use a relatively flat tre structure (typically 1-2 levels, up to 6 levels for very large data).  This flat structure minimises the time required to parse the tre
 
 ;; ---------------------------------------
 ;; Keywords
@@ -291,8 +286,6 @@ persistent-vector
              tumbler-2 (range 10)
              tumbler-3 (range 10)]
          [tumbler-1 tumbler-2 tumbler-3]))
-
-
 ;; => 1000
 
 ;; count the possible combinations
@@ -305,8 +298,6 @@ persistent-vector
                             (= tumbler-2 tumbler-3)
                             (= tumbler-3 tumbler-1)))]
          [tumbler-1 tumbler-2 tumbler-3]))
-
-
 ;; => 720
 
 ;; lets look at the combinations again, we can see that there is always at least 2 matching values.  This is probably the opposite of what we want in real life.
@@ -317,8 +308,6 @@ persistent-vector
                 (= tumbler-2 tumbler-3)
                 (= tumbler-3 tumbler-1))]
   [tumbler-1 tumbler-2 tumbler-3])
-
-
 ;; => ([0 0 0] [0 0 1] [0 0 2] [0 0 3] [0 0 4] [0 0 5] [0 0 6] [0 0 7] [0 0 8] [0 0 9] [0 1 0] [0 1 1] [0 2 0] [0 2 2] [0 3 0] [0 3 3] [0 4 0] [0 4 4] [0 5 0] [0 5 5] [0 6 0] [0 6 6] [0 7 0] [0 7 7] [0 8 0] [0 8 8] [0 9 0] [0 9 9] [1 0 0] [1 0 1] [1 1 0] [1 1 1] [1 1 2] [1 1 3] [1 1 4] [1 1 5] [1 1 6] [1 1 7] [1 1 8] [1 1 9] [1 2 1] [1 2 2] [1 3 1] [1 3 3] [1 4 1] [1 4 4] [1 5 1] [1 5 5] [1 6 1] [1 6 6] [1 7 1] [1 7 7] [1 8 1] [1 8 8] [1 9 1] [1 9 9] [2 0 0] [2 0 2] [2 1 1] [2 1 2] [2 2 0] [2 2 1] [2 2 2] [2 2 3] [2 2 4] [2 2 5] [2 2 6] [2 2 7] [2 2 8] [2 2 9] [2 3 2] [2 3 3] [2 4 2] [2 4 4] [2 5 2] [2 5 5] [2 6 2] [2 6 6] [2 7 2] [2 7 7] [2 8 2] [2 8 8] [2 9 2] [2 9 9] [3 0 0] [3 0 3] [3 1 1] [3 1 3] [3 2 2] [3 2 3] [3 3 0] [3 3 1] [3 3 2] [3 3 3] [3 3 4] [3 3 5] [3 3 6] [3 3 7] [3 3 8] [3 3 9] ...)
 
 ;; ---------------------------------------
@@ -424,17 +413,17 @@ capital-letters
 22/7
 
 
-;; The lazyness can be overridden by specifying a precision, eg coersing the result into a specific type
+;; The laziness can be overridden by specifying a precision, eg coercing the result into a specific type
 
 (/  22 7.0)
 (double (/ 22 7))
 (float (/ 22 7))
 
 
-;; The range function returns a lazy sequence of numbers in the range given by the arguents provided to range.
-;; Calling the range function without arguments will force an infinate sequence of numbers to be generated, quickly resulting in an out of memory error in the heap.
+;; The range function returns a lazy sequence of numbers in the range given by the arguments provided to range.
+;; Calling the range function without arguments will force an infinite sequence of numbers to be generated, quickly resulting in an out of memory error in the heap.
 
-;; (range) ;; dont run range without arguments unless you put another constraint around it
+;; (range) ;; don't run range without arguments unless you put another constraint around it
 
 ;; Instead, we can either pass arguments to the range function that limit the sequence size or wrap the range function in another function
 
@@ -499,20 +488,20 @@ name-of-new-string
 
 
 (let [words (clojure.string/upper-case sentence)]
-  (map #(letter->clack alphabet %) (map str words)
+  (map #(letter->clack alphabet %) (map str words)))
 
-       ;;
-       ;; Higher Order functions
+;;
+;; Higher Order functions
 
-       ;; functions can be used as an arugument to other functions,
-       ;; because a function always evaluates to a value
+;; functions can be used as an arugument to other functions,
+;; because a function always evaluates to a value
 
-       ;; from wikipedia - is this example too abstract?  Isnt this just a simplification of the map function
-       (defn twice
-         [function-to-apply value]
-         (function-to-apply (function-to-apply value)))
+;; from wikipedia - is this example too abstract?  Isnt this just a simplification of the map function
+(defn twice
+  [function-to-apply value]
+  (function-to-apply (function-to-apply value)))
 
-       (twice #(+ % 3) 7)))
+(twice #(+ % 3) 7)
 
 
 (filter
@@ -592,7 +581,7 @@ name-of-new-string
 
 
 ;; range will act differently dependent on the context in which it is called.
-;; TODO: these different types need some explaination.
+;; TODO: these different types need some explanation.
 
 (type (range))
 ;; => clojure.lang.Iterate
@@ -891,17 +880,17 @@ deref players
 
 ;; To limit the scope of a def, add the :private true metadata key value pair.
 
-(def ^{:private true} some-var :value)
+;; (def ^{:private true} some-var :value)
 
 
 ;; private functions could help with encapsulation and document in the code which functions form the `API' for a namespace.
 
-(defn- my-private-function
+(defn ^{:private true} my-private-function
   []
-  (str "I can only be called from within my namespace"))
+  "I can only be called from within my namespace")
 
+(my-private-function)
 
-;; writing article on the curious case of defs
 
 ;;
 ;; Chaining functions - Threading macro
@@ -999,23 +988,19 @@ deref players
       (list 4 x)    ; (list 4 (2 (1 "a"))) => (4 (3 (2 (1 "a"))))
       (list 5 x))   ; (list 5 (4 (3 (2 (1 "a"))))) => (5 (4 (3 (2 (1 "a")))))
 
-;; The
 
-;;
 ;; Partial functions
 
 (map (partial reduce +) [[1 2 3 4] [5 6 7 8]])
 
 
-(defn sum
+(defn sum-two-numbers
   "Sum two numbers together"
   [number1 number2]
   (+ number1 number2))
 
 
-(sum 1 2)
-
-
+(sum-two-numbers 1 2)
 ;; => 3
 
 ;; (sum 1)
@@ -1063,16 +1048,12 @@ deref players
 (def wrap-message (partial join-strings "Hello Clojurians in "))
 
 (wrap-message)
-
-
 ;; => "Hello Clojurians in "
 
 (wrap-message "London")
-
-
 ;; => "Hello Clojurians in London"
 
-;;
+
 ;; LISP features - extensibility via macros
 
 ;; examples fo macros
@@ -1127,16 +1108,14 @@ deref players
 ;; Example taken from Stack Overflow http://stackoverflow.com/questions/1053926/clojure-while-loop
 
 ;; zip should only take what it needs from the infinate sequence
-(clojure.zip/zip "abc" #_(infinte sequence))
+
+(zipmap [:jen :sam :calli :jo]
+        ["map" "filter" "drop" "partition"])
 
 
-(clojure.zip/zipmap [:jen :sam :calli :jo]
-                    ["map" "filter" "drop" "partition"])
+;; Compose abstractions
 
-
-;; Composable abstractions
-
-(def alphabet
+(def english-alphabet
   {"A" [0 1 0 0 0 1]
    "B" [0 0 1 0 1 0]
    "C" [0 1 0 0 1 0]
@@ -1165,3 +1144,7 @@ deref players
    "Z" [1 1 0 0 1 1]
    "." [1 0 1 1 0 1]
    " " [0 0 1 0 0 0]})
+
+
+(comment
+  (english-alphabet))

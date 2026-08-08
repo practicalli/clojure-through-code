@@ -21,15 +21,19 @@
       (conj prev-p (next-row (last prev-p))))))
 
 
-;; Would be curious to hear if you think there's a more idiomatic clojure way to do this : }
+(comment
+  (pascal 42))
 
-;; seancorfield  01:08
+;; Is there's a more idiomatic approach
 
-(defn pascal
+(defn pascal-partition
   [n]
   (take n (iterate #(mapv (fn [[x y]] (+ x y))
                           (partition 2 1 (cons 0 (into % [0])))) [1])))
 
+
+(comment
+  (pascal-partition 42))
 
 ;; For a given row, if you prepend and append 0 and then break into (overlapping) pairs, then add each pair, you get the next rows.
 ;; So you can have an infinite sequence of Pascal's triangle rows and you just take as many rows as you want.

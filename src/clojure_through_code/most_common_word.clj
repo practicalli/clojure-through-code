@@ -58,22 +58,24 @@
   ;; Experimenting with regular expressions
 
   (re-seq #"[\w|'-]+" "Morning-room in Algernon's flat in Half-Moon Street.")
-  (re-seq #"\w+" "Morning-room in Algernon's flat in Half-Moon Street.")
+  (re-seq #"\w+" "Morning-room in Algernon's flat in Half-Moon Street."))
 
-)
+
 
 
 ;;
 ;; Most Common Words - Threading Macro Style
 
 
-(def common-english-words
+(def common-english-words-thread
   (-> (slurp "resources/common-english-words.csv")
       (clojure.string/split #",")
       set))
 
+(comment
+  common-english-words-thread)
 
-(defn most-common-words
+(defn most-common-words-thread
   [book]
   (->> book
        #_(re-seq #"[a-zA-Z0-9|']+")
@@ -84,9 +86,9 @@
        (sort-by val)
        reverse))
 
-
-;; Use importance-of-being-earnest book defined above
-(most-common-words importance-of-being-earnest)
+(comment
+  ;; Use importance-of-being-earnest book defined above
+  (most-common-words-thread importance-of-being-earnest))
 
 
 ;;
@@ -94,7 +96,7 @@
 
 ;; To understand what each of the functions do in the most-common-words function you can comment out one or more expressions by placing the comment reader macro #_ in front of the expression
 
-(defn most-common-words
+(defn most-common-words-repl
   [book]
   (->> book
        #_(re-seq #"[a-zA-Z0-9|']+")
@@ -107,10 +109,14 @@
 
 ;; Now the most-common-words function will only return the result of evaluating book (the full text of the book). To see what each of the other lines do, simply remove the #_ character from the front of an expression and re-evaluate the most-common-words function in the repl
 
+(comment
+  (most-common-words-repl importance-of-being-earnest))
 
 
 ;; Accessing the book directly at Project Gutenburg
 ;; using Java Interop to ensure a clean connection that closes when finished
+
+(require 'clojure.java.io)
 
 (with-open [in (java.util.zip.GZIPInputStream.
                  (clojure.java.io/input-stream
@@ -152,11 +158,4 @@
 
   (-main "https://www.gutenberg.org/cache/epub/844/pg844.txt" "common-english-words.txt")
 
-#_())
-
-
-(def fish)
-
-
-(defn blah
-  (println "I am a bad function definition"))
+ #_())

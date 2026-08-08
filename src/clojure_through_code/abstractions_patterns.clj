@@ -1,6 +1,4 @@
-(ns clojure-through-code.abstractions-patterns
-  (:require
-    [clojure-through-code.database :as database]))
+(ns clojure-through-code.abstractions-patterns)
 
 
 ;;
@@ -100,8 +98,8 @@
   (apply command args))
 
 
-(execute database/login  "fey" "force@wakens")
-(execute database/logout "fey")
+(execute 'database/login  "fey" "force@wakens")
+(execute 'database/logout "fey")
 
 
 ;; Where it could be useful in Clojure
@@ -252,21 +250,21 @@
 ;; ---------------------------------------------------------
 ;; Adapter
 
-(defprotocol BarkingDog
-  "this is a barking dog"
-
-  (bark
-    [this]
-    "dog should bark"))
-
-
-(extend-protocol BarkingDog clojure.lang.IPersistentVector
-                 (bark [v] (conj v "bark!")))
-
-
-(def a-vector [1 2 3 4])
-
-(bark a-vector) [1 2 3 4 "bark!"]
+;; (defprotocol BarkingDog
+;;   "this is a barking dog"
+;;
+;;   (bark
+;;     [this]
+;;     "dog should bark"))
+;;
+;;
+;; (extend-protocol BarkingDog clojure.lang.IPersistentVector
+;;                  (bark [v] (conj v "bark!")))
+;;
+;;
+;; (def a-vector [1 2 3 4])
+;;
+;; (bark a-vector) [1 2 3 4 "bark!"]
 
 ;; ---------------------------------------------------------
 
